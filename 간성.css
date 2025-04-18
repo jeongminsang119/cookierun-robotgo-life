@@ -502,8 +502,8 @@
   
   .rider {
     position: absolute;
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     transition: top 1.5s ease, left 1.5s ease;
   }
   
