@@ -1,0 +1,4041 @@
+<!DOCTYPE html>
+<!--made by Printed Heart-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>킁킁게임</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #000;
+        font-size: 10px;
+        color: #fff;
+      }
+      p {
+        margin: 0px 10px;
+        display: inline-block;
+        font-size: 1.5em;
+      }
+      div {
+        display: inline-block;
+      }
+      #container {
+        display: block;
+        width: 960px;
+        height: 660px;
+        margin: calc((100vh - 680px) / 2) auto;
+      }
+      #displayArea {
+        position: relative;
+        width: 960px;
+        height: 500px;
+        border-style: solid;
+        border-width: 4px;
+        border-color: #fff;
+      }
+      #canvas {
+        position: absolute;
+        left: -4px;
+        top: -4px;
+        width: 960;
+        height: 500px;
+        z-index: -1;
+      }
+      .ui {
+        display: block;
+        position: relative;
+        float: left;
+        width: 320px;
+        height: 80px;
+        padding-top: 5px;
+      }
+      .classSelectionArea {
+        position: absolute;
+        left: 70px;
+        top: 16px;
+        width: 180px;
+        height: 32px;
+        perspective: 200px;
+      }
+      .classBox {
+        position: absolute;
+        background-color: rgb(255, 0, 255);
+      }
+      .keyBtn {
+        float: left;
+        padding: 2px 15px;
+        margin: 0px 5px;
+        font-size: 1.5em;
+        text-align: center;
+        line-height: 38px;
+        border-style: solid;
+        border-radius: 5px;
+        border-width: 4px;
+        border-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" style="line-height: 48px">
+      <div class="ui">
+        <div id="key_A" class="keyBtn">A</div>
+        <div class="classSelectionArea">
+          <div
+            id="classBoxL1"
+            class="classBox"
+            style="
+              width: 24px;
+              height: 24px;
+              transform: rotateY(140deg);
+              left: 12px;
+              top: 3px;
+            "
+          ></div>
+          <div
+            id="classBoxL2"
+            class="classBox"
+            style="
+              width: 28px;
+              height: 28px;
+              transform: rotateY(165deg);
+              left: 36px;
+              top: 1px;
+            "
+          ></div>
+          <div
+            id="classBoxL3"
+            class="classBox"
+            style="
+              width: 30px;
+              height: 30px;
+              left: 75px;
+              border-style: solid;
+              border-width: 2px;
+              border-color: #fff;
+            "
+          ></div>
+          <div
+            id="classBoxL4"
+            class="classBox"
+            style="
+              width: 28px;
+              height: 28px;
+              transform: rotateY(15deg);
+              left: 115px;
+              top: 1px;
+            "
+          ></div>
+          <div
+            id="classBoxL5"
+            class="classBox"
+            style="
+              width: 24px;
+              height: 24px;
+              transform: rotateY(40deg);
+              left: 143px;
+              top: 3px;
+            "
+          ></div>
+        </div>
+        <div id="key_D" class="keyBtn" style="float: right">D</div>
+      </div>
+      <div class="ui">
+        <div
+          id="key_enter"
+          class="keyBtn"
+          style="float: none; display: block; margin: 0 50px"
+        >
+          엔터버튼눌르면시작
+        </div>
+      </div>
+      <div class="ui">
+        <div id="key_left" class="keyBtn">◀</div>
+        <div class="classSelectionArea">
+          <div
+            id="classBoxR1"
+            class="classBox"
+            style="
+              width: 24px;
+              height: 24px;
+              transform: rotateY(140deg);
+              left: 12px;
+              top: 3px;
+            "
+          ></div>
+          <div
+            id="classBoxR2"
+            class="classBox"
+            style="
+              width: 28px;
+              height: 28px;
+              transform: rotateY(165deg);
+              left: 36px;
+              top: 1px;
+            "
+          ></div>
+          <div
+            id="classBoxR3"
+            class="classBox"
+            style="
+              width: 30px;
+              height: 30px;
+              left: 75px;
+              border-style: solid;
+              border-width: 2px;
+              border-color: #fff;
+            "
+          ></div>
+          <div
+            id="classBoxR4"
+            class="classBox"
+            style="
+              width: 28px;
+              height: 28px;
+              transform: rotateY(15deg);
+              left: 115px;
+              top: 1px;
+            "
+          ></div>
+          <div
+            id="classBoxR5"
+            class="classBox"
+            style="
+              width: 24px;
+              height: 24px;
+              transform: rotateY(40deg);
+              left: 143px;
+              top: 3px;
+            "
+          ></div>
+        </div>
+        <div id="key_right" class="keyBtn" style="float: right">▶</div>
+      </div>
+      <div id="displayArea"><canvas id="canvas"></canvas></div>
+      <div class="ui">
+        <p style="float: left">Player 1</p>
+        <div id="key_F" class="keyBtn">F</div>
+        <div id="key_G" class="keyBtn">G</div>
+        <div id="key_H" class="keyBtn">H</div>
+      </div>
+      <div class="ui">
+        <p id="timer" style="display: block; text-align: center">00 : 00</p>
+      </div>
+      <div class="ui">
+        <p style="float: right">Player 2</p>
+        <div id="key_num3" class="keyBtn" style="float: right">3</div>
+        <div id="key_num2" class="keyBtn" style="float: right">2</div>
+        <div id="key_num1" class="keyBtn" style="float: right">1</div>
+      </div>
+    </div>
+  </body>
+  <script>
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const FPS = 60; //frame per secend
+    const MAP_SIZE = [960, 500];
+    const PLATFORM_UPDATE_COOL = 30000; //platform updating cooltime (frame)
+    const PLATFORM_UPDATE_INTERVAL = 50;
+    const [MASS_SOFT, MASS_HARD, MASS_PARTICLE] = [0, 1, 2];
+    const [DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN] = [1, -1, -2, 2];
+    const DIR = [DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN];
+    const [
+      CLASS_RED,
+      CLASS_BLUE,
+      CLASS_MINT,
+      CLASS_BROWN,
+      CLASS_GREEN,
+      CLASS_YELLOW,
+      CLASS_GRAY,
+    ] = [0, 1, 2, 3, 4, 5, 6];
+    const COLOR_CLASS = [
+      //red, blue, mint, brown, green, yellow, gray
+      [255, 70, 70],
+      [39, 164, 255],
+      [160, 255, 215],
+      [206, 175, 99],
+      [92, 227, 4],
+      [251, 247, 120],
+      [110, 110, 110],
+    ];
+    const COLOR_GROUND = [191, 191, 191];
+    const COLOR_TEST = [255, 0, 255];
+    const BTN_CODE = [
+      37, 39, 38, 40, 97, 98, 99, 65, 83, 68, 87, 70, 71, 72, 13,
+    ];
+    const BTN_ID = [
+      "#key_left",
+      "#key_right",
+      "#key_up",
+      "#key_down",
+      "#key_num1",
+      "#key_num2",
+      "#key_num3",
+      "#key_A",
+      "#key_S",
+      "#key_D",
+      "#key_W",
+      "#key_F",
+      "#key_G",
+      "#key_H",
+      "#key_enter",
+    ];
+    const CLASSBOX_ID = [
+      "#classBoxL1",
+      "#classBoxL2",
+      "#classBoxL3",
+      "#classBoxL4",
+      "#classBoxL5",
+      "#classBoxR1",
+      "#classBoxR2",
+      "#classBoxR3",
+      "#classBoxR4",
+      "#classBoxR5",
+    ];
+
+    const STAT_CLASS = [
+      [
+        //red
+        900, //max HP
+        6, //move speed
+        [25, 1, 25], //skill power
+        [90, 180, 1500], //skill cooltime
+        [
+          [0, 0],
+          [16, 16],
+          [10, 10],
+        ], //skill bullet size
+        [0, 0, 5], //skill bullet speed
+        [100, 480, 60], //skill bullet lifetime
+      ],
+      [
+        //blue
+        1000,
+        6,
+        [33, null, 10],
+        [50, 530, 1200],
+        [
+          [10, 3],
+          [null, null],
+          [64, 64],
+        ],
+        [13, 5, 0],
+        [30, 60, 15],
+      ],
+      [
+        //mint
+        1100,
+        8,
+        [11, 11, 4],
+        [20, 200, 1800],
+        [
+          [5, 25],
+          [10, 25],
+          [0, 0],
+        ],
+        [20, 12, 0],
+        [24, 50, 360],
+      ],
+      [
+        //brown
+        1200,
+        5,
+        [10, null, 10],
+        [80, 480, 1440],
+        [
+          [7, 7],
+          [0, 0],
+          [4, 4],
+        ],
+        [17, 0, 0],
+        [15, 900, 480],
+      ],
+      [
+        //green
+        1000,
+        6,
+        [24, null, null],
+        [100, 150, 2100],
+        [
+          [4, 4],
+          [null, null],
+          [6, 9],
+        ],
+        [0, null, 0],
+        [85, null, 1440],
+      ],
+      [
+        //yellow
+        900,
+        7,
+        [27, 17, 37],
+        [40, 420, 1320],
+        [
+          [16, 1],
+          [48, 48],
+          [32, 2],
+        ],
+        [20, 0, 0],
+        [60, 120, 300],
+      ],
+      [
+        //gray
+        800,
+        7,
+        [48, 1, 6],
+        [75, 60, 2400],
+        [
+          [5, 5],
+          [null, null],
+          [32, 32],
+        ],
+        [0, 0, 0],
+        [120, null, 780],
+      ],
+    ];
+
+    const STAT_PLATFORM = [
+      [
+        [
+          [true, [0, 85], [200, 20]],
+          [false, [null, null], [null, null]],
+          [false, [null, null], [null, null]],
+        ],
+        [
+          [true, [0, -40], [180, 20]],
+          [true, [-400, 85], [80, 20]],
+          [true, [400, 85], [80, 20]],
+        ],
+        [
+          [false, [null, null], [null, null]],
+          [true, [-200, 85], [100, 20]],
+          [true, [200, 85], [100, 20]],
+        ],
+        [
+          [true, [0, 85], [20, 100]],
+          [false, [null, null], [null, null]],
+          [false, [null, null], [null, null]],
+        ],
+        [
+          [false, [null, null], [null, null]],
+          [false, [null, null], [null, null]],
+          [false, [null, null], [null, null]],
+        ],
+      ],
+      [
+        [0, 240],
+        [-520, 0],
+        [520, 0],
+      ],
+    ];
+    const AUTOMODE_COOLTIME = [
+      [20, 120],
+      [10, 90],
+    ];
+
+    let keyState = [];
+    let isKeyDown = new Array(14).fill(false);
+    document.addEventListener("keydown", function (e) {
+      keyState[e.keyCode] = true;
+    });
+    document.addEventListener("keyup", function (e) {
+      keyState[e.keyCode] = false;
+    });
+
+    let $canvas = document.getElementById("canvas");
+    [$canvas.width, $canvas.height] = MAP_SIZE;
+    let ctx = $canvas.getContext("2d");
+    ctx.textAlign = "center";
+
+    let $enterBox = document.getElementById("key_enter");
+
+    function random(...args) {
+      if (args.length === 1) {
+        const [n] = args;
+        return Math.random() * n;
+      }
+      if (args.length === 2) {
+        const [start, end] = args;
+        if (start > end) throw Error("start value is bigger then last value");
+        return Math.random() * (end - start) + start;
+      }
+    }
+    function randomInt(...args) {
+      if (args.length === 1) {
+        const [n] = args;
+        return Math.ceil(Math.random() * n);
+      }
+      if (args.length === 2) {
+        const [start, end] = args;
+        if (start > end) throw Error("start value is bigger then last value");
+        return Math.ceil(Math.random() * (end - start)) + start;
+      }
+    }
+    function randomBool(arg1 = true, arg2 = false) {
+      return Math.random() > 0.5 ? arg1 : arg2;
+    }
+    function rgb(rgbArray, alpha = 1) {
+      return (
+        "rgba(" +
+        rgbArray[0] +
+        "," +
+        rgbArray[1] +
+        "," +
+        rgbArray[2] +
+        "," +
+        alpha.toString() +
+        ")"
+      );
+    }
+
+    class GameManager {
+      constructor() {
+        this.isRunning = false;
+        this.isGameOver;
+        this.winner_index = null;
+        this.selectedClass = [0, 0];
+        this.objectList = new Array();
+        this.$gameTimer = document.getElementById("timer");
+        this.player;
+        this.gameDate;
+        this.platformDate;
+        this.platformType = 0;
+        this.platformType_before = 0;
+        this.platformUpadateTime = 0;
+        this.isAutoPlaying;
+        this.auto_mode = [0, 0, 0, 0];
+        this.auto_time = [0, 0, 0, 0];
+        this.classBoxUpdate(0, this.selectedClass[0]);
+        this.classBoxUpdate(1, this.selectedClass[1]);
+      }
+
+      gameStart() {
+        if (this.isRunning) return;
+
+        this.resetObjectList();
+
+        this.isRunning = true;
+        this.isGameOver = false;
+        this.winner_index = null;
+
+        this.gameDate = Date.now();
+        this.platformDate = Date.now() + PLATFORM_UPDATE_COOL;
+
+        [this.player[0].class_type, this.player[1].class_type] =
+          this.selectedClass;
+        [this.player[1].otherPlayer, this.player[0].otherPlayer] = this.player;
+
+        this.player[0].initialize();
+        this.player[1].initialize();
+
+        [this.player[0].pos, this.player[1].pos] = [
+          [100, 200],
+          [MAP_SIZE[0] - 100, 200],
+        ];
+
+        if (this.player[1].class_type == CLASS_GRAY)
+          this.auto_time[AUTOMODE_COOLTIME.length + 1] = randomInt(120, 240);
+      }
+
+      gameOver() {
+        this.isRunning = false;
+        this.isGameOver = true;
+        this.isAutoPlaying = false;
+
+        keyState = [];
+        $enterBox.style.color = "white";
+        $enterBox.innerText = "버튼눌러돌코들아";
+      }
+
+      resetObjectList() {
+        this.objectList = new Array();
+        this.objectList.push(ground);
+        for (let p of this.player) this.objectList.push(p);
+        for (let f of platforms) this.objectList.push(f);
+      }
+
+      update() {
+        if (this.isRunning) this.screenRefresh();
+        else {
+          this.drawManagerUI();
+          return;
+        }
+
+        this.player[0].otherPlayersDir =
+          this.player[0].pos[0] > this.player[1].pos[0] ? -1 : 1;
+        this.player[1].otherPlayersDir = -this.player[0].otherPlayersDir;
+
+        if (this.isAutoPlaying) this.autoPlay();
+
+        for (let obj of this.objectList) obj.updateAll();
+
+        this.$gameTimer.innerText = this.calTimerText(
+          Date.now() - this.gameDate
+        );
+
+        this.platformUpdate();
+        this.drawPlayerUI();
+      }
+
+      screenRefresh() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      drawManagerUI() {
+        if (this.isGameOver) {
+          if (this.winner_index != null) {
+            //Game Over Text
+            Painter.drawText(
+              this.winner_index == 0 ? "white" : "#ff4646",
+              [MAP_SIZE[0] * 0.25 + 0.5 * this.winner_index, MAP_SIZE[1] / 2],
+              this.winner_index == 0 ? "YOU WIN!" : "YOU LOSE..."
+            );
+            Painter.drawText(
+              this.winner_index == 1 ? "white" : "#ff4646",
+              [MAP_SIZE[0] * 0.75 + 0.5 * this.winner_index, MAP_SIZE[1] / 2],
+              this.winner_index == 1 ? "YOU WIN!" : "YOU LOSE..."
+            );
+
+            this.winner_index = null;
+          }
+        }
+      }
+
+      drawPlayerUI() {
+        let newScale;
+        for (let i = 0; i < 2; i++) {
+          let p = this.player[i];
+
+          newScale = p.hp / p.hpm; //HP bar
+          Painter.drawRect(
+            "white",
+            [MAP_SIZE[0] * i + DIR[i] * 210, 18],
+            [200, 8]
+          );
+          Painter.drawRect(
+            rgb(COLOR_CLASS[this.selectedClass[i]]),
+            [MAP_SIZE[0] * i + DIR[i] * 10 + DIR[i] * 200 * newScale, 18],
+            [200 * newScale, 8]
+          );
+          Painter.drawText(
+            "black",
+            [MAP_SIZE[0] * i + DIR[i] * 210, 22],
+            p.hp.toString() + " / " + p.hpm.toString()
+          );
+
+          for (let n = 0; n < 3; n++) {
+            //skill cooltime bar
+            this.drawSkillBar(
+              0,
+              i,
+              n,
+              p.skillTime[n] == p.skillCool[n],
+              0,
+              p.skillTime[n] / p.skillCool[n]
+            );
+          }
+          switch (p.class_type) {
+            case CLASS_BLUE: //blue
+              if (p.stackAttack > 0)
+                this.drawSkillBar(
+                  1,
+                  i,
+                  0,
+                  p.stackAttack == 3,
+                  1,
+                  3,
+                  p.stackAttack
+                );
+              if (p.buffTime > 0)
+                this.drawSkillBar(0, i, 1, true, 1, p.buffTime / 240);
+              if (p.skillStat[1] > 0)
+                this.drawSkillBar(0, i, 2, true, 1, p.skillStat[1] / 300);
+              break;
+
+            case CLASS_MINT: //mint
+              this.drawSkillBar(
+                0,
+                i,
+                0,
+                p.skillStat[0] == 20,
+                1,
+                p.skillStat[0] / 20
+              );
+              this.drawSkillBar(
+                0,
+                i,
+                1,
+                p.skillStat[0] == 20,
+                1,
+                p.skillStat[0] / 20
+              );
+              break;
+
+            case CLASS_BROWN: //brown
+              this.drawSkillBar(0, i, 0, true, 1, p.skillStat[1] / 75);
+              break;
+
+            case CLASS_YELLOW: //yellow
+              if (p.stackAttack > 0)
+                this.drawSkillBar(
+                  1,
+                  i,
+                  0,
+                  p.stackAttack == 2,
+                  1,
+                  2,
+                  p.stackAttack
+                );
+          }
+        }
+
+        Painter.drawText("white", [MAP_SIZE[0] / 2, 20], "Platform Change"); //platform change timer text
+        Painter.drawText(
+          "white",
+          [MAP_SIZE[0] / 2, 34],
+          this.calTimerText(this.platformDate - Date.now())
+        );
+      }
+
+      drawSkillBar(
+        barType,
+        index_player,
+        index_skill,
+        isOn,
+        yPos,
+        val1 = 1,
+        val2 = 1
+      ) {
+        if (barType == 0)
+          Painter.drawRect(
+            isOn ? "white" : "gray",
+            [
+              index_player * MAP_SIZE[0] +
+                DIR[index_player] * (10 + 137 * index_skill + 63 * val1),
+              34 + 11 * yPos,
+            ],
+            [63 * val1, 3]
+          );
+        else {
+          let xSize = (63 - (val1 - 1) * 5) / val1;
+          for (let i = 0; i < val1; i++) {
+            if (i < val2)
+              Painter.drawRect(
+                isOn ? "white" : "gray",
+                [
+                  index_player * MAP_SIZE[0] +
+                    DIR[index_player] *
+                      (10 + 137 * index_skill + (xSize * 2 + 10) * i + xSize),
+                  34 + 11 * yPos,
+                ],
+                [xSize, 3]
+              );
+          }
+        }
+      }
+
+      buttonDown(btn_index) {
+        if (this.isRunning) {
+          switch (btn_index) {
+            case 0:
+              this.player[1].dash(-1);
+              break;
+
+            case 1:
+              this.player[1].dash(1);
+              break;
+
+            case 4:
+              this.player[1].skill1On();
+              break;
+
+            case 5:
+              this.player[1].skill2On();
+              break;
+
+            case 6:
+              this.player[1].skill3On();
+              break;
+
+            case 7:
+              this.player[0].dash(-1);
+              break;
+
+            case 9:
+              this.player[0].dash(1);
+              break;
+
+            case 11:
+              this.player[0].skill1On();
+              break;
+
+            case 12:
+              this.player[0].skill2On();
+              break;
+
+            case 13:
+              this.player[0].skill3On();
+              break;
+
+            case 14:
+              if (!this.isAutoPlaying) {
+                this.isAutoPlaying = true;
+
+                $enterBox.style.color = "red";
+                $enterBox.innerText = "Auto Play is Running";
+
+                for (let i = 0; i < 3; i++) {
+                  this.player[1].skillTime[i] += randomInt(
+                    0,
+                    this.player[1].skillCool[i]
+                  );
+                }
+              }
+          }
+        } else {
+          GM.classBoxSelect(btn_index);
+
+          if (btn_index == 14) {
+            this.gameStart();
+
+            $enterBox.innerText = "버튼눌러돌코들아";
+          }
+        }
+      }
+
+      buttonPress(btn_index) {
+        if (this.isRunning) {
+          switch (btn_index) {
+            case 0:
+              if (!this.isAutoPlaying) this.player[1].move(0, -1);
+              break;
+
+            case 1:
+              if (!this.isAutoPlaying) this.player[1].move(0, 1);
+              break;
+
+            case 2:
+              if (!this.isAutoPlaying) this.player[1].jump();
+              break;
+
+            case 3:
+              if (!this.isAutoPlaying) this.player[1].down();
+              break;
+
+            case 4:
+              if (!this.isAutoPlaying) this.player[1].skill(0);
+              break;
+
+            case 5:
+              if (!this.isAutoPlaying) this.player[1].skill(1);
+              break;
+
+            case 6:
+              if (!this.isAutoPlaying) this.player[1].skill(2);
+              break;
+
+            case 7:
+              this.player[0].move(0, -1);
+              break;
+
+            case 8:
+              this.player[0].down();
+              break;
+
+            case 9:
+              this.player[0].move(0, 1);
+              break;
+
+            case 10:
+              this.player[0].jump();
+              break;
+
+            case 11:
+              this.player[0].skill(0);
+              break;
+
+            case 12:
+              this.player[0].skill(1);
+              break;
+
+            case 13:
+              this.player[0].skill(2);
+          }
+        }
+      }
+
+      buttonUp(btn_index) {
+        if (this.isRunning) {
+          switch (btn_index) {
+            case 4:
+              this.player[1].skill1Off();
+              break;
+
+            case 5:
+              this.player[1].skill2Off();
+              break;
+
+            case 6:
+              this.player[1].skill3Off();
+              break;
+
+            case 11:
+              this.player[0].skill1Off();
+              break;
+
+            case 12:
+              this.player[0].skill2Off();
+              break;
+
+            case 13:
+              this.player[0].skill3Off();
+          }
+        }
+      }
+
+      autoPlay() {
+        let p = this.player[1];
+
+        for (let i = 0; i < AUTOMODE_COOLTIME.length; i++) {
+          this.auto_time[i]--;
+
+          if (this.auto_time[i] < 1) {
+            this.autoPlayAction(this.auto_mode, i);
+            this.auto_time[i] = randomInt(
+              AUTOMODE_COOLTIME[i][0],
+              AUTOMODE_COOLTIME[i][1]
+            );
+          }
+        }
+
+        p.move(0, this.auto_mode[0] ? 1 : -1);
+
+        if (p.pos[0] == MAP_SIZE[0] - p.size[0]) {
+          this.auto_mode[0] = false;
+          p.pos[0]--;
+        } else if (p.pos[0] == p.size[0]) {
+          this.auto_mode[0] = true;
+          p.pos[0]++;
+        }
+
+        if (this.auto_mode[1]) p.jump();
+        else p.down();
+
+        if (p.class_type != CLASS_BROWN) p.skill(0);
+        else {
+          p.skill1On();
+          p.skill1Off();
+        }
+
+        if (p.class_type != CLASS_GRAY) p.skill(1);
+        else {
+          this.auto_time[AUTOMODE_COOLTIME.length]--;
+
+          if (
+            this.auto_time[AUTOMODE_COOLTIME.length] < 1 &&
+            Transform.calDistance(this.player[0].pos, p.pos) < 5 &&
+            p.hp > p.hpm / 4
+          ) {
+            p.skill2On();
+            this.auto_time[AUTOMODE_COOLTIME.length] = randomInt(300, 900);
+            this.auto_mode[AUTOMODE_COOLTIME.length] = true;
+          }
+
+          if (this.auto_mode[AUTOMODE_COOLTIME.length]) {
+            this.auto_time[AUTOMODE_COOLTIME.length + 1]--;
+
+            if (this.auto_time[AUTOMODE_COOLTIME.length + 1] < 1) {
+              p.skill2On();
+              this.auto_time[AUTOMODE_COOLTIME.length + 1] = randomInt(60, 90);
+              this.auto_mode[AUTOMODE_COOLTIME.length] = false;
+            }
+          }
+        }
+        p.skill(2);
+      }
+
+      autoPlayAction(mode, act_type) {
+        switch (act_type) {
+          case 0:
+            mode[act_type] = randomBool();
+            break;
+
+          case 1:
+            mode[act_type] = randomBool();
+            break;
+        }
+      }
+
+      platformUpdate() {
+        if (this.platformDate < Date.now()) {
+          this.platformType_before = this.platformType;
+          this.platformType =
+            this.platformType + 1 == STAT_PLATFORM[0].length
+              ? 0
+              : this.platformType + 1;
+          this.platformDate = Date.now() + PLATFORM_UPDATE_COOL;
+        }
+
+        if (this.platformUpadateTime > 0) {
+          this.platformUpadateTime--;
+
+          for (let i = 0; i < 3; i++) {
+            let coord = STAT_PLATFORM[0][this.platformType][i][0]
+              ? STAT_PLATFORM[0][this.platformType][i][1]
+              : STAT_PLATFORM[1][i];
+            let size = STAT_PLATFORM[0][this.platformType][i][0]
+              ? STAT_PLATFORM[0][this.platformType][i][2]
+              : [20, 20];
+            let coord_before = STAT_PLATFORM[0][this.platformType_before][i][0]
+              ? STAT_PLATFORM[0][this.platformType_before][i][1]
+              : STAT_PLATFORM[1][i];
+            let size_before = STAT_PLATFORM[0][this.platformType_before][i][0]
+              ? STAT_PLATFORM[0][this.platformType_before][i][2]
+              : [20, 20];
+
+            for (let n = 0; n < 2; n++) {
+              platforms[i].pos[n] =
+                MAP_SIZE[n] / 2 +
+                coord[n] +
+                (PLATFORM_UPDATE_INTERVAL -
+                  (coord[n] - coord_before[n]) * this.platformUpadateTime) /
+                  PLATFORM_UPDATE_INTERVAL;
+              platforms[i].size[n] =
+                size[n] +
+                (PLATFORM_UPDATE_INTERVAL -
+                  (size[n] - size_before[n]) * this.platformUpadateTime) /
+                  PLATFORM_UPDATE_INTERVAL;
+            }
+          }
+        }
+      }
+
+      calTimerText(date) {
+        let sec = Math.round(date / 1000);
+        let min = Math.floor(sec / 60);
+
+        return (
+          (min < 10 ? "0" + min : min) +
+          " : " +
+          (sec % 60 < 10 ? "0" + (sec % 60) : sec % 60)
+        );
+      }
+
+      classBoxSelect(btn_index) {
+        switch (btn_index) {
+          case 0:
+            this.classBoxUpdate(1, -1);
+            break;
+
+          case 1:
+            this.classBoxUpdate(1, 1);
+            break;
+
+          case 7:
+            this.classBoxUpdate(0, -1);
+            break;
+
+          case 9:
+            this.classBoxUpdate(0, 1);
+            break;
+        }
+      }
+
+      classBoxUpdate(p, n) {
+        this.selectedClass[p] += n;
+        if (this.selectedClass[p] >= COLOR_CLASS.length)
+          this.selectedClass[p] = 0;
+        if (this.selectedClass[p] < 0)
+          this.selectedClass[p] = COLOR_CLASS.length - 1;
+        if (n == 0) this.selectedClass[p] = n;
+
+        for (let i = 0; i < 5; i++) {
+          let class_index = this.selectedClass[p] - 2 + i;
+          if (class_index < 0) class_index = COLOR_CLASS.length + class_index;
+          if (class_index >= COLOR_CLASS.length)
+            class_index -= COLOR_CLASS.length;
+
+          document.querySelector(CLASSBOX_ID[i + p * 5]).style.backgroundColor =
+            rgb(COLOR_CLASS[class_index]);
+        }
+      }
+    }
+
+    class GameObject {
+      constructor(objType_list) {
+        this.objType_list = this.createTypeList(objType_list);
+        this.transform = new Transform(this);
+        this.painter = new Painter();
+        this.collisionObjectList = [];
+        this.create();
+      }
+      create() {
+        GM.objectList.push(this);
+      }
+      destory() {
+        this.onDestroy();
+        const index = GM.objectList.indexOf(this);
+        if (index !== -1) GM.objectList.splice(index, 1);
+      }
+      onDestroy() {}
+      updateAll() {
+        this.update();
+        this.transform.update();
+        this.draw();
+        //console.log(this.objType + ": " + this.collisionObjectList);
+      }
+      update() {}
+      draw() {
+        Painter.drawRect(
+          rgb(this.painter.color, this.painter.alpha),
+          this.pos,
+          this.size
+        );
+      }
+      collisionEvent(obj) {
+        return;
+      }
+      createTypeList(list) {
+        let returnList = new Array();
+        if (Array.isArray(list)) returnList = list;
+        else returnList.push(list);
+        return returnList;
+      }
+      get objType() {
+        return this.objType_list.join("_");
+      }
+      set objType(objType_list) {
+        this.objType_list = this.createTypeList(objType_list);
+      }
+      get pos() {
+        return this.transform.position;
+      }
+      set pos(position) {
+        this.transform.position = position;
+      }
+      get size() {
+        return this.transform.size;
+      }
+      set size(size) {
+        this.transform.size = size;
+      }
+    }
+
+    class Transform {
+      constructor(gameObject) {
+        this.gameObject = gameObject;
+        this.massType = MASS_SOFT;
+        this.position = [0, 0];
+        this.translate = [0, 0];
+        this.size = [0, 0];
+        this.velocity = [0, 0];
+        this.gravity = [0, 0];
+        this.friction = 0;
+        this.isBound = false;
+        this.isNotMove = false;
+        this.isAbleMapOut = true;
+        this.contact = [false, false, false, false];
+      }
+
+      update() {
+        if (this.isNotMove) return;
+
+        for (let i = 0; i < 2; i++) {
+          if (this.gravity[i] != 0)
+            this.velocity[i] += parseFloat(this.gravity[i]); //cal gravity
+
+          if (this.velocity[i] != 0) {
+            this.translate[i] += this.velocity[i]; //cal velocity
+
+            if (this.friction != 0) {
+              //cal friction
+              if (this.velocity[i] > 0) {
+                this.velocity[i] -= this.friction;
+                if (this.velocity[i] < 0) this.velocity[i] = 0;
+              } else {
+                this.velocity[i] += this.friction;
+                if (this.velocity[i] > 0) this.velocity[i] = 0;
+              }
+            }
+          }
+
+          if (this.translate[i] != 0) {
+            this.position[i] += this.translate[i];
+          } //cal translate
+        }
+        if (this.massType != MASS_PARTICLE) {
+          //cal collision
+          this.contact = [false, false, false, false];
+
+          for (let obj of GM.objectList) {
+            if (
+              obj != this.gameObject &&
+              obj.transform.massType != MASS_PARTICLE &&
+              this.gameObject.collisionObjectList.includes(obj.objType) &&
+              Transform.checkCollision(this, obj.transform)
+            ) {
+              this.gameObject.collisionEvent(obj);
+              //if (!(this.gameObject.objType + obj.objType == 'P1ground' || this.gameObject.objType + obj.objType == 'P2ground'))
+              //	console.log('collsition Event: ' + this.gameObject.objType + " + " + obj.objType);
+            }
+          }
+        }
+        if (!this.isAbleMapOut) {
+          //prevent map out
+          for (let i = 0; i < 2; i++) {
+            if (this.position[i] + this.size[i] > MAP_SIZE[i]) {
+              this.position[i] = MAP_SIZE[i] - this.size[i];
+              this.velocity[i] = this.isBound ? -this.velocity[i] : 0;
+            } else if (this.position[i] - this.size[i] < 0) {
+              this.position[i] = this.size[i];
+              this.velocity[i] = this.isBound ? -this.velocity[i] : 0;
+            }
+          }
+        }
+        this.translate = [0, 0];
+      }
+
+      collisionWithHard(other) {
+        switch (Transform.checkRelativeDirection(other, this)) {
+          case DIR_RIGHT:
+            this.position[0] = other.position[0] - other.size[0] - this.size[0];
+            this.velocity[0] *= this.isBound ? -1 : 0;
+            this.contact[0] = true;
+            break;
+
+          case DIR_LEFT:
+            this.position[0] = other.position[0] + other.size[0] + this.size[0];
+            this.velocity[0] *= this.isBound ? -1 : 0;
+            this.contact[1] = true;
+            break;
+
+          case DIR_UP:
+            this.position[1] = other.position[1] + other.size[1] + this.size[1];
+            this.velocity[1] *= this.isBound ? -1 : 0;
+            this.contact[2] = true;
+            break;
+
+          case DIR_DOWN:
+            this.position[1] = other.position[1] - other.size[1] - this.size[1];
+            this.velocity[1] *= this.isBound ? -1 : 0;
+            this.contact[3] = true;
+        }
+      }
+
+      translate_circle(degree, radius) {
+        let radian =
+          ((degree <= 0 ? 360 + degree : degree > 360 ? degree - 360 : degree) *
+            Math.PI) /
+          180;
+        this.position[0] += Math.cos(radian) * radius;
+        this.position[1] += Math.sin(radian) * radius;
+      }
+
+      translate_gotoOther(other_pos, speed, dir = 1) {
+        let x = other_pos[0] - this.position[0];
+        let y = other_pos[1] - this.position[1];
+        let diagonal = Math.sqrt(x ** 2 + y ** 2);
+        this.velocity[0] = ((speed * x) / diagonal) * dir;
+        this.velocity[1] = ((speed * y) / diagonal) * dir;
+      }
+
+      translate_tracingOther(other_pos, distance_ratio, minSpeed) {
+        let x = other_pos[0] - this.position[0];
+        let y = other_pos[1] - this.position[1];
+        this.velocity[0] =
+          (x > 0 ? 1 : -1) * (distance_ratio * Math.abs(x) + minSpeed);
+        this.velocity[1] =
+          (y > 0 ? 1 : -1) * (distance_ratio * Math.abs(y) + minSpeed);
+      }
+
+      static calDistance(pos1, pos2) {
+        return Math.sqrt(
+          Math.abs(pos1[0] - pos2[0]) ** 2 + Math.abs(pos1[1] - pos2[1]) ** 2
+        );
+      }
+
+      static checkRelativeDirection(tf_target, tf) {
+        let pos_before = [
+          tf.position[0] - tf.translate[0],
+          tf.position[1] - tf.translate[1],
+        ];
+        let slope =
+          ((tf_target.size[1] + tf.size[1]) /
+            (tf_target.size[0] + tf.size[0])) *
+          (pos_before[0] - tf_target.position[0]);
+        let isExceedSlopeCurve =
+          pos_before[1] > tf_target.position[1] + slope ? true : false;
+        let isExceedSlopeCurve_minus =
+          pos_before[1] > tf_target.position[1] - slope ? true : false;
+
+        if (isExceedSlopeCurve) {
+          if (isExceedSlopeCurve_minus) return DIR_UP;
+          return DIR_RIGHT;
+        } else {
+          if (isExceedSlopeCurve_minus) return DIR_LEFT;
+          return DIR_DOWN;
+        }
+      }
+
+      static checkCollision(tf1, tf2) {
+        if (
+          tf1.position[0] - tf1.size[0] <= tf2.position[0] + tf2.size[0] &&
+          tf1.position[0] + tf1.size[0] >= tf2.position[0] - tf2.size[0] &&
+          tf1.position[1] - tf1.size[1] <= tf2.position[1] + tf2.size[1] &&
+          tf1.position[1] + tf1.size[1] >= tf2.position[1] - tf2.size[1]
+        )
+          return true;
+        return false;
+      }
+
+      static checkMapOut(tf) {
+        if (
+          tf.position[0] - tf.size[0] > MAP_SIZE[0] ||
+          tf.position[0] + tf.size[0] < 0 ||
+          tf.position[1] - tf.size[1] > MAP_SIZE[0] ||
+          tf.position[1] + tf.size[1] < 0
+        )
+          return true;
+        return false;
+      }
+    }
+
+    class Painter {
+      constructor() {
+        this.color = "FF00FF";
+        this.alpha = 1;
+      }
+
+      static drawRect(col, pos, size) {
+        ctx.fillStyle = col;
+        ctx.fillRect(
+          pos[0] - size[0],
+          pos[1] - size[1],
+          size[0] * 2,
+          size[1] * 2
+        );
+      }
+
+      static drawText(col, pos, str) {
+        ctx.fillStyle = col;
+        ctx.fillText(str, pos[0], pos[1]);
+      }
+    }
+
+    class Player extends GameObject {
+      constructor(objType_list) {
+        super(objType_list);
+        this.transform.isAbleMapOut = false;
+        this.class_type;
+        this.otherPlayer;
+        this.otherPlayersDir;
+        this.bulletCollisionObjectList;
+        this.hpm;
+        this.hp;
+        this.moveSpeed;
+        this.skill_action;
+        this.skill_list = [
+          [
+            this.skill1_red,
+            this.skill1_blue,
+            this.skill1_mint,
+            this.skill1_brown,
+            this.skill1_green,
+            this.skill1_yellow,
+            this.skill1_gray,
+          ],
+          [
+            this.skill2_red,
+            this.skill2_blue,
+            this.skill2_mint,
+            this.skill2_brown,
+            this.skill2_green,
+            this.skill2_yellow,
+            this.skill2_gray,
+          ],
+          [
+            this.skill3_red,
+            this.skill3_blue,
+            this.skill3_mint,
+            this.skill3_brown,
+            this.skill3_green,
+            this.skill3_yellow,
+            this.skill3_gray,
+          ],
+        ];
+        this.skillPower;
+        this.skillCool;
+        this.skillTime = [undefined, undefined, undefined];
+        this.skillStat = [undefined, undefined, undefined, undefined];
+        this.bulletSize;
+        this.bulletSpeed;
+        this.bulletLifeTime;
+        this.comboAttack;
+        this.comboAttackCool;
+        this.comboAttackTime;
+        this.stackAttack;
+        this.dashing;
+        this.dashTime;
+        this.buffTime;
+        this.invincible;
+        this.stunning;
+        this.burnning;
+        this.freezing;
+      }
+
+      initialize() {
+        this.transform.size = [8, 8];
+        this.transform.gravity[1] = 1;
+        this.transform.friction = 0.25;
+        this.transform.velocity = [0, 0];
+        this.transform.translate = [0, 0];
+        this.painter.color = COLOR_CLASS[this.class_type];
+        this.painter.alpha = 1;
+        this.collisionObjectList = ["ground"];
+        this.bulletCollisionObjectList = [];
+        this.hpm = STAT_CLASS[this.class_type][0];
+        this.hp = this.hpm;
+        this.moveSpeed = STAT_CLASS[this.class_type][1];
+        this.skillPower = STAT_CLASS[this.class_type][2];
+        this.skillCool = STAT_CLASS[this.class_type][3];
+        this.skillTime = [0, 0, 0];
+        this.skillStat = [0, 0, 0, 0];
+        this.skill_action = [
+          this.skill_list[0][this.class_type],
+          this.skill_list[1][this.class_type],
+          this.skill_list[2][this.class_type],
+        ];
+        this.bulletSize = STAT_CLASS[this.class_type][4];
+        this.bulletSpeed = STAT_CLASS[this.class_type][5];
+        this.bulletLifeTime = STAT_CLASS[this.class_type][6];
+        this.comboAttack = 0;
+        this.comboAttackTime = 0;
+        this.stackAttack = 0;
+        this.dashing = 0;
+        this.dashTime = [0, 0];
+        this.buffTime = -1;
+        this.invincible = false;
+        this.stunning = 0;
+        this.burnning = -1;
+        this.freezing = -1;
+
+        switch (this.class_type) {
+          case CLASS_RED: //red
+            this.comboAttackCool = 16;
+            //this.bulletCollisionObjectList.push(this.objType + "_red_skill1");
+            break;
+
+          case CLASS_BLUE: //blue
+            this.comboAttackCool = 8;
+            break;
+
+          case CLASS_MINT: //mint
+            this.comboAttackCool = 5;
+            break;
+
+          case CLASS_BROWN: //brown
+            this.skillStat[0] = false;
+            this.skillStat[1] = false;
+            this.collisionObjectList.push(this.objType + "_brown_skill2");
+            break;
+
+          case CLASS_GREEN: //green
+            this.skillStat[0] = false;
+            break;
+
+          case CLASS_GRAY: //gray
+            this.painter.alpha = 0;
+            this.skillStat[1] = 8;
+            this.comboAttackCool = 15;
+        }
+
+        switch (this.otherPlayer.class_type) {
+          case CLASS_RED: //red
+            this.bulletCollisionObjectList.push(
+              this.otherPlayer.objType + "_red_skill2"
+            );
+            break;
+
+          case CLASS_BROWN: //brown
+            this.collisionObjectList.push(
+              this.otherPlayer.objType + "_brown_skill2"
+            );
+            this.bulletCollisionObjectList.push(
+              this.otherPlayer.objType + "_brown_skill2"
+            );
+            break;
+
+          case CLASS_GREEN: //green
+            this.bulletCollisionObjectList.push(
+              this.otherPlayer.objType + "_green_skill3"
+            );
+            break;
+
+          case CLASS_YELLOW: //yellow
+            this.bulletCollisionObjectList.push(
+              this.otherPlayer.objType + "_yellow_skill2"
+            );
+        }
+      }
+
+      update() {
+        //update by class
+        switch (this.class_type) {
+          case CLASS_BLUE: //blue
+            if (this.skillStat[1] > 0) {
+              this.skillStat[1]--;
+              let randScale = random(1, 10);
+
+              for (let i = 0; i < 3; i++) {
+                let pt = new Particle(
+                  "particle",
+                  COLOR_CLASS[CLASS_BLUE],
+                  [randomInt(-320, MAP_SIZE[0]), 3],
+                  [randScale * 0.3, randScale * 0.3],
+                  90 + (200 - Math.floor(randScale * 20)),
+                  [
+                    random(randScale * 0.2, randScale * 0.4),
+                    random(randScale * 0.1, randScale * 0.5),
+                  ],
+                  15,
+                  0.3
+                );
+                pt.startAlpha = randScale * 0.07;
+                pt.painter.alpha = pt.startAlpha;
+                pt.isDeleteOnMapOut = false;
+              }
+            }
+            break;
+
+          case CLASS_MINT: //mint
+            if (this.skillStat[0] == 20) {
+              let randScale = random(1, 3);
+              let pt = new Particle(
+                "particle",
+                COLOR_CLASS[CLASS_MINT],
+                [null, null],
+                [randScale, randScale],
+                45,
+                [0, 0],
+                20,
+                0.7
+              );
+              pt.startPosition = [
+                this.pos[0] + random(-this.size[0], this.size[0]),
+                this.pos[1] + random(-this.size[1], this.size[1]),
+              ];
+              pt.revolute = [
+                random(4, 24),
+                randomBool(DIR_RIGHT, DIR_LEFT) * randomInt(5, 25),
+                randomInt(1, 360),
+              ];
+            }
+            break;
+
+          case CLASS_BROWN: //brown
+            if (this.skillStat[3] > 0) this.skillStat[3]--;
+
+            if (this.skillStat[2]) {
+              this.transform.velocity[1] = 40;
+
+              let pt = new Particle(
+                "particle",
+                COLOR_CLASS[CLASS_BROWN],
+                this.pos.slice(),
+                this.size,
+                10,
+                [0, 0],
+                10,
+                0.5
+              );
+            }
+            break;
+
+          case CLASS_GREEN: //green
+            if (this.skillStat[0]) {
+              this.skillStat[1]++;
+
+              if (this.skillStat[1] > 29) this.skillStat = [false, 0, 0];
+
+              this.skillStat[2] =
+                this.skillStat[1] < 15
+                  ? this.skillStat[1] * 15
+                  : (30 - this.skillStat[1]) * 15;
+
+              let tf_grapBox = new Transform(this);
+              tf_grapBox.position = [
+                this.pos[0] + this.otherPlayersDir * this.skillStat[2],
+                this.pos[1],
+              ];
+              tf_grapBox.size = [this.skillStat[2], 3];
+
+              if (
+                Transform.checkCollision(tf_grapBox, this.otherPlayer.transform)
+              ) {
+                this.otherPlayer.pos[1] = this.pos[1];
+                this.otherPlayer.transform.translate[0] =
+                  this.transform.translate[0];
+                this.otherPlayer.transform.velocity[1] =
+                  this.transform.velocity[1];
+                this.otherPlayer.stun(10);
+
+                if (this.skillStat[1] > 15) {
+                  if (this.otherPlayer.pos[0] > this.pos[0]) {
+                    this.otherPlayer.pos[0] -= 30;
+                    if (this.otherPlayer.pos[0] < this.pos[0])
+                      this.otherPlayer.pos[0] = this.pos[0];
+                  } else if (this.otherPlayer.pos[0] < this.pos[0]) {
+                    this.otherPlayer.pos[0] += 30;
+                    if (this.otherPlayer.pos[0] > this.pos[0])
+                      this.otherPlayer.pos[0] = this.pos[0];
+                  }
+                }
+              }
+            }
+            break;
+
+          case CLASS_YELLOW: //yellow
+            if (this.skillStat[1] > 0) {
+              if (this.skillStat[1] > 240) {
+                let randScale = random(0.5, 3);
+                let pt = new Particle(
+                  "particle",
+                  COLOR_CLASS[CLASS_YELLOW],
+                  this.pos.slice(),
+                  [randScale, randScale],
+                  30,
+                  [0, 0],
+                  30,
+                  0.6
+                );
+                pt.transform.translate_circle(
+                  randomInt(0, 360),
+                  randomInt(16, 48)
+                );
+                pt.transform.translate_gotoOther(this.pos, 2);
+
+                if (this.skillStat[1] % 9 == 0) {
+                  let lightGreatsword = this.createBulletObject([
+                    "yellow",
+                    "skill3",
+                  ]);
+                  lightGreatsword.bulletStat[0] = randomInt(-4, 4);
+                  lightGreatsword.pos = [
+                    this.pos[0] + 55 * this.otherPlayersDir,
+                    this.pos[1] + lightGreatsword.bulletStat[0],
+                  ];
+                }
+              }
+              this.skillStat[1]--;
+            }
+            break;
+
+          case CLASS_GRAY: //gray
+            if (this.skillStat[1] > 0) {
+              let isDamage = false;
+
+              if (this.skillStat[0]) {
+                if (this.skillStat[1] < 96) this.skillStat[1] += 4;
+                isDamage = true;
+              } else {
+                if (this.skillStat[1] > 8) {
+                  this.skillStat[1] -= 4;
+                  isDamage = true;
+                }
+              }
+
+              if (isDamage) {
+                for (let i = 0; i < 3; i++) {
+                  let randScale = random(
+                    this.skillStat[1] / 8,
+                    this.skillStat[1] / 3
+                  );
+                  let pt = new Particle(
+                    "particle",
+                    COLOR_CLASS[this.class_type],
+                    this.pos.slice(),
+                    [randScale, randScale],
+                    30,
+                    [0, 0],
+                    30,
+                    0.5,
+                    [0, 0],
+                    0,
+                    false,
+                    false,
+                    30
+                  );
+                  pt.transform.translate_circle(
+                    randomInt(0, 360),
+                    randomInt(8, this.skillStat[1])
+                  );
+                }
+
+                let randScale2 = random(1, 3);
+
+                let pt2 = new Particle(
+                  "particle",
+                  COLOR_CLASS[this.class_type],
+                  [
+                    this.pos[0] +
+                      randomInt(-this.skillStat[1], this.skillStat[1]),
+                    this.pos[1] +
+                      randomInt(-this.skillStat[1], this.skillStat[1]),
+                  ],
+                  [randScale2, randScale2],
+                  45,
+                  [random(-5, 5), random(-5, 5)],
+                  45,
+                  1,
+                  [0, 0],
+                  0,
+                  false,
+                  false,
+                  45
+                );
+
+                if (
+                  Transform.calDistance(this.pos, this.otherPlayer.pos) <
+                  this.skillStat[1]
+                ) {
+                  this.otherPlayer.reduceHP(this.skillPower[1]);
+                  this.healHP(this.skillPower[1] + 2);
+                }
+                this.reduceHP(1);
+              }
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+          //skill cooltime
+          if (this.skillTime[i] < this.skillCool[i]) this.skillTime[i]++;
+        }
+
+        if (this.comboAttack > 0) {
+          //combo attack
+          this.comboAttackTime++;
+
+          if (this.comboAttackTime >= this.comboAttackCool) {
+            this.comboAttack--;
+            this.comboAttackTime = 0;
+
+            switch (this.class_type) {
+              case CLASS_RED:
+                {
+                  //red skill3
+                  let meteor = this.createBulletObject(["red", "skill3"]);
+                  meteor.pos = [this.otherPlayer.pos[0], -10];
+                  meteor.transform.gravity[1] = 2.5;
+                  meteor.transform.velocity[0] = random(-5, 5);
+                  meteor.isDeleteOnMapOut = false;
+                  meteor.lifeTime = 240;
+                }
+                break;
+
+              case CLASS_BLUE: //blue skill1
+                if (this.buffTime > 0) {
+                  let degree;
+                  for (let i = 0; i < 3; i++) {
+                    degree = this.skillStat[0] + i * 120;
+
+                    let iceBullet = this.createBulletObject(["blue", "skill1"]);
+                    iceBullet.transform.translate_circle(degree, 40);
+                  }
+                } else {
+                  let iceBullet = this.createBulletObject(["blue", "skill1"]);
+                }
+                break;
+
+              case CLASS_MINT:
+                {
+                  //mint skill1-1
+                  let windBlade_reinforced = this.createBulletObject([
+                    "mint",
+                    "skill1",
+                    1,
+                  ]);
+                  windBlade_reinforced.transform.friction = 0.85;
+                  windBlade_reinforced.size = [
+                    windBlade_reinforced.size[0] * 2,
+                    windBlade_reinforced.size[1] * 2,
+                  ];
+                  windBlade_reinforced.transform.translate_circle(
+                    -60 + this.comboAttack * 60,
+                    40
+                  );
+
+                  if (this.skillStat[1] == 1) {
+                    windBlade_reinforced.transform.friction = 0.45;
+                    windBlade_reinforced.size = [
+                      windBlade_reinforced.size[0],
+                      windBlade_reinforced.size[1],
+                    ];
+                    windBlade_reinforced.lifeTime = Math.floor(
+                      windBlade_reinforced.lifeTime * 1.5
+                    );
+                    windBlade_reinforced.power = Math.floor(
+                      windBlade_reinforced.power * 0.6
+                    );
+                  }
+
+                  windBlade_reinforced.power = Math.ceil(
+                    windBlade_reinforced.power * 1.5
+                  );
+                }
+                break;
+
+              case CLASS_GRAY: {
+                //gray skill1-1
+                let soulSpear = this.createBulletObject(["gray", "skill1", 1]);
+                soulSpear.transform.velocity = [0, 0];
+                soulSpear.size = [24, 2];
+                soulSpear.transform.translate_circle(this.comboAttack * 90, 36);
+                soulSpear.power = 32;
+              }
+            }
+          }
+        }
+
+        if (this.dashTime[0] > 0) this.dashTime[0]--; //dash
+        if (this.dashTime[1] > 0) this.dashTime[1]--;
+        if (this.dashing > 1) {
+          this.dashing--;
+
+          this.transform.friction = 7;
+          this.transform.gravity[1] = 0;
+
+          let pt = new Particle(
+            "particle",
+            COLOR_CLASS[this.class_type],
+            this.pos.slice(),
+            this.size,
+            12,
+            [0, 0],
+            12,
+            0.6
+          );
+
+          for (let i = 0; i < 3; i++) {
+            let randScale = random(1, 2);
+            let pt2 = new Particle(
+              "particle",
+              COLOR_CLASS[this.class_type],
+              [
+                this.pos[0] + random(-this.size[0] * 2, this.size[0]),
+                this.pos[1] + random(-this.size[1], this.size[1]),
+              ],
+              [randScale, randScale],
+              30,
+              [random(-1, 1), random(-1, 1)],
+              25,
+              0.6,
+              [0, -0.02],
+              0.02
+            );
+          }
+        } else if (this.dashing == 1) {
+          this.dashing = 0;
+          this.transform.friction = 0.25;
+          this.transform.gravity[1] = 1;
+          this.transform.velocity = [0, 0];
+        }
+
+        if (this.buffTime > 0) {
+          //buff
+          this.buffTime--;
+
+          if (this.buffTime == 0) {
+            if (this.class_type == CLASS_BLUE) this.transform.gravity[1] = 1; //blue skill2 end
+            this.buffTime = -1;
+          }
+
+          if (this.class_type == CLASS_BLUE) {
+            //blue skill2 start
+            let degree;
+
+            this.skillStat[0] += 3;
+            if (this.skillStat[0] > 360) this.skillStat[0] -= 360;
+
+            for (let i = 0; i < 3; i++) {
+              degree = this.skillStat[0] + i * 120;
+
+              let pt = new Particle(
+                "particle",
+                COLOR_CLASS[this.class_type],
+                this.pos.slice(),
+                [5, 5],
+                60,
+                [0, 0],
+                60,
+                0.35,
+                [0, 0],
+                0,
+                false,
+                false,
+                60
+              );
+              pt.transform.translate_circle(degree, 40);
+
+              let pt2 = new Particle(
+                "particle",
+                COLOR_CLASS[this.class_type],
+                this.pos.slice(),
+                [2, 2],
+                45,
+                [0, 0],
+                30,
+                0.35
+              );
+              pt2.transform.translate_circle(degree, 40);
+              pt2.pos = [
+                pt2.pos[0] + randomInt(-10, 10),
+                pt2.pos[1] + randomInt(-10, 10),
+              ];
+            }
+
+            let pt3 = new Particle(
+              "particle",
+              COLOR_CLASS[this.class_type],
+              this.pos.slice(),
+              [8, 8],
+              45,
+              [0, 0],
+              30,
+              0.2
+            );
+          }
+        }
+
+        if (this.stunning > 0) this.stunning--; //stunning
+
+        if (this.burnning > 0) {
+          //burnning
+          this.burnning--;
+          if (this.burnning % 8 == 0) this.reduceHP(1);
+
+          let randScale = random(2, 5);
+          let pt = new Particle(
+            "particle",
+            COLOR_CLASS[CLASS_RED],
+            [
+              this.pos[0] + random(-this.size[0], this.size[0]),
+              this.pos[1] + random(-this.size[1], this.size[1]),
+            ],
+            [randScale, randScale],
+            30,
+            [random(-1, 1), random(-1, 0)],
+            25,
+            0.6,
+            [0, -0.02],
+            0.02
+          );
+        }
+
+        if (this.freezing > 0) {
+          //freezing
+          this.freezing--;
+
+          if (this.freezing == 0) {
+            this.moveSpeed = STAT_CLASS[this.class_type][1];
+            this.freezing = -1;
+          }
+          if (this.freezing % 2 == 0) {
+            let randScale = random(1, 4);
+            let pt = new Particle(
+              "particle",
+              COLOR_CLASS[CLASS_BLUE],
+              [
+                this.pos[0] + random(-this.size[0] * 2, this.size[0] * 2),
+                this.pos[1] + random(-this.size[1] * 2, this.size[1] * 2),
+              ],
+              [randScale, randScale],
+              120,
+              [0, 0],
+              60,
+              0.5,
+              [0, 0],
+              0,
+              false,
+              false,
+              90
+            );
+          }
+        }
+      }
+
+      draw() {
+        Painter.drawRect(
+          rgb(this.painter.color, this.painter.alpha),
+          this.pos,
+          this.size
+        );
+        Painter.drawText(
+          "white",
+          [this.pos[0], this.pos[1] - 12],
+          this.objType
+        );
+
+        switch (this.class_type) {
+          case CLASS_BROWN: //brown skill1 charging
+            if (this.skillStat[0]) {
+              let newScale = 7 + (13 * this.skillStat[1]) / 100;
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [
+                  this.pos[0] + this.otherPlayersDir * (15 + newScale),
+                  this.pos[1],
+                ],
+                [newScale, 7]
+              );
+            }
+            break;
+
+          case CLASS_GREEN: //green skill2
+            if (this.skillStat[0]) {
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [
+                  this.pos[0] + this.otherPlayersDir * this.skillStat[2],
+                  this.pos[1],
+                ],
+                [this.skillStat[2], 3]
+              );
+              for (let i = 0; i < Math.floor(this.skillStat[2] / 10); i++)
+                Painter.drawRect(
+                  rgb(this.painter.color),
+                  [
+                    this.pos[0] + this.otherPlayersDir * i * 20,
+                    this.pos[1] + 6 * (i % 2 == 0 ? 1 : -1),
+                  ],
+                  [1, 3]
+                );
+            }
+            break;
+
+          case CLASS_YELLOW: //yellow skill3
+            if (this.skillStat[1] > 0) {
+              for (let i = 0; i < 2; i++) {
+                for (let n = 0; n < 3; n++)
+                  Painter.drawRect(
+                    rgb(this.painter.color, 0.5),
+                    [
+                      this.pos[0] + this.otherPlayersDir * (8 + n * 6),
+                      this.pos[1] - 32 + 64 * i,
+                    ],
+                    [3, 24 - 11 * n]
+                  );
+              }
+            }
+            break;
+
+          case CLASS_GRAY: //yellow skill3
+            Painter.drawRect(
+              rgb(this.painter.color, (64 - this.skillStat[1]) / 64),
+              this.pos,
+              [this.skillStat[1], this.skillStat[1]]
+            );
+            break;
+        }
+      }
+
+      collisionEvent(obj) {
+        if (obj.transform.massType == MASS_HARD) {
+          this.transform.collisionWithHard(obj.transform);
+
+          if (
+            this.class_type == CLASS_BROWN &&
+            this.skillStat[2] &&
+            this.transform.contact[3]
+          ) {
+            this.skillStat[2] = false;
+
+            for (let i = 0; i < 8; i++) {
+              let randScale = random(2, 5);
+              let pt = new Particle(
+                "particle",
+                COLOR_CLASS[CLASS_BROWN],
+                [this.pos[0], this.pos[1] + this.size[1]],
+                [randScale, randScale],
+                60,
+                [random(-5, 5), random(-10, 4)],
+                25,
+                1,
+                [0, 0.5],
+                0.05,
+                false,
+                true,
+                25
+              );
+            }
+
+            if (obj.objType == this.objType + "_brown_skill2") {
+              this.healHP(75);
+              obj.destory();
+            }
+          }
+        }
+      }
+
+      move(coordType, offset, mulFactor = 1) {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_BLUE && this.buffTime > 1) mulFactor = 1.5;
+        this.transform.translate[coordType] =
+          offset * Math.floor(this.moveSpeed * mulFactor);
+      }
+
+      jump() {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_BLUE && this.buffTime > 1) {
+          this.move(1, -1, 1.5);
+          return;
+        } else if (this.transform.contact[3])
+          this.transform.velocity[1] = -Math.ceil(this.moveSpeed * 1.6 + 13);
+      }
+
+      down() {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_BLUE && this.buffTime > 1) {
+          this.move(1, 1, 1.5);
+          return;
+        } else if (
+          this.class_type == CLASS_BROWN &&
+          !this.transform.contact[3] &&
+          this.skillStat[3] == 0
+        ) {
+          this.skillStat[2] = true;
+          this.skillStat[3] = 60;
+        }
+      }
+
+      dash(offset) {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_MINT) {
+          if (this.dashTime[offset == 1 ? 0 : 1] < 1) {
+            this.dashTime[offset == 1 ? 0 : 1] = 20;
+            this.dashTime[offset == 1 ? 1 : 0] = 0;
+          } else {
+            this.dashTime[offset == 1 ? 0 : 1] = 0;
+            this.dashing = 15;
+            this.transform.velocity[0] = offset * 50;
+            this.transform.velocity[1] = 0;
+          }
+        }
+      }
+
+      skill(skill_index) {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_BROWN) {
+          //brown skill1 charging
+          if (skill_index == 0) {
+            if (this.skillStat[skill_index]) {
+              this.skillTime[skill_index] = 0;
+              if (this.skillStat[1] < 75) this.skillStat[1]++;
+            }
+            return;
+          } else if (skill_index == 1) {
+            if (!this.transform.contact[3]) return;
+          }
+        } else if (this.class_type == CLASS_GRAY) {
+          if (skill_index == 1) return;
+        }
+
+        if (this.skillTime[skill_index] >= this.skillCool[skill_index]) {
+          this.skill_action[skill_index](this);
+          this.skillTime[skill_index] = 0;
+        }
+      }
+
+      skill1_red(player) {
+        //damage: 10 ~ 200
+        let growingFlame = player.createBulletObject(["red", "skill1"]);
+        growingFlame.transform.gravity[0] = player.otherPlayersDir * 0.25;
+      }
+
+      skill1_blue(player) {
+        player.stackAttack++;
+
+        if (player.stackAttack > 3) {
+          if (player.buffTime == -1) {
+            for (let i = 0; i < 3; i++) {
+              let iceDisk = player.createBulletObject(["blue", "skill1", 1]);
+              iceDisk.transform.translate_circle(
+                -10 + i * 10 + 90 * (player.otherPlayersDir - 1),
+                2
+              );
+              iceDisk.transform.translate_gotoOther(
+                player.pos,
+                player.bulletSpeed[0],
+                -1
+              );
+              iceDisk.size = [7, 7];
+              iceDisk.transform.isBound = true;
+              iceDisk.lifeTime = player.bulletLifeTime[0] * 2;
+            }
+          } else {
+            let degree;
+
+            for (let i = 0; i < 3; i++) {
+              degree = player.skillStat[0] + i * 120;
+
+              for (let n = 0; n < 3; n++) {
+                let iceDisk = player.createBulletObject(["blue", "skill1", 1]);
+                iceDisk.transform.translate_circle(degree, 40);
+
+                let basePos = iceDisk.pos.slice();
+                iceDisk.transform.translate_circle(
+                  -10 + n * 10 + 90 * (player.otherPlayersDir - 1),
+                  2
+                );
+                iceDisk.transform.translate_gotoOther(
+                  basePos,
+                  player.bulletSpeed[0],
+                  -1
+                );
+                iceDisk.size = [7, 7];
+                iceDisk.transform.isBound = true;
+                iceDisk.lifeTime = player.bulletLifeTime[0] * 2;
+              }
+            }
+          }
+          player.stackAttack = 0;
+        }
+        player.comboAttack = 3;
+      }
+
+      skill1_mint(player) {
+        if (player.skillStat[0] == 20) {
+          player.comboAttack = 3;
+          player.skillStat[0] = 0;
+        } else {
+          let windBlade = player.createBulletObject(["mint", "skill1"]);
+          windBlade.transform.friction = 0.85;
+
+          if (player.skillStat[1] == 1) {
+            windBlade.size = [windBlade.size[1], windBlade.size[0]];
+            windBlade.transform.friction = 0.45;
+            windBlade.power = Math.floor(windBlade.power * 0.6);
+            windBlade.lifeTime = Math.floor(windBlade.lifeTime * 1.5);
+          }
+
+          windBlade.fadeStartTime = windBlade.lifeTime;
+          player.skillStat[0]++;
+        }
+
+        player.skillStat[1] = player.skillStat[1] == 1 ? 0 : 1;
+      }
+
+      skill1_brown(player) {}
+
+      skill1_green(player) {
+        for (let i = 0; i < 4; i++) {
+          let pollen = player.createBulletObject(["green", "skill1"]);
+          pollen.transform.velocity = [
+            player.otherPlayersDir * random(4, 8),
+            i * random(0, 2) - 6,
+          ];
+          pollen.transform.gravity[1] = 0.25;
+          pollen.transform.isBound = true;
+          pollen.transform.isAbleMapOut = false;
+        }
+
+        let seed = player.createBulletObject(["green", "skill1", 1]);
+        seed.size = [4, 7];
+        seed.transform.gravity[1] = 0.25;
+        seed.lifeTime = 240;
+        seed.fadeStartTime = -1;
+        seed.sponChild = true;
+      }
+
+      skill1_yellow(player) {
+        player.stackAttack++;
+
+        if (player.stackAttack > 2) {
+          let lazer = player.createBulletObject(["yellow", "skill1", 1]);
+          lazer.transform.velocity[0] = 0;
+          lazer.size = [600, 6];
+          lazer.lifeTime = 15;
+          lazer.fadeStartTime = 12;
+          lazer.power = 6;
+
+          player.stackAttack = 0;
+        } else {
+          let lightSword = player.createBulletObject(["yellow", "skill1"]);
+        }
+      }
+
+      skill1_gray(player) {
+        if (player.hp > player.hpm / 4) player.reduceHP(32);
+
+        if (player.transform.contact[3]) {
+          for (let i = 0; i < 2; i++) {
+            let soulTracker = player.createBulletObject(["gray", "skill1"]);
+            soulTracker.pos = [player.pos[0], player.pos[1] + 48 * (i - 1)];
+            soulTracker.transform.velocity[1] -= 1.4 * i;
+            soulTracker.lifeTime = 120 + i * 38;
+          }
+        } else player.comboAttack = 4;
+      }
+
+      skill1On() {
+        //brown skill1 charge start
+        if (this.stunning != 0) return;
+
+        if (this.skillTime[0] >= this.skillCool[0]) {
+          if (this.class_type == CLASS_BROWN) {
+            this.skillStat[0] = true;
+            this.skillTime[0] = 0;
+          }
+        }
+      }
+
+      skill1Off() {
+        if (this.stunning != 0) return;
+
+        if (this.class_type == CLASS_BROWN && this.skillStat[0]) {
+          //brown skill1 shot (damage: 80 ~ 210)
+          let newScale = 7 + (13 * this.skillStat[1]) / 75;
+          let stoneSpear = this.createBulletObject(["brown", "skill1"]);
+          stoneSpear.pos = [
+            this.pos[0] + this.otherPlayersDir * (15 + newScale),
+            this.pos[1],
+          ];
+          stoneSpear.transform.velocity = [
+            this.otherPlayersDir * (8 + newScale * 1.5),
+            0,
+          ];
+          stoneSpear.transform.friction = 1.25;
+          stoneSpear.size = [newScale, 7];
+          stoneSpear.sponChild = true;
+          stoneSpear.fadeStartTime = -1;
+          stoneSpear.power = stoneSpear.power + Math.floor(newScale) * 10;
+
+          this.skillStat[0] = false;
+          this.skillStat[1] = 0;
+        }
+      }
+
+      skill2_red(player) {
+        let anotherSun = player.createBulletObject(["red", "skill2"]);
+        anotherSun.transform.velocity[1] = -5;
+        anotherSun.transform.friction = 0.25;
+        anotherSun.fadeStartTime = 30;
+        anotherSun.collisionObjectList.push(player.objType + "_red_skill1");
+      }
+
+      skill2_blue(player) {
+        player.buffTime = 240;
+        player.transform.gravity = [0, 0];
+        player.transform.velocity = [0, 0];
+      }
+
+      skill2_mint(player) {
+        let bladeStorm = player.createBulletObject(["mint", "skill2"]);
+        bladeStorm.pos[1] -= 25;
+        bladeStorm.transform.gravity[1] = 3;
+        bladeStorm.painter.alpha = 0;
+        bladeStorm.startAlpha = 0;
+        bladeStorm.fadeStartTime = -1;
+
+        if (player.skillStat[0] < 20) {
+          player.skillStat[0] += 5;
+          if (player.skillStat[0] > 20) player.skillStat[0] = 20;
+        } else {
+          bladeStorm.objType -= [player.objType, "mint", "skill2", 1];
+          bladeStorm.attackType = ["mint", "skill2", 1];
+
+          player.skillStat[0] = 0;
+        }
+      }
+
+      skill2_brown(player) {
+        player.transform.velocity[1] = -25;
+
+        let stoneWall = player.createBulletObject(["brown", "skill2"]);
+        stoneWall.transform.gravity[1] = 1;
+        stoneWall.transform.massType = MASS_HARD;
+        stoneWall.fadeStartTime = -1;
+        stoneWall.bulletStat = [false, 0];
+      }
+
+      skill2_green(player) {
+        player.skillStat[0] = true;
+      }
+
+      skill2_yellow(player) {
+        let brightShield = player.createBulletObject(["yellow", "skill2"]);
+        brightShield.painter.alpha = 0.5;
+        brightShield.startAlpha = 0.5;
+      }
+
+      skill2_gray(player) {}
+
+      skill2On() {
+        if (this.stunning != 0) return;
+
+        if (this.skillTime[1] >= this.skillCool[1]) {
+          if (this.class_type == CLASS_GRAY && this.hp > this.hpm * 0.1) {
+            this.skillStat[0] = this.skillStat[0] ? false : true;
+            this.invincible = this.skillStat[0];
+            this.skillTime[1] = 0;
+          }
+        }
+      }
+
+      skill2Off() {}
+
+      skill3_red(player) {
+        player.comboAttack = 9;
+      }
+
+      skill3_blue(player) {
+        let iceAge = player.createBulletObject(["blue", "skill3"]);
+        iceAge.painter.alpha = 0.4;
+        iceAge.startAlpha = 0.4;
+        iceAge.fadeStartTime = 12;
+
+        player.skillStat[1] = 300;
+        player.otherPlayer.freeze(300);
+
+        for (let i = 0; i < 6; i++) {
+          let pt = new Particle(
+            "particle",
+            player.painter.color,
+            player.pos.slice(),
+            [24, 24],
+            30,
+            [0, 0],
+            30,
+            0.5,
+            [0, 0],
+            0,
+            false,
+            false,
+            30
+          );
+          pt.transform.translate_circle(60 * i, 1);
+          pt.transform.translate_gotoOther(player.pos, 12, -1);
+        }
+      }
+
+      skill3_mint(player) {
+        let typhoon = player.createBulletObject(["mint", "skill3"]);
+        typhoon.pos[1] = MAP_SIZE / 2 - 20;
+        typhoon.painter.alpha = 0;
+        typhoon.startAlpha = 0;
+        typhoon.fadeStartTime = -1;
+        player.skillStat[0] = 20;
+      }
+
+      skill3_brown(player) {
+        for (let i = 0; i < 2; i++) {
+          let stomeSmash = player.createBulletObject(["brown", "skill3"]);
+          stomeSmash.bulletStat = [90 + 180 * i, 4];
+          stomeSmash.transform.translate_circle(stomeSmash.bulletStat[0], 64);
+          stomeSmash.pos = [stomeSmash.pos[0], player.pos[1]];
+          stomeSmash.isDeleteOnMapOut = false;
+          stomeSmash.fadeStartTime = -1;
+        }
+      }
+
+      skill3_green(player) {
+        let primordialSeed = player.createBulletObject(["green", "skill3"]);
+        primordialSeed.transform.gravity[1] = 0.25;
+
+        for (let i = 0; i < 4; i++) {
+          let seed = player.createBulletObject(["green", "skill1", 1]);
+          seed.transform.velocity = [
+            (i - 1.5) * (3 - Math.abs(i - 1.5)) * 1.5,
+            -4,
+          ];
+          seed.size = [4, 7];
+          seed.transform.gravity[1] = 0.3;
+          seed.transform.friction = 0.05;
+          seed.lifeTime = 240;
+          seed.fadeStartTime = -1;
+          seed.sponChild = true;
+        }
+      }
+
+      skill3_yellow(player) {
+        player.skillStat[1] = 480;
+      }
+
+      skill3_gray(player) {
+        let darkRitual = player.createBulletObject(["gray", "skill3"]);
+        darkRitual.pos = [MAP_SIZE[0] / 2, MAP_SIZE[1] + 32];
+        darkRitual.transform.velocity[1] = -6.5;
+        darkRitual.transform.friction = 0.05;
+        darkRitual.transform.isDeleteOnMapOut = false;
+      }
+
+      skill3On() {}
+      skill3Off() {}
+
+      createBulletObject(attackType) {
+        let skill_index = parseInt(attackType[1][5]) - 1;
+
+        let newObjType_list = [this.objType];
+        for (let i = 0; i < attackType.length; i++)
+          newObjType_list.push(attackType[i]);
+
+        let bullet = new Bullet(
+          newObjType_list,
+          this,
+          this.otherPlayer,
+          COLOR_CLASS[this.class_type],
+          this.pos.slice(),
+          this.bulletSize[skill_index]
+        );
+        bullet.collisionObjectList.push(this.otherPlayer.objType);
+        for (let i = 0; i < this.bulletCollisionObjectList.length; i++)
+          bullet.collisionObjectList.push(this.bulletCollisionObjectList[i]);
+        bullet.otherPlayersDir = this.otherPlayersDir;
+        bullet.transform.velocity[0] =
+          this.otherPlayersDir * this.bulletSpeed[skill_index];
+        bullet.lifeTime = this.bulletLifeTime[skill_index];
+        bullet.power = this.skillPower[skill_index];
+        bullet.fadeStartTime = 10;
+        //console.log(bullet.objType + ": " + bullet.collisionObjectList);
+        return bullet;
+      }
+
+      reduceHP(value) {
+        let newValue = value;
+
+        if (this.class_type == CLASS_BROWN) {
+          if (newValue == 1)
+            if (randomBool()) return;
+            else if (randomBool()) newValue = Math.floor(value / 2);
+        } else if (this.class_type == CLASS_GRAY) {
+          if (
+            this.hp - newValue < this.hpm * 0.1 &&
+            this.skillStat[0] == true
+          ) {
+            this.skillStat[0] = false;
+            this.invincible = this.skillStat[0];
+            this.skillTime[1] = 0;
+          }
+        }
+
+        this.hp -= newValue;
+
+        if (this.hp < 1) {
+          this.hp = 0;
+          GM.gameOver();
+          GM.winner_index = parseInt(this.otherPlayer.objType[1]) - 1;
+        }
+      }
+
+      healHP(value) {
+        this.hp += value;
+        if (this.hp > this.hpm) this.hp = this.hpm;
+      }
+
+      freeze(time) {
+        if (this.freezing < time) {
+          this.freezing = time;
+          this.moveSpeed = Math.floor(STAT_CLASS[this.class_type][1] * 0.6);
+        }
+      }
+
+      stun(time) {
+        if (this.stunning < time) this.stunning = time;
+      }
+    }
+
+    class Bullet extends GameObject {
+      constructor(
+        objType_list,
+        player,
+        otherPlayer,
+        color,
+        position,
+        size,
+        alpha = 1
+      ) {
+        super(objType_list);
+        this.attackType_list = objType_list.slice(1, objType_list.length);
+        this.transform.position = position;
+        this.transform.size = size;
+        this.painter.color = color;
+        this.painter.alpha = alpha;
+        this.isDeleteOnMapOut = true;
+        this.player = player;
+        this.otherPlayer = otherPlayer;
+        this.otherPlayersDir;
+        this.collisionObjectList = ["ground"];
+        this.startColor = color;
+        this.startAlpha = alpha;
+        this.lifeTime = 100;
+        this.power = 100;
+        this.fadeStartTime = -1;
+        this.sponChild = false;
+        this.bulletStat = [0, 0, 0];
+      }
+
+      update() {
+        if (this.isDeleteOnMapOut && Transform.checkMapOut(this.transform)) {
+          this.sponChild = false;
+          this.destory();
+        }
+
+        switch (this.attackType) {
+          case "fire":
+            {
+              let randScale = random(0.1, 2);
+              let pt = new Particle(
+                "particle",
+                COLOR_CLASS[CLASS_RED],
+                [
+                  this.pos[0] + random(-this.size[0], this.size[0]),
+                  this.pos[1] + 12,
+                ],
+                [randScale, randScale],
+                30,
+                [random(-2, 2), random(-2, 0)],
+                25,
+                0.85,
+                [0, -0.2],
+                0.1
+              );
+
+              let randScale2 = random(2, 5);
+              let pt2 = new Particle(
+                "particle",
+                COLOR_CLASS[CLASS_RED],
+                [
+                  this.pos[0] + random(-this.size[0], this.size[0]),
+                  this.pos[1] + 12,
+                ],
+                [randScale2, randScale2],
+                45,
+                [random(-1, 1), random(-1, 0)],
+                45,
+                0.65,
+                [0, -0.02],
+                0.02
+              );
+            }
+            break;
+
+          case "red_skill1":
+            {
+              let newScale = 1 + (39 * (100 - this.lifeTime)) / 100;
+              let randScale = random(newScale / 8, newScale / 2);
+
+              this.size = [newScale, newScale];
+
+              this.power = 10 + 10 * Math.floor(newScale / 2);
+
+              if (this.lifeTime % 2 == 0) {
+                let pt = new Particle(
+                  "particle",
+                  this.startColor,
+                  [
+                    this.pos[0] + random(-this.size[0], this.size[0]),
+                    this.pos[1] + random(-this.size[1], this.size[1]),
+                  ],
+                  [randScale, randScale],
+                  25,
+                  [0, 0],
+                  25,
+                  0.6
+                );
+              }
+            }
+            break;
+
+          case "red_skill2":
+            {
+              let newScale = this.size[0] + 0.03;
+              let randScale = random(newScale / 8, newScale / 2);
+
+              this.size = [newScale, newScale];
+
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                [randScale, randScale],
+                30,
+                [0, 0],
+                30,
+                0.6
+              );
+              pt.transform.translate_circle(
+                randomInt(0, 360),
+                randomInt(this.size[0] * 2, this.size[0] * 6)
+              );
+              pt.transform.translate_gotoOther(this.pos, 2);
+            }
+            break;
+
+          case "red_skill2_1":
+          case "red_skill3":
+            {
+              let randScale = random(this.size[0] / 8, this.size[0]);
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + random(-this.size[0], this.size[0]),
+                  this.pos[1] + 12,
+                ],
+                [randScale, randScale],
+                30,
+                [random(-2, 2), random(-2, 0)],
+                25,
+                0.85,
+                [0, -0.2],
+                0.1
+              );
+            }
+            break;
+
+          case "blue_skill1":
+          case "blue_skill1_1":
+            for (let i = 0; i < 2; i++) {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + random(-this.size[0], this.size[0]),
+                  this.pos[1] + random(-this.size[1], this.size[1]),
+                ],
+                [2, 2],
+                10,
+                [0, 0],
+                10,
+                0.75
+              );
+            }
+            break;
+
+          case "blue_skill3":
+            this.size = [this.size[0] + 16, this.size[1] + 16];
+            break;
+
+          case "mint_skill1_1": {
+            let pt = new Particle(
+              "particle",
+              this.startColor,
+              [
+                this.pos[0] + random(-this.size[0], this.size[0]),
+                this.pos[1] + random(-this.size[1], this.size[1]),
+              ],
+              [3, 3],
+              25,
+              [0, 0],
+              25,
+              0.35
+            );
+          }
+
+          case "mint_skill1":
+            {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                this.size,
+                10,
+                [0, 0],
+                10,
+                0.35
+              );
+            }
+            break;
+
+          case "mint_skill2_1":
+            let newScale = 10 + (40 * (50 - this.lifeTime)) / 50;
+            this.size = [newScale, newScale * 2.5];
+
+          case "mint_skill3":
+            if (this.attackType == "mint_skill3") {
+              if (this.bulletStat[0] < 100) {
+                this.bulletStat[0]++;
+                let ySize = ((MAP_SIZE[1] / 2 - 20) * this.bulletStat[0]) / 100;
+                this.size = [(64 * this.bulletStat[0]) / 100, ySize];
+                this.pos[1] = MAP_SIZE[1] - 40 - ySize;
+              }
+
+              this.pos[0] += this.otherPlayer.pos[0] > this.pos[0] ? 2 : -2;
+            }
+
+          case "mint_skill2":
+            {
+              let randScale = random(
+                0.1 + this.size[0] * 0.25,
+                0.1 + this.size[0] * 0.35
+              );
+              for (let i = 0; i < 3; i++) {
+                let pt = new Particle(
+                  "particle",
+                  this.startColor,
+                  [
+                    this.pos[0] +
+                      random(-this.size[0] * 1.5, this.size[0] * 1.5),
+                    this.pos[1] + random(-this.size[1], this.size[1]),
+                  ],
+                  [randScale * 5, randScale],
+                  15,
+                  [0, 0],
+                  15,
+                  random(0.25, 0.75),
+                  [random(-1, 1), -0.4]
+                );
+              }
+
+              let randScale2 = random(1, 1 + this.size[0] * 0.25);
+              let pt2 = new Particle(
+                "particle",
+                this.startColor,
+                [null, null],
+                [randScale2, randScale2],
+                45,
+                [0, 0],
+                20,
+                0.75,
+                [0, 0],
+                0,
+                false,
+                false,
+                40
+              );
+              pt2.startPosition = [
+                this.pos[0] + random(-this.size[0], this.size[0]),
+                this.pos[1] + random(-this.size[1], this.size[1]),
+              ];
+              pt2.revolute = [
+                random(randScale2 * 2, randScale2 * 8),
+                randomBool(DIR_RIGHT, DIR_LEFT) * randomInt(5, 25),
+                randomInt(0, 360),
+              ];
+            }
+            break;
+
+          case "brown_skill2":
+            if (this.bulletStat[0] && this.bulletStat[1] < 10) {
+              this.bulletStat[1]++;
+
+              this.size = [12, (50 * this.bulletStat[1]) / 10];
+
+              let randScale = random(2, 5);
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + random(-this.size[0], this.size[0]),
+                  this.pos[1] + this.size[1] - 5,
+                ],
+                [randScale, randScale],
+                60,
+                [random(-5, 5), random(-10, -4)],
+                25,
+                1,
+                [0, 0.5],
+                0.05,
+                false,
+                true,
+                25
+              );
+            }
+            break;
+
+          case "brown_skill3":
+            if (this.bulletStat[1] == 20) {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                this.size,
+                12,
+                [0, 0],
+                12,
+                0.25
+              );
+              break;
+            }
+            if (this.bulletStat[1] < 19.95) {
+              this.bulletStat[1] += 0.05;
+
+              this.bulletStat[0] += Math.floor(this.bulletStat[1] * 2);
+              if (this.bulletStat[0] > 360) this.bulletStat[0] -= 360;
+
+              this.size = [this.bulletStat[1], this.bulletStat[1]];
+              this.pos = this.player.pos.slice();
+              this.transform.translate_circle(this.bulletStat[0], 64);
+              this.pos = [this.pos[0], this.player.pos[1]];
+
+              if (this.lifeTime % 12 == 0) {
+                for (let i = 0; i < 4; i++) {
+                  let randScale = random(2, 4);
+                  let stoneShard = new Bullet(
+                    [this.player.objType, "brown", "skill1"],
+                    this.player,
+                    this.otherPlayer,
+                    this.startColor,
+                    [
+                      this.pos[0],
+                      this.pos[1] + random(-this.size[1], this.size[1]),
+                    ],
+                    [randScale, randScale]
+                  );
+                  stoneShard.collisionObjectList =
+                    this.collisionObjectList.slice();
+                  stoneShard.transform.velocity = [
+                    (this.player.pos[0] < this.pos[0] ? 1 : -1) *
+                      random(12, 24),
+                    random(-6, 6),
+                  ];
+                  stoneShard.transform.gravity[1] = 0.5;
+                  stoneShard.transform.isBound = true;
+                  stoneShard.lifeTime = 20;
+                  stoneShard.fadeStartTime = 3;
+                  stoneShard.power = 8;
+                }
+              }
+            } else {
+              this.bulletStat[1] = 20;
+              this.transform.velocity = [
+                (this.player[0] < this.pos[0] ? 1 : -1) * 30 * random(0.8, 1.2),
+                random(-3, 6),
+              ];
+              this.transform.gravity[1] = 0.5;
+              this.transform.isBound = true;
+              this.transform.isAbleMapOut = false;
+              this.power = 20;
+            }
+            break;
+
+          case "green_skill1_2":
+            if (this.lifeTime > 10) {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + random(-this.size[0] + 3, this.size[0] - 3),
+                  this.pos[1] + 5,
+                ],
+                [1, 1],
+                30,
+                [0, 0],
+                20,
+                0.75,
+                [0, -0.05]
+              );
+            }
+            break;
+
+          case "green_skill1_4":
+            if (this.bulletStat[0] < 30) this.bulletStat[0]++;
+            break;
+
+          case "green_skill3":
+            if (this.lifeTime > 1200) break;
+            if (this.bulletStat[0] < 30) this.bulletStat[0]++;
+            if (this.bulletStat[1] < 120) {
+              this.bulletStat[1]++;
+            } else {
+              for (let i = 0; i < 4; i++) {
+                let seed = new Bullet(
+                  [this.player.objType, "green", "skill1", 1],
+                  this.player,
+                  this.otherPlayer,
+                  this.startColor,
+                  this.pos.slice(),
+                  [4, 7]
+                );
+                seed.collisionObjectList = this.collisionObjectList.slice();
+                seed.transform.velocity = [
+                  (i - 1.5) * (3 - Math.abs(i - 1.5)) * random(1, 3),
+                  -random(4, 9),
+                ];
+                seed.transform.gravity[1] = 0.3;
+                seed.transform.friction = 0.05;
+                seed.lifeTime = 240;
+                seed.fadeStartTime = -1;
+                seed.sponChild = true;
+              }
+              this.bulletStat[0] -= 3;
+              this.bulletStat[1] = 0;
+            }
+            break;
+
+          case "yellow_skill2_1":
+            this.transform.translate_gotoOther(this.otherPlayer.pos, 20);
+
+          case "yellow_skill1":
+            {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                [1.5, 1.5],
+                10,
+                [0, 0],
+                5,
+                1
+              );
+            }
+            break;
+
+          case "yellow_skill1_1":
+            {
+              this.size = [600, (6 * this.lifeTime) / 15];
+              this.pos = [
+                this.player.pos[0] + this.otherPlayersDir * 620,
+                this.player.pos[1],
+              ];
+
+              let randScale = random(1, 2);
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.player.pos[0] + this.otherPlayersDir * 15,
+                  this.player.pos[1],
+                ],
+                [randScale, randScale],
+                30,
+                [this.otherPlayersDir * randomInt(2, 7), randomInt(-4, 4)],
+                30,
+                1
+              );
+            }
+            break;
+
+          case "yellow_skill2":
+            this.pos = this.player.pos.slice();
+            break;
+
+          case "yellow_skill3":
+            this.otherPlayersDir = this.player.otherPlayersDir;
+
+            if (this.lifeTime > 60) {
+              this.pos = [
+                this.player.pos[0] + this.otherPlayersDir * 55,
+                this.player.pos[1] + this.bulletStat[0],
+              ];
+            } else if (this.lifeTime == 60) {
+              this.transform.velocity[0] = this.otherPlayersDir * 32;
+            } else {
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                [1.5, 1.5],
+                10,
+                [0, 0],
+                5,
+                1
+              );
+            }
+            break;
+
+          case "gray_skill1":
+          case "gray_skill1_1":
+            {
+              if (this.attackType == "gray_skill1") {
+                let pt = new Particle(
+                  "particle",
+                  this.startColor,
+                  [
+                    this.pos[0] + randomInt(-this.size[0], this.size[0]),
+                    this.pos[1] + randomInt(-this.size[1], this.size[1]),
+                  ],
+                  [10, 10],
+                  15,
+                  [0, 0],
+                  15,
+                  0.75,
+                  [0, 0],
+                  0,
+                  false,
+                  false,
+                  15
+                );
+
+                if (this.lifeTime < 120)
+                  this.transform.translate_tracingOther(
+                    this.otherPlayer.pos,
+                    0.05,
+                    2 + this.bulletStat[0]
+                  );
+              } else if (this.attackType == "gray_skill1_1") {
+                let pt = new Particle(
+                  "particle",
+                  this.startColor,
+                  [
+                    this.pos[0] + randomInt(-this.size[0], this.size[0]),
+                    this.pos[1] + randomInt(-this.size[1], this.size[1]),
+                  ],
+                  [24, 2],
+                  20,
+                  [0, 0],
+                  20,
+                  0.75,
+                  [0, 0],
+                  0,
+                  false,
+                  false,
+                  20
+                );
+
+                if (this.lifeTime == 60)
+                  this.transform.velocity[0] = this.otherPlayersDir * 25;
+              }
+              let randScale = random(1, 3);
+              let pt2 = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + randomInt(-this.size[0], this.size[0]),
+                  this.pos[1] + randomInt(-this.size[1], this.size[1]),
+                ],
+                [randScale, randScale],
+                30,
+                [random(-3, 3), random(-3, 3)],
+                30,
+                1,
+                [0, 0],
+                0,
+                false,
+                false,
+                30
+              );
+            }
+            break;
+
+          case "gray_skill3":
+            if (this.lifeTime < 600) {
+              if (this.bulletStat[0] < 30) this.bulletStat[0]++;
+
+              for (let i = 0; i < 3; i++) {
+                let randScale = random(1, 8);
+                let pt = new Particle(
+                  "particle",
+                  this.startColor,
+                  this.pos.slice(),
+                  [randScale, randScale],
+                  25,
+                  [0, 0],
+                  25,
+                  0.5
+                );
+
+                if (randomBool()) {
+                  pt.pos = this.player.pos.slice();
+                  pt.transform.translate_gotoOther(
+                    this.pos.slice(),
+                    random(5, 10)
+                  );
+                } else {
+                  pt.transform.translate_circle(randomInt(0, 360), 32);
+                  pt.transform.translate_gotoOther(
+                    this.player.pos.slice(),
+                    random(5, 10)
+                  );
+                }
+
+                let newScale = 90 + (8 - randScale) * 30;
+                let pt2 = new Particle(
+                  "particle",
+                  this.startColor,
+                  this.pos.slice(),
+                  [randScale / 2, randScale / 2],
+                  newScale,
+                  [null, null],
+                  newScale,
+                  0.35 + randScale / 32
+                );
+                pt2.startPosition = this.pos.slice();
+                pt2.revolute = [
+                  newScale,
+                  randomBool(DIR_RIGHT, DIR_LEFT) *
+                    randomInt(1, 15 - Math.floor(newScale * 0.05)),
+                  randomInt(0, 360),
+                ];
+
+                let pt3 = new Particle(
+                  "particle",
+                  this.startColor,
+                  [randomInt(0, MAP_SIZE[0]), -16],
+                  [randScale, newScale / 2],
+                  newScale,
+                  [0, randScale / 4],
+                  newScale,
+                  randScale / 32
+                );
+                pt2.isDeleteOnMapOut = false;
+
+                if (this.lifeTime % 24 == 0) {
+                  let soulTracker = new Bullet(
+                    [this.player.objType, "gray", "skill1"],
+                    this.player,
+                    this.otherPlayer,
+                    this.startColor,
+                    [
+                      randomInt(80, MAP_SIZE[0] - 80),
+                      this.pos[1] + randomInt(-64, 64),
+                    ],
+                    [5, 5]
+                  );
+                  soulTracker.collisionObjectList =
+                    this.collisionObjectList.slice();
+                  soulTracker.lifeTime = 158;
+                  soulTracker.power = 48;
+                  soulTracker.fadeStartTime = 10;
+                  soulTracker.bulletStat[0] = random(-2, 2);
+                }
+              }
+            } else if (this.lifeTime == 600) {
+              this.painter.alpha = 0;
+              this.player.stun(600);
+            }
+        }
+
+        this.lifeTime--;
+        if (this.lifeTime < 1) this.destory();
+
+        if (this.fadeStartTime > 0 && this.lifeTime < this.fadeStartTime)
+          this.painter.alpha =
+            (this.startAlpha * this.lifeTime) / this.fadeStartTime;
+      }
+
+      draw() {
+        Painter.drawRect(
+          rgb(this.painter.color, this.painter.alpha),
+          this.pos,
+          this.size
+        );
+        switch (this.attackType) {
+          case "yellow_skill1":
+          case "yellow_skill2_1":
+          case "yellow_skill3":
+            Painter.drawRect(
+              rgb(this.painter.color),
+              [
+                this.pos[0] - (this.otherPlayersDir * this.size[0]) / 2,
+                this.pos[1],
+              ],
+              [1, this.size[0] / 4 + 2]
+            );
+            break;
+
+          case "brown_skill2":
+            if (this.bulletStat[0]) {
+              let newScale = (25 * this.lifeTime) / 900;
+              Painter.drawRect(
+                "white",
+                [this.pos[0] + newScale - 25, this.pos[1] + this.size[1] + 10],
+                [newScale, 2]
+              );
+            }
+            break;
+
+          case "green_skill1_3":
+            Painter.drawRect(
+              rgb(this.painter.color, this.painter.alpha),
+              this.pos,
+              [6, 1]
+            );
+            break;
+
+          case "green_skill1_4":
+            {
+              let newScale = this.bulletStat[0] / 30;
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [this.pos[0], this.pos[1] + 18 - 36 * newScale],
+                [12, 12]
+              );
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [this.pos[0], this.pos[1] + 30 - 18 * newScale],
+                [1, 18 * newScale]
+              );
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [this.pos[0] - 9, this.pos[1] + 30 - 25 * newScale],
+                [9, 2]
+              );
+              Painter.drawRect(
+                rgb(this.painter.color),
+                [this.pos[0] + 9, this.pos[1] + 30 - 21 * newScale],
+                [9, 2]
+              );
+            }
+            break;
+
+          case "green_skill3":
+            {
+              let newScale = this.bulletStat[0] / 30;
+              let newScale2 = (25 * this.lifeTime) / 1440;
+              Painter.drawRect(
+                "white",
+                [this.pos[0] + newScale2 - 25, this.pos[1] + this.size[1] + 10],
+                [newScale2, 2]
+              );
+              Painter.drawRect(
+                rgb(this.painter.color, this.painter.alpha),
+                [this.pos[0], this.pos[1] - 14 * newScale],
+                [26 * newScale, 14 * newScale]
+              );
+              for (let i = 0; i < 5; i++) {
+                Painter.drawRect(
+                  rgb(this.painter.color, this.painter.alpha),
+                  [
+                    this.pos[0] + (i * 13 - 26) * newScale,
+                    this.pos[1] - 27 * newScale,
+                  ],
+                  [5 * newScale, 5 * newScale]
+                );
+              }
+              Painter.drawRect(
+                rgb(this.painter.color, this.painter.alpha),
+                [this.pos[0], this.pos[1] - 8],
+                [49 * newScale, 3]
+              );
+            }
+            break;
+
+          case "gray_skill3":
+            if (this.lifeTime < 600) {
+              let newScale = this.bulletStat[0] / 30;
+              Painter.drawRect(
+                rgb(this.painter.color, 1 - this.bulletStat[0] / 100),
+                this.pos.slice(),
+                [32, 32]
+              );
+              Painter.drawRect(
+                rgb(this.painter.color, newScale),
+                this.pos.slice(),
+                [4 * newScale, 20 * newScale]
+              );
+            }
+        }
+      }
+
+      onDestroy() {
+        switch (this.attackType) {
+          case "red_skill3":
+            this.createExplosion(this.pos, 64, 50);
+            break;
+
+          case "brown_skill1":
+            if (!this.sponChild) return;
+            for (let i = 0; i < 8; i++) {
+              let randScale = random(3, 6);
+              let stoneShard = new Bullet(
+                [this.player.objType, "brown", "skill1"],
+                this.player,
+                this.otherPlayer,
+                this.startColor,
+                this.pos.slice(),
+                [randScale, randScale]
+              );
+              stoneShard.collisionObjectList = this.collisionObjectList.slice();
+              stoneShard.transform.velocity = [
+                this.otherPlayersDir * random(7, 16),
+                randomBool(DIR_RIGHT, DIR_LEFT) * random(0, 10),
+              ];
+              stoneShard.transform.isBound = true;
+              stoneShard.lifeTime = 20;
+              stoneShard.power = 15;
+              stoneShard.fadeStartTime = 3;
+            }
+            break;
+
+          case "brown_skill2":
+          case "brown_skill3":
+            for (let i = 0; i < 8; i++) {
+              let randScale = random(3, 9);
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                [
+                  this.pos[0] + randomInt(-this.size[0], this.size[0]),
+                  this.pos[1] + randomInt(-this.size[1], this.size[1]),
+                ],
+                [randScale, randScale],
+                75,
+                [random(-5, 5), random(-5, 2)],
+                30,
+                1,
+                [0, 0.5],
+                0.05,
+                false,
+                true,
+                30
+              );
+            }
+            break;
+
+          case "green_skill1_1":
+            if (this.sponChild) {
+              switch (randomInt(0, 3)) {
+                case 1:
+                  {
+                    let healingTurf = new Bullet(
+                      [this.player.objType, "green", "skill1", 2],
+                      this.player,
+                      this.otherPlayer,
+                      this.startColor,
+                      this.pos.slice(),
+                      [30, 7],
+                      0
+                    );
+                    healingTurf.collisionObjectList =
+                      this.collisionObjectList.slice();
+                    healingTurf.collisionObjectList.push(this.player.objType);
+                    healingTurf.transform.gravity[1] = 0.25;
+                    healingTurf.isBound = true;
+                    healingTurf.lifeTime = 450;
+                    healingTurf.power = 1;
+
+                    for (let i = 0; i < 32; i++) {
+                      let randScale = random(3, 16);
+                      let pt = new Particle(
+                        "particle",
+                        this.startColor,
+                        [
+                          this.pos[0] +
+                            randomInt(
+                              -healingTurf.size[0],
+                              healingTurf.size[0]
+                            ),
+                          healingTurf.pos[1] + healingTurf.size[1] - randScale,
+                        ],
+                        [random(0.5, 1.5), randScale],
+                        healingTurf.lifeTime + randomInt(0, 30),
+                        [0, 0],
+                        10,
+                        0.75,
+                        [0, 0.25],
+                        0,
+                        false,
+                        true
+                      );
+                    }
+                  }
+                  break;
+
+                case 2:
+                  for (let i = 0; i < 5; i++) {
+                    let spikeNuts = new Bullet(
+                      [this.player.objType, "green", "skill1", 3],
+                      this.player,
+                      this.otherPlayer,
+                      this.startColor,
+                      this.pos.slice(),
+                      [1, 6]
+                    );
+                    spikeNuts.collisionObjectList =
+                      this.collisionObjectList.slice();
+                    spikeNuts.transform.gravity[1] = 1;
+                    spikeNuts.transform.friction = 0.5;
+                    spikeNuts.transform.velocity = [-12 + i * 6, -9];
+                    spikeNuts.lifeTime = 600;
+                    spikeNuts.power = 15;
+                  }
+                  break;
+
+                case 3:
+                  {
+                    let bombFruit = new Bullet(
+                      [this.player.objType, "green", "skill1", 4],
+                      this.player,
+                      this.otherPlayer,
+                      this.startColor,
+                      [this.pos[0], this.pos[1] - 23],
+                      [12, 30],
+                      0
+                    );
+                    bombFruit.collisionObjectList =
+                      this.collisionObjectList.slice();
+                    bombFruit.transform.gravity[1] = 0.25;
+                    bombFruit.lifeTime = 300;
+                    bombFruit.power = 15;
+                    bombFruit.sponChild = true;
+                  }
+                  break;
+              }
+            }
+            break;
+
+          case "green_skill1_4":
+            if (this.sponChild)
+              this.createExplosion([this.pos[0], this.pos[1] - 18], 60, 60);
+            break;
+
+          case "yellow_skill3":
+            for (let i = 0; i < 8; i++) {
+              let randScale = random(1, 2);
+              let pt = new Particle(
+                "particle",
+                this.startColor,
+                this.pos.slice(),
+                [randScale, randScale],
+                45,
+                [0, 0],
+                45,
+                1
+              );
+              pt.transform.translate_circle(randomInt(0, 360), 1);
+              pt.transform.translate_gotoOther(
+                this.pos.slice(),
+                random(3, 6),
+                -1
+              );
+            }
+            break;
+
+          case "gray_skill3":
+            this.player.hpm += 50;
+        }
+      }
+
+      collisionEvent(obj) {
+        switch (obj.objType) {
+          case "P1":
+          case "P2":
+            this.collisionWithPlayer(obj.objType);
+            break;
+
+          case "ground":
+            switch (this.attackType) {
+              case "explosion":
+              case "red_skill1":
+              case "red_skill2":
+              case "blue_skill3":
+              case "mint_skill1":
+              case "mint_skill1_1":
+              case "mint_skill3":
+              case "yellow_skill1_1":
+              case "yellow_skill2":
+              case "gray_skill1_1":
+              case "gray_skill3":
+                break;
+
+              case "yellow_skill3":
+                if (this.lifeTime < 61) this.destory();
+                break;
+
+              case "brown_skill2":
+                if (!this.bulletStat[0]) this.bulletStat[0] = true;
+
+              case "fire":
+              case "blue_skill1_1":
+              case "green_skill1":
+              case "green_skill1_1":
+              case "green_skill1_2":
+              case "green_skill1_3":
+              case "green_skill1_4":
+              case "green_skill3":
+                this.transform.collisionWithHard(obj.transform);
+                break;
+
+              case "mint_skill2":
+              case "mint_skill2_1":
+                if (
+                  Transform.checkRelativeDirection(
+                    obj.transform,
+                    this.transform
+                  ) == DIR_DOWN
+                ) {
+                  this.pos[1] = obj.pos[1] - obj.size[1] - this.size[1];
+                  this.transform.velocity[1] = 0;
+                }
+                break;
+
+              case "brown_skill1":
+                if (this.transform.isBound) {
+                  this.transform.collisionWithHard(obj.transform);
+                  this.transform.isBound = false;
+                } else {
+                  this.destory();
+                }
+                break;
+
+              case "brown_skill3":
+                if (this.transform.isBound)
+                  this.transform.collisionWithHard(obj.transform);
+                break;
+
+              case "red_skill2_1":
+              case "red_skill3":
+                if (this.transform.velocity[1] < 0) break;
+                this.createFire(obj);
+
+              default:
+                this.destory();
+            }
+            break;
+
+          case "P1_red_skill1":
+          case "P2_red_skill1":
+            if (this.attackType == "red_skill2") {
+              this.createExplosion(
+                this.pos,
+                this.size[0] * 4,
+                Math.floor(50 + this.size[0] ** 2 / 8)
+              );
+              let newScale = Math.floor(this.size[0] * 0.4) - 1;
+
+              for (let i = 0; i < newScale - 3; i++) {
+                let flame = new Bullet(
+                  [this.player.objType, "red", "skill2", 1],
+                  this.player,
+                  this.otherPlayer,
+                  this.startColor,
+                  this.pos.slice(),
+                  [this.size[0] / 5, this.size[1] / 5]
+                );
+                flame.collisionObjectList = this.collisionObjectList.slice();
+                flame.transform.velocity = [
+                  random(-(newScale * 0.1 + 1), newScale * 0.1 + 1),
+                  -random(newScale * 0.05 + 2, newScale * 0.25 + 4),
+                ];
+                flame.transform.gravity[1] = 0.1;
+                flame.isDeleteOnMapOut = false;
+                flame.lifeTime = 600;
+                flame.power = 1;
+              }
+
+              obj.destory();
+              this.destory();
+            }
+            break;
+
+          case "P1_red_skill2":
+          case "P2_red_skill2":
+            switch (this.attackType) {
+              case "fire":
+              case "explosion":
+              case "red_skill1":
+              case "red_skill2":
+              case "red_skill2_1":
+              case "blue_skill3":
+              case "mint_skill3":
+              case "brown_skill2":
+              case "brown_skill3":
+              case "green_skill3":
+              case "yellow_skill1_1":
+              case "yellow_skill2":
+              case "gray_skill3":
+                break;
+
+              case "yellow_skill3":
+                if (this.lifeTime > 60) break;
+
+              case "brown_skill1":
+              case "green_skill1_1":
+              case "green_skill1_4":
+                this.sponChild = false;
+
+              default:
+                obj.size = [obj.size[0] + 1, obj.size[1] + 1];
+                this.destory();
+            }
+            break;
+
+          case "P1_brown_skill2":
+          case "P2_brown_skill2":
+          case "P1_green_skill3":
+          case "P2_green_skill3":
+            switch (this.attackType) {
+              case "fire":
+              case "explosion":
+              case "red_skill2":
+              case "red_skill2_1":
+              case "blue_skill3":
+              case "mint_skill3":
+              case "brown_skill2":
+              case "brown_skill3":
+              case "green_skill1_1":
+              case "green_skill1_2":
+              case "green_skill1_4":
+              case "green_skill3":
+              case "yellow_skill1_1":
+              case "yellow_skill2":
+              case "gray_skill3":
+                break;
+
+              case "mint_skill1":
+              case "mint_skill1_1":
+              case "mint_skill2":
+              case "mint_skill2_1":
+                obj.lifeTime -= this.power * 10;
+                this.destory();
+                break;
+
+              case "yellow_skill3":
+                if (this.lifeTime > 60) break;
+
+              case "brown_skill1":
+                this.sponChild = false;
+
+              default:
+                obj.lifeTime -= this.power * 2;
+                this.destory();
+            }
+            if (obj.lifeTime < 1) obj.destory();
+            break;
+
+          case "P1_yellow_skill2":
+          case "P2_yellow_skill2":
+            switch (this.attackType) {
+              case "fire":
+              case "explosion":
+              case "red_skill2":
+              case "blue_skill3":
+              case "mint_skill3":
+              case "brown_skill2":
+              case "brown_skill3":
+              case "green_skill1_2":
+              case "green_skill3":
+              case "yellow_skill1_1":
+              case "yellow_skill2":
+              case "gray_skill3":
+                break;
+
+              case "yellow_skill3":
+                if (this.lifeTime > 60) break;
+
+              case "brown_skill1":
+                this.sponChild = false;
+
+              default:
+                obj.createReflector(this.pos);
+                this.destory();
+            }
+        }
+      }
+
+      collisionWithPlayer(playerType) {
+        if (
+          playerType == this.otherPlayer.objType &&
+          this.otherPlayer.invincible
+        )
+          return;
+
+        switch (this.attackType) {
+          case "fire":
+            if (this.lifeTime % 5 == 0) this.otherPlayer.reduceHP(this.power);
+            this.otherPlayer.burnning = 240;
+            return;
+
+          case "red_skill2":
+          case "red_skill2_1":
+            this.otherPlayer.burnning = 240;
+            break;
+
+          case "mint_skill2":
+          case "mint_skill2_1":
+            this.otherPlayer.transform.translate = [0, 0];
+            this.otherPlayer.transform.velocity = [
+              this.transform.velocity[0] * 0.5,
+              -13,
+            ];
+            this.otherPlayer.stun(20);
+            break;
+
+          case "mint_skill3":
+            this.otherPlayer.transform.velocity[1] -= 9;
+            break;
+
+          case "brown_skill3":
+            this.otherPlayer.stun(5);
+            this.otherPlayer.transform.velocity[0] =
+              this.bulletStat[1] *
+              (this.otherPlayer.pos[0] > this.player.pos[0] ? 1 : -1);
+            break;
+
+          case "brown_skill2":
+          case "green_skill3":
+          case "yellow_skill2":
+            return;
+
+          case "green_skill1_2":
+            if (playerType == this.player.objType) {
+              if (this.lifeTime % 5 == 0) this.player.healHP(1);
+              return;
+            }
+            break;
+
+          case "blue_skill3":
+            this.otherPlayer.stun(60);
+            break;
+
+          case "yellow_skill3":
+            if (this.lifeTime > 60) return;
+            else this.destory();
+            break;
+
+          case "mint_skill1":
+          case "mint_skill1_1":
+          case "yellow_skill1_1":
+          case "gray_skill3":
+            break;
+
+          case "red_skill1":
+          case "red_skill3":
+            this.otherPlayer.burnning = 240;
+            this.destory();
+            break;
+
+          case "blue_skill1":
+          case "blue_skill1_1":
+            this.otherPlayer.freeze(180);
+            this.destory();
+            break;
+
+          case "brown_skill1":
+            this.sponChild = false;
+            this.destory();
+            break;
+
+          case "green_skill1_1":
+            this.sponChild = false;
+            this.destory();
+            return;
+
+          case "gray_skill1":
+          case "gray_skill1_1":
+            this.player.healHP(this.power);
+
+          default:
+            this.destory();
+        }
+
+        this.otherPlayer.reduceHP(this.power);
+      }
+
+      createFire(obj) {
+        let fire = new Bullet(
+          [this.player.objType, "fire"],
+          this.player,
+          this.otherPlayer,
+          this.startColor,
+          [this.pos[0], this.pos[1] - 12],
+          [24, 12],
+          0
+        );
+        fire.attackType = ["fire"];
+        fire.collisionObjectList = this.collisionObjectList.slice();
+        fire.transform.gravity[1] = 1;
+        fire.lifeTime = randomInt(120, 180);
+        fire.power = 1;
+      }
+
+      createExplosion(pos, size, damage) {
+        let explosion = new Bullet(
+          [this.player.objType, "explosion"],
+          this.player,
+          this.otherPlayer,
+          this.startColor,
+          pos.slice(),
+          [size, size],
+          0
+        );
+        explosion.attackType = ["explosion"];
+        explosion.collisionObjectList = this.collisionObjectList.slice();
+        explosion.lifeTime = 1;
+        explosion.power = damage;
+
+        for (let i = 0; i < 32; i++) {
+          let randScale = random(1, size / 2);
+          let pt = new Particle(
+            "particle",
+            this.startColor,
+            pos.slice(),
+            [randScale, randScale],
+            10 + Math.ceil(randScale * 2),
+            [null, null],
+            10 + Math.ceil(randScale * 2),
+            0.6 - randScale / 128
+          );
+          pt.transform.translate_circle(
+            randomInt(0, 360),
+            random(0.01, 0.01 + randScale * 2)
+          );
+          pt.transform.translate_gotoOther(
+            pos.slice(),
+            random(0.01 * (size / 2 - randScale), 1 + (size / 2 - randScale)),
+            -1
+          );
+          pt.transform.friction = 0.1;
+        }
+      }
+
+      createReflector(pos) {
+        let reflector = new Bullet(
+          [this.player.objType, "yellow", "skill2", 1],
+          this.player,
+          this.otherPlayer,
+          this.startColor,
+          pos.slice(),
+          [6, 1]
+        );
+        reflector.collisionObjectList = this.collisionObjectList.slice();
+        reflector.lifeTime = 60;
+        reflector.power = this.power;
+      }
+
+      get attackType() {
+        return this.attackType_list.join("_");
+      }
+      set attackType(attackType_list) {
+        this.attackType_list = this.createTypeList(attackType_list);
+      }
+    }
+
+    class Particle extends GameObject {
+      constructor(
+        objType_list,
+        color,
+        position,
+        size,
+        lifeTime,
+        velocity,
+        fadeStartTime = -1,
+        alpha = 1,
+        gravity = [0, 0],
+        friction = 0,
+        isBound = false,
+        isGrounded = false,
+        downSizeStartTime = -1
+      ) {
+        super(objType_list);
+        this.transform.position = position;
+        this.transform.size = size;
+        this.transform.velocity = velocity;
+        this.transform.gravity = gravity;
+        this.transform.friction = friction;
+        this.transform.isBound = isBound;
+        this.transform.massType = MASS_PARTICLE;
+        this.painter.color = color;
+        this.painter.alpha = alpha;
+        this.startSize = size;
+        this.startPosition = [undefined, undefined];
+        this.startColor = color;
+        this.startAlpha = alpha;
+        if (isGrounded) {
+          this.transform.massType = MASS_SOFT;
+          this.collisionObjectList = ["ground"];
+        }
+        this.isDeleteOnMapOut = true;
+        this.lifeTime = lifeTime;
+        this.fadeStartTime = fadeStartTime;
+        this.downSizeStartTime = downSizeStartTime;
+        this.revolute = [-1, undefined, undefined]; //arg0 = radius, arg1 = degree, arg2 = start degree
+      }
+
+      update() {
+        if (this.isDeleteOnMapOut && Transform.checkMapOut(this.transform))
+          this.destory();
+
+        this.lifeTime--;
+        if (this.lifeTime < 1) this.destory();
+
+        if (this.fadeStartTime > 0 && this.lifeTime < this.fadeStartTime)
+          this.painter.alpha =
+            (this.startAlpha * this.lifeTime) / this.fadeStartTime;
+
+        if (
+          this.downSizeStartTime > 0 &&
+          this.lifeTime < this.downSizeStartTime
+        )
+          this.size = [
+            (this.size[0] * this.lifeTime) / this.downSizeStartTime,
+            (this.size[1] * this.lifeTime) / this.downSizeStartTime,
+          ];
+
+        if (this.revolute[0] > 0) {
+          this.pos = this.startPosition.slice();
+          this.transform.translate_circle(this.revolute[2], this.revolute[0]);
+          this.revolute[2] += this.revolute[1];
+          if (this.revolute[2] > 360) this.revolute[2] -= 360;
+          else if (this.revolute[2] < 0) this.revolute[2] += 360;
+        }
+      }
+
+      collisionEvent(obj) {
+        if (obj.transform.massType == MASS_HARD)
+          this.transform.collisionWithHard(obj.transform);
+      }
+    }
+
+    class Block extends GameObject {
+      constructor(objType_list, color, position, size) {
+        super(objType_list);
+        this.transform.position = position;
+        this.transform.size = size;
+        this.transform.massType = MASS_HARD;
+        this.transform.isNotMove = true;
+        this.painter.color = color;
+      }
+    }
+
+    GM = new GameManager();
+    GM.player = [new Player("P1"), new Player("P2")];
+
+    const ground = new Block(
+      "ground",
+      COLOR_GROUND,
+      [MAP_SIZE[0] / 2, MAP_SIZE[1]],
+      [MAP_SIZE[0], 40]
+    );
+    let platform1 = new Block(
+      "ground",
+      COLOR_GROUND,
+      [MAP_SIZE[0] / 2, MAP_SIZE[1] / 2 + 85],
+      [200, 20]
+    );
+    let platform2 = new Block(
+      "ground",
+      COLOR_GROUND,
+      [MAP_SIZE[0] / 2 - 520, MAP_SIZE[1] / 2],
+      [20, 20]
+    );
+    let platform3 = new Block(
+      "ground",
+      COLOR_GROUND,
+      [MAP_SIZE[0] / 2 + 520, MAP_SIZE[1] / 2],
+      [20, 20]
+    );
+    let platforms = [platform1, platform2, platform3];
+
+    setInterval(function () {
+      GM.update();
+
+      for (let i = 0; i < BTN_CODE.length; i++) {
+        let $btn = document.querySelector(BTN_ID[i]);
+
+        if (keyState[BTN_CODE[i]]) {
+          if (!isKeyDown[i]) {
+            isKeyDown[i] = true;
+            GM.buttonDown(i);
+            if ($btn != null) $btn.style.backgroundColor = "#C0C0C0";
+          }
+          GM.buttonPress(i);
+        } else {
+          if (isKeyDown[i]) {
+            isKeyDown[i] = false;
+            GM.buttonUp(i);
+            if ($btn != null) $btn.style.backgroundColor = "#000";
+          }
+        }
+      }
+    }, 1000 / FPS);
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  </script>
+</html>
