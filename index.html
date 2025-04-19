@@ -12,6 +12,61 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   </head>
   <body>
+ <audio
+      id="bgm"
+      src="BEATPELLA HOUSE - Candy Thief (Official Video) (BEATBOX).mp4"
+      loop
+    ></audio>
+
+    <script>
+      const audio = document.getElementById("bgm");
+      let isPlaying = false;
+
+      window.addEventListener(
+        "click",
+        () => {
+          if (!isPlaying) {
+            audio.volume = 0.5;
+            audio.play();
+            isPlaying = true;
+            document.getElementById("musicToggle").innerText = "🔇 음악 끄기";
+          }
+        },
+        { once: true }
+      );
+
+      function toggleMusic() {
+        if (audio.paused) {
+          audio.play();
+          document.getElementById("musicToggle").innerText = "🔇 음악 끄기";
+        } else {
+          audio.pause();
+          document.getElementById("musicToggle").innerText = "🎵 음악 켜기";
+        }
+      }
+    </script>
+
+    <button
+      id="musicToggle"
+      onclick="toggleMusic()"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 10px 15px;
+        background-color: #ffcc00;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+      "
+    >
+      🎵 음악 켜기
+    </button>
+
+
+    
     <header>
       <nav>
         <div class="logo">🍗 간성치킨</div>
