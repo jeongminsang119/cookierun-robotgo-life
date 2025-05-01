@@ -1,0 +1,786 @@
+@font-face {
+  font-family: "cookieRun Regular";
+  src: url("../CookieRunFont_OTF/CookieRun\ Regular.otf") format("truetype");
+}
+@font-face {
+  font-family: "cookieRun Black";
+  src: url("../CookieRunFont_OTF/CookieRun\ Black.otf.otf") format("truetype");
+}
+@font-face {
+  font-family: "cookieRun Bold";
+  src: url("../CookieRunFont_OTF/CookieRun\ Bold.otf") format("truetype");
+}
+
+body {
+  font-family: "cookieRun Regular";
+}
+
+.game_app {
+  overflow: hidden;
+  position: relative;
+  min-width: 1280px;
+  height: 754px;
+  margin-top: calc(50vh - 377px);
+  margin-bottom: calc(50vh - 377px);
+  /* background-color: black; */
+}
+.game_app .game {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 70000000000px;
+  height: 100%;
+  /* background-image: url('../lib/backgrounds/game/dragon.png'); */
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+}
+@keyframes crash {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+.game_app .crash_filter {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0%;
+  background-color: red;
+  opacity: 0;
+  display: none;
+  z-index: 15;
+  animation: crash 0.1s steps(2);
+  animation-iteration-count: 5;
+}
+
+.game_app .stage_guide {
+  position: absolute;
+  display: none;
+  width: 30vw;
+  height: 30vh;
+  top: 50%;
+  left: 50%;
+  margin-top: -15vh;
+  margin-left: -15vw;
+  background-color: wheat;
+  border: 6px solid orange;
+  border-radius: 10px;
+  z-index: 30;
+}
+.game_app .stage_guide .stage_guide_text {
+  font-family: "cookieRun Bold";
+  font-size: 20px;
+  margin-right: 2vw;
+  margin-left: 2vw;
+  margin-top: 5vh;
+  height: 10vh;
+  width: 26vw;
+  color: rgb(64, 7, 7);
+  /* text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white; */
+  text-align: center;
+  /* line-height: 10vh; */
+}
+.game_app .stage_guide button {
+  font-family: "cookieRun Bold";
+  width: 10vw;
+  height: 6vh;
+  margin-top: 7vh;
+  margin-left: 3.3vw;
+  font-size: 20px;
+  border: rgb(64, 7, 7) 2px solid;
+  border-radius: 15px;
+  background-color: orange;
+  color: white;
+  text-shadow: -1px 0 rgb(64, 7, 7), 0 1px rgb(64, 7, 7), 1px 0 rgb(64, 7, 7),
+    0 -1px rgb(64, 7, 7);
+}
+
+.game_app .stage_guide_all_clear {
+  position: absolute;
+  display: none;
+  width: 30vw;
+  height: 30vh;
+  top: 50%;
+  left: 50%;
+  margin-top: -15vh;
+  margin-left: -15vw;
+  background-color: wheat;
+  border: 6px solid orange;
+  border-radius: 10px;
+  z-index: 30;
+}
+.game_app .stage_guide_all_clear .stage_guide_all_clear_text {
+  font-family: "cookieRun Bold";
+  font-size: 20px;
+  margin-right: 2vw;
+  margin-left: 2vw;
+  margin-top: 5vh;
+  height: 10vh;
+  width: 26vw;
+  color: rgb(64, 7, 7);
+  /* text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white; */
+  text-align: center;
+  /* line-height: 10vh; */
+}
+.game_app .stage_guide_all_clear button {
+  font-family: "cookieRun Bold";
+  width: 10vw;
+  height: 6vh;
+  margin-top: 7vh;
+  margin-left: 10vw;
+  font-size: 20px;
+  border: rgb(64, 7, 7) 2px solid;
+  border-radius: 15px;
+  background-color: orange;
+  color: white;
+  text-shadow: -1px 0 rgb(64, 7, 7), 0 1px rgb(64, 7, 7), 1px 0 rgb(64, 7, 7),
+    0 -1px rgb(64, 7, 7);
+}
+
+.game_app .ground {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 70000000000px;
+  height: 10%;
+  /* background-image: url('../lib/backgrounds/ground/ground.png'); */
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+}
+
+.game_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  top: calc(50vh - 377px);
+  z-index: 20;
+  width: 100%;
+  height: 100px;
+}
+
+.game_info .score_box {
+  display: flex;
+  float: left;
+  font-family: "cookieRun Bold";
+  text-align: center;
+  width: 10%;
+  right: 10%;
+  color: rgb(247, 178, 4);
+  font-size: 50px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}
+
+.game_info .cookie_profile {
+  float: left;
+  width: 20%;
+  height: 80%;
+  padding: 10px;
+}
+
+.game_info .cookie_profile .cookie_img {
+  float: left;
+  width: 40%;
+  height: 100%;
+  text-align: center;
+}
+
+.game_info .cookie_profile .cookie_img img {
+  height: 100%;
+  background-color: white;
+  border-radius: 20px;
+  border: 3px solid rgb(247, 178, 4);
+}
+
+.game_info .cookie_profile .cookie_desc {
+  float: left;
+  left: 0;
+  color: #fff;
+  width: 60%;
+  text-shadow: 1px 1px 1px #000;
+}
+.game_info .cookie_profile .cookie_desc .cookie_name {
+  font-size: 25px;
+  font-weight: bolder;
+  color: #fff;
+  padding: 3%;
+  text-shadow: 1px 1px 1px #000;
+}
+/* .game_info .cookie_profile .cookie_desc .cookie_story {
+} */
+
+.game_info .hp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* float: left; */
+  width: 50%;
+  height: 100%;
+}
+.game_info .hp .hp_img {
+  display: flex;
+  /* width: 10%; */
+  height: 60%;
+}
+.game_info .hp .hp_background {
+  display: flex;
+  width: 100%;
+  height: 10px;
+  background-color: white;
+  border: 2px solid #fff;
+  border-radius: 5px;
+}
+.game_info .hp .hp_background .hp_progress {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  transition: width 0.3s linear;
+}
+
+.game_info #pause_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  height: 30%;
+  width: 7%;
+  background-color: rgb(247, 178, 4);
+  border-radius: 5px;
+  border-width: 3px;
+  border-color: #fff;
+}
+.game_info #pause_button .pause_button_text {
+  font-family: "cookieRun Regular";
+  color: #fff;
+  font-size: 20px;
+  /* text-shadow: 1px 1px 1px #000; */
+}
+
+.coin_box {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: fixed;
+  top: 180px;
+  left: 2%;
+  height: 40px;
+  align-items: center;
+}
+.coin_box img {
+  width: 40px;
+  height: 40px;
+}
+.coin_box .coin_amount {
+  font-size: 30px;
+  line-height: 40px;
+  color: white;
+  font-family: "cookieRun Regular";
+}
+
+@keyframes cookie_run {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -1470px;
+  }
+}
+@keyframes cookie_run_giant {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -2215.5px;
+  }
+}
+
+/* @keyframes cookie_slide {
+    0% {
+      background-position-x: 0px;
+    }
+    100% {
+      background-position-x: -606px;
+    }
+  }
+@keyframes cookie_slide_giant {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -909px;
+  }
+} */
+
+/* @keyframes cookie_jump {
+  0%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-250px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+@keyframes cookie_jump_giant {
+  0%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-375px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+} */
+
+@keyframes cookie_jump_double {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -2310px;
+  }
+}
+@keyframes cookie_jump_double_giant {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -3481.5px;
+  }
+}
+@keyframes blink_effect {
+  50% {
+    opacity: 0;
+  }
+}
+
+.cookie_box {
+  position: fixed;
+  left: 0;
+  bottom: 10%;
+  width: 210px;
+  height: 230px;
+  will-change: transform;
+  z-index: 20;
+  /* background-color: red; */
+}
+
+.cookie_box .cookie.paused {
+  animation: none !important;
+}
+.cookie_box .cookie.run {
+  height: 100%;
+  background-image: url("gingerMK_run.png");
+  background-size: 1470px 230px;
+  animation: cookie_run 0.4s infinite steps(7);
+}
+.cookie_box .cookie.slide {
+  position: relative;
+  width: 110px;
+  height: 300px;
+  background-image: url("gingerMK_slide.png");
+  background-size: 110px 300px;
+  animation: none;
+  transform: rotate(270deg);
+  bottom: -22.6px;
+}
+.cookie_box .cookie.jump {
+  height: 100%;
+  background-image: url("gingerMK_jump_one.png");
+  background-size: 210px 230px;
+  animation: none;
+}
+.cookie_box .cookie.jump.double {
+  height: 100%;
+  width: 100%;
+  background-image: url("gingerMK_jump_double.png");
+  background-size: 2310px 230px;
+  animation: cookie_jump_double 0.5s infinite steps(11);
+}
+.cookie_box .cookie.jump.down,
+.cookie_box .cookie.jump.down.slide {
+  bottom: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-image: url("gingerMK_jump_down.png");
+  background-size: 210px 230px;
+  transform: none;
+}
+.cookie_box .cookie.crashed {
+  width: 211px;
+  height: 226.2px;
+  bottom: 0%;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  background-image: url("gingerMK_crashed3.png") !important;
+  background-size: 210px 230px !important;
+  animation: blink_effect 0.1s infinite !important;
+}
+
+.cookie_box .cookie.run.giant {
+  height: 150%;
+  width: 150%;
+  transform: translateY(-112px);
+  background-size: 2215.5px 339.3px;
+  animation: cookie_run_giant 0.4s infinite steps(7);
+  /* background-color: blue; */
+}
+.cookie_box .cookie.slide.giant {
+  width: 169.65px;
+  height: 452.4px;
+  animation: none;
+  transform: rotate(270deg) translateX(105px);
+  background-size: 169.65px 452.4px;
+}
+.cookie_box .cookie.jump.giant {
+  height: 150%;
+  width: 150%;
+  background-size: 316.5px 339.3px;
+}
+.cookie_box .cookie.jump.double.giant {
+  height: 150%;
+  width: 150%;
+  background-size: 3481.5px 339.3px;
+  animation: cookie_jump_double_giant 0.5s infinite steps(11);
+}
+.cookie_box .cookie.jump.down.giant,
+.cookie_box .cookie.jump.down.slide.giant {
+  height: 150%;
+  width: 150%;
+  background-size: 316.5px 339.3px;
+}
+.cookie_box .cookie.supper {
+  animation: blink_effect 0.1s infinite !important;
+}
+.cookie_box .cookie.dead {
+  background-image: url("gingerMK_dead.png") !important;
+  background-size: 211px 226.2px;
+  width: 100%;
+  height: 100%;
+  animation: none !important;
+  /* animation: none; */
+}
+
+.jelly {
+  position: absolute;
+  width: 50px;
+  height: 60px;
+  background-image: url("blue_jelly_bean.png");
+  background-size: 50px 60px;
+  z-index: 10;
+  will-change: transform;
+}
+.jelly.yellow_bear {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-image: url("yellow_bear_jelly.png");
+  background-size: 60px 60px;
+  z-index: 10;
+}
+.jelly.pink_bear {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-image: url("pink_bear_jelly.png");
+  background-size: 60px 60px;
+  z-index: 10;
+}
+.jelly.blue_bear {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-image: url("blue_bear_jelly.png");
+  background-size: 60px 60px;
+  z-index: 10;
+}
+.jelly.big_bear {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-image: url("무싸티젤리.png");
+  background-size: 150px 150px;
+  z-index: 10;
+}
+.jelly.coin {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-image: url("coin_jelly.png");
+  background-size: 40px 40px;
+  z-index: 10;
+}
+
+@keyframes stageStart {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.stage_box {
+  position: absolute;
+  font-family: "cookieRun Bold";
+  z-index: 30;
+  left: 50%;
+  top: 50%;
+  z-index: 190;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 90px;
+  white-space: nowrap;
+  animation: stageStart 1.5s;
+  animation-fill-mode: both;
+  color: black;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}
+.paused_box {
+  position: absolute;
+  font-family: "cookieRun Bold";
+  z-index: 30;
+  left: 50%;
+  top: 50%;
+  z-index: 190;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 90px;
+  white-space: nowrap;
+  color: rgb(247, 178, 4);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}
+
+@keyframes snacks {
+  0% {
+    background-position-x: 0px;
+  }
+  99% {
+    background-position-x: -550px;
+  }
+  100% {
+    background-position-x: -440px;
+  }
+}
+@keyframes clocks {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -440px;
+  }
+}
+@keyframes table {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -550px;
+  }
+}
+@keyframes long_crystal {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -460px;
+  }
+}
+@keyframes broken {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-500px, -500px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.obstacle {
+  position: absolute;
+  /* width: 180px;
+  height: 200px;
+  background-image: url("../lib/obstacles/yellow_cone.png");
+  background-size: 180px 200px; */
+  z-index: 10;
+  /* background-color: red; */
+}
+.obstacle.broken {
+  animation: broken 1s both !important;
+}
+
+/*2단*/
+.obstacle.clocks {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("로봇.png");
+  background-size: 110px 300px;
+}
+.obstacle.pink_crystal {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("pink_crystal.png");
+  background-size: 110px 300px;
+}
+.obstacle.snacks {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("snacks.png");
+  background-size: 550px 300px;
+  animation: snacks 1s forwards steps(5);
+}
+.obstacle.cake {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("cake1.png");
+  background-size: 110px 300px;
+}
+.obstacle.dragon_tail {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("로봇.png");
+  background-size: 110px 300px;
+}
+
+/*1단*/
+.obstacle.table {
+  /* 1단 */
+  position: absolute;
+  width: 100px;
+  height: 110px;
+  background-image: url("table.png");
+  background-size: 550px 110px;
+  animation: table 1s infinite steps(5);
+}
+.obstacle.green_crystal {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("green_crystal.png");
+  background-size: 110px 110px;
+}
+.obstacle.mini_snack {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("mini_snack.png");
+  background-size: 110px 110px;
+}
+.obstacle.small_mushroom {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("mushroom_small.png");
+  background-size: 110px 110px;
+}
+
+/*슬라이드*/
+.obstacle.lamp {
+  /* 슬라이드 */
+  position: absolute;
+  width: 300px;
+  height: 570px;
+  background-image: url("lamp.png");
+  background-size: 300px 570px;
+}
+.obstacle.lamp.broken {
+  background-image: url("lamp_broken.png");
+  width: 431px;
+  height: 570px;
+  background-size: 431px 570px;
+}
+.obstacle.long_crystal {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("long_crystal.png");
+  background-size: 460px 570px;
+  animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.knife {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("knife.png");
+  background-size: 230px 570px;
+}
+.obstacle.onion_frog {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("onion_frog.png");
+  background-size: 460px 570px;
+  animation: long_crystal 1s infinite steps(2);
+}
+
+.item {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
+
+.item.blast {
+  /* position: absolute;
+  width: 90px;
+  height: 90px; */
+  background-image: url("Blast Jelly.png");
+  background-size: 100px 100px;
+}
+.item.giant {
+  background-image: url("Giant Jelly.png");
+  background-size: 100px 100px;
+}
+.item.coin_magic {
+  background-image: url("Coin Magic Jelly.png");
+  background-size: 100px 100px;
+}
+.item.magnet {
+  background-image: url("Magnet Jelly.png");
+  background-size: 100px 100px;
+}
+.item.energy_potion {
+  width: 150px;
+  height: 150px;
+  background-image: url("Energy Potion.png");
+  background-size: 150px 150px;
+}
+.item.mini_energy_potion {
+  background-image: url("Mini Energy Potion.png");
+  background-size: 100px 100px;
+}

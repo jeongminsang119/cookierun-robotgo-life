@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>간성런</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="game.css" />
+
+    <style type="text/css">
+      body {
+        margin: 0;
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgm" loop>
+      <source src="교가.mp3" type="audio/mpeg" />
+      브라우저가 오디오 태그를 지원하지 않습니다.
+    </audio>
+
+    <div class="game_app">
+      <div class="crash_filter"></div>
+      <div class="stage_guide">
+        <div class="stage_guide_text">
+          스테이지 클리어!<br />취업하러 가시겠어요?<br />지금 도망가도 모든
+          데이터는 유지됩니다.
+        </div>
+        <button onclick="nextStage()">다음 스테이지</button>
+        <button onclick="backLobby()">로비로 돌아가기</button>
+      </div>
+      <div class="stage_guide_all_clear">
+        <div class="stage_guide_all_clear_text">
+          모든 스테이지 클리어!<br />로비로 돌아가 최고 점수를 확인하세요.
+        </div>
+        <button onclick="backLobby()">로비로 돌아가기</button>
+      </div>
+
+      <div class="game">
+        <div class="cookie_box">
+          <div class="cookie run"></div>
+        </div>
+        <div class="ground"></div>
+      </div>
+
+      <div class="game_info">
+        <div class="cookie_profile">
+          <div class="cookie_img">
+            <img src="간성.png" alt="" />
+          </div>
+          <div class="cookie_desc">
+            <div class="cookie_name">치킨집대표</div>
+            <div class="cookie_story">학교탈출, <br />치킨맛 쿠키</div>
+          </div>
+        </div>
+        <div class="hp">
+          <img src="Mini Energy Potion.png" alt="" class="hp_img" />
+          <span class="hp_background"><span class="hp_progress"></span></span>
+        </div>
+        <div class="score_box"></div>
+        <button type="button" id="pause_button" onclick="pause()">
+          <div class="pause_button_text">정지</div>
+        </button>
+      </div>
+      <div class="coin_box">
+        <img src="coin_jelly.png" alt="" />
+        <div class="coin_amount"></div>
+      </div>
+
+      <div class="modal"></div>
+    </div>
+
+    <script type="text/javascript" src="stage.js" charset="utf-8"></script>
+    <script type="text/javascript" src="game.js" charset="utf-8"></script>
+    <script type="text/javascript" src="class.js" charset="utf-8"></script>
+  </body>
+</html>
