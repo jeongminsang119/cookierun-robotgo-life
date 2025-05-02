@@ -2,22 +2,36 @@ const stage1 = {
   name: "로봇고의 시작",
   backgroundUrl: "또봇.jpg",
   groundUrl: "mint_wood.png",
-  length: 10200,
+  length: 40800,
+
   jumpObstacle: "obstacle table",
-  jumpObstaclePosition: [1000, 1500, 5000],
+  jumpObstaclePosition: [2000, 8000, 16000, 22000, 30000, 36000],
+
   doubleJumpObstacle: "obstacle clocks",
-  doubleJumpObstaclePosition: [2500, 3400, 6700, 6900, 7100, 7300],
+  doubleJumpObstaclePosition: [
+    4000, 7000, 12000, 18000, 24000, 28000, 32000, 37000,
+  ],
+
   slideObstacle: "obstacle lamp",
-  slideObstaclePosition: [5500, 8200, 8700],
-  blastPosition: [6500],
-  coinMagicPosition: [6300],
-  giantPosition: [8000],
-  magnetPosition: [6400],
-  energyPosition: [10200],
-  miniEnergyPosition: [],
-  goodPatternPosition: [9200],
-  jellyPatternPosition: [],
-  damage: 100,
+  slideObstaclePosition: [6000, 10000, 14000, 20000, 26000, 34000],
+
+  blastPosition: [10000, 20000, 30000],
+
+  coinMagicPosition: [9500, 19500, 29500],
+
+  giantPosition: [16000, 32000],
+
+  magnetPosition: [9800, 19800, 29800],
+
+  energyPosition: [40800],
+
+  miniEnergyPosition: [3000, 9000, 15000, 21000, 27000, 33000, 39000],
+
+  goodPatternPosition: [11000, 23000, 35000],
+
+  jellyPatternPosition: [5000, 15000, 25000, 35000],
+
+  damage: 200,
 };
 
 const stage2 = {
@@ -77,13 +91,13 @@ const stage4 = {
   slideObstaclePosition: [1600, 2800, 15000, 16600],
   blastPosition: [8200],
   coinMagicPosition: [8000],
-  giantPosition: [12000],
+  giantPosition: [3000, 12000],
   magnetPosition: [8100],
   energyPosition: [5500],
   miniEnergyPosition: [],
   goodPatternPosition: [4500, 19000],
   jellyPatternPosition: [8400, 12200],
-  damage: 400,
+  damage: 300,
 };
 
 const stage5 = {
@@ -99,11 +113,11 @@ const stage5 = {
   slideObstaclePosition: [1600, 2800, 15000, 16600],
   blastPosition: [8200],
   coinMagicPosition: [8000],
-  giantPosition: [12000],
+  giantPosition: [500, 12000],
   magnetPosition: [8100],
   energyPosition: [5500],
   miniEnergyPosition: [],
   goodPatternPosition: [4500, 19000],
   jellyPatternPosition: [8400, 12200],
-  damage: 400,
+  damage: 300,
 };
