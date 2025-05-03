@@ -23,18 +23,20 @@ const allItemComProp = {
 };
 
 const stageInfo = {
-  stage: [stage1,
-          stage2,
-          stage3,
-          stage4,
-          stage5,
-          stage6,
-          stage7,
-          stage8,
-          stage9,
-          stage10,
-          stage11,
-          stage12,],
+  stage: [
+    stage1,
+    stage2,
+    stage3,
+    stage4,
+    stage5,
+    stage6,
+    stage7,
+    stage8,
+    stage9,
+    stage10,
+    stage11,
+    stage12,
+  ] /**/,
   currentStage: {},
   currentStageIndex: localStorage.getItem("currentStageIndex"),
   totalScore: localStorage.getItem("score") * 1,
@@ -195,19 +197,24 @@ const setGameBackground = () => {
 
 const windowEvent = () => {
   window.addEventListener("keydown", (e) => {
-    if (key.keyValue[e.which] === "jump" && !key.keyDown["slide"]) {
-      cookie.jumpState =
-        cookie.jumpState === 0 ? 1 : cookie.jumpState === 1 ? 2 : 3;
+    const action = key.keyValue[e.which];
 
-      if (cookie.jumpState === 2) {
-        cookie.jumpTimer = 0;
+    if (!key.keyDown[action]) {
+      // 중복입력 방지
+      if (action === "jump" && !key.keyDown["slide"]) {
+        if (cookie.jumpState < 2) {
+          cookie.jumpState++;
+          cookie.jumpTimer = 0; // 즉시 반응
+        }
       }
     }
-    key.keyDown[key.keyValue[e.which]] = true;
+
+    key.keyDown[action] = true;
   });
 
   window.addEventListener("keyup", (e) => {
-    key.keyDown[key.keyValue[e.which]] = false;
+    const action = key.keyValue[e.which];
+    key.keyDown[action] = false;
   });
 };
 
