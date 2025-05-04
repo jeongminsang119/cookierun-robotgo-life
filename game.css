@@ -630,7 +630,7 @@ body {
 }
 
 /*2단*/
-.obstacle.clocks {
+.obstacle.robot {
   /* 2단 */
   position: absolute;
   width: 110px;
@@ -653,7 +653,7 @@ body {
   height: 300px;
   background-image: url("snacks.png");
   background-size: 550px 300px;
-  animation: snacks 1s forwards steps(5);
+  animation: snacks 1s infinite steps(5);
 }
 .obstacle.cake {
   /* 2단 */
@@ -669,6 +669,22 @@ body {
   width: 110px;
   height: 300px;
   background-image: url("로봇.png");
+  background-size: 110px 300px;
+}
+.obstacle.doci {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("고슴도치.png");
+  background-size: 110px 300px;
+}
+.obstacle.mountain {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("큰산.png");
   background-size: 110px 300px;
 }
 
