@@ -1,37 +1,23 @@
 const stage1 = {
-  name: "로봇고의 시작",
+  name: "STAGE1",
   backgroundUrl: "또봇.jpg",
   groundUrl: "mint_wood.png",
-  length: 40800 /*40800 */,
-
+  length: 10200,
   jumpObstacle: "obstacle table",
-  jumpObstaclePosition: [2000, 8000, 16000, 22000, 30000, 36000],
-
-  doubleJumpObstacle: "obstacle clocks",
-  doubleJumpObstaclePosition: [
-    4000, 7000, 12000, 18000, 24000, 28000, 32000, 37000,
-  ],
-
+  jumpObstaclePosition: [1000, 1500, 5000],
+  doubleJumpObstacle: "obstacle robot",
+  doubleJumpObstaclePosition: [2500, 3400, 6700, 6900, 7100, 7300],
   slideObstacle: "obstacle lamp",
-  slideObstaclePosition: [6000, 10000, 14000, 20000, 26000, 34000],
-
-  blastPosition: [10000, 20000, 30000],
-
-  coinMagicPosition: [9500, 19500, 29500],
-
-  giantPosition: [16000, 32000],
-
-  magnetPosition: [9800, 19800, 29800],
-
-  energyPosition: [40800],
-
-  miniEnergyPosition: [3000, 9000, 15000, 21000, 27000, 33000, 39000],
-
-  goodPatternPosition: [11000, 23000, 35000],
-
-  jellyPatternPosition: [5000, 15000, 25000, 35000],
-
-  damage: 200,
+  slideObstaclePosition: [5500, 8200, 8700],
+  blastPosition: [6500],
+  coinMagicPosition: [6300],
+  giantPosition: [8000],
+  magnetPosition: [6400],
+  energyPosition: [10200],
+  miniEnergyPosition: [],
+  goodPatternPosition: [9200],
+  jellyPatternPosition: [],
+  damage: 100,
 };
 
 const stage2 = {
@@ -75,11 +61,11 @@ const stage3 = {
   miniEnergyPosition: [10600, 10700, 10800],
   goodPatternPosition: [5600],
   jellyPatternPosition: [9700],
-  damage: 300,
+  damage: 100,
 };
 
 const stage4 = {
-  name: "방학이다",
+  name: "이제부터 쿠키런",
   backgroundUrl: "dragon.png",
   groundUrl: "wood.png",
   length: 20000 /*20000*/,
@@ -97,7 +83,7 @@ const stage4 = {
   miniEnergyPosition: [],
   goodPatternPosition: [4500, 19000],
   jellyPatternPosition: [8400, 12200],
-  damage: 300,
+  damage: 100,
 };
 
 const stage5 = {
@@ -119,7 +105,7 @@ const stage5 = {
   miniEnergyPosition: [],
   goodPatternPosition: [4500, 19000],
   jellyPatternPosition: [8400, 12200],
-  damage: 300,
+  damage: 100,
 };
 
 const stage6 = {
@@ -141,7 +127,7 @@ const stage6 = {
   miniEnergyPosition: [],
   goodPatternPosition: [4500, 19000],
   jellyPatternPosition: [8400, 12200],
-  damage: 300,
+  damage: 100,
 };
 
 // 스테이지 7-9는 stages.ts 파일에, 스테이지 10-27은 이 파일에 있습니다.
@@ -165,7 +151,7 @@ const stage7 = {
   miniEnergyPosition: [2800, 8400, 14000, 19600, 25200],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [3500, 13500, 23500],
-  damage: 380,
+  damage: 120,
 };
 
 const stage8 = {
@@ -187,7 +173,7 @@ const stage8 = {
   miniEnergyPosition: [2600, 7800, 13000, 18200, 23400, 28600],
   goodPatternPosition: [9000, 19000, 29000],
   jellyPatternPosition: [5000, 15000, 25000],
-  damage: 400,
+  damage: 120,
 };
 
 const stage9 = {
@@ -209,7 +195,7 @@ const stage9 = {
   miniEnergyPosition: [3000, 8400, 13800, 19200, 24600],
   goodPatternPosition: [5000, 15000, 25000],
   jellyPatternPosition: [7000, 17000, 27000],
-  damage: 420,
+  damage: 120,
 };
 
 const stage10 = {
@@ -231,7 +217,7 @@ const stage10 = {
   miniEnergyPosition: [2200, 7600, 13000, 18400, 23800, 29200],
   goodPatternPosition: [10000, 20000],
   jellyPatternPosition: [5000, 15000, 25000],
-  damage: 440,
+  damage: 140,
 };
 
 const stage11 = {
@@ -253,7 +239,7 @@ const stage11 = {
   miniEnergyPosition: [2400, 8000, 13600, 19200, 24800],
   goodPatternPosition: [8000, 18000, 28000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 460,
+  damage: 120,
 };
 
 const stage12 = {
@@ -275,7 +261,7 @@ const stage12 = {
   miniEnergyPosition: [2800, 8400, 14000, 19600, 25200],
   goodPatternPosition: [4000, 14000, 24000],
   jellyPatternPosition: [7000, 17000, 27000],
-  damage: 480,
+  damage: 20,
 };
 
 const stage13 = {
@@ -297,7 +283,7 @@ const stage13 = {
   miniEnergyPosition: [2600, 8200, 13800, 19400, 25000],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 500,
+  damage: 100,
 };
 
 const stage14 = {
@@ -319,7 +305,7 @@ const stage14 = {
   miniEnergyPosition: [3000, 9000, 15000, 21000, 27000],
   goodPatternPosition: [6000, 16000, 26000],
   jellyPatternPosition: [10000, 20000],
-  damage: 520,
+  damage: 100,
 };
 
 // 스테이지 18-27 (마지막)
@@ -343,7 +329,7 @@ const stage15 = {
   miniEnergyPosition: [2400, 8400, 14400, 20400, 26400],
   goodPatternPosition: [5000, 15000, 25000],
   jellyPatternPosition: [9000, 19000, 29000],
-  damage: 540,
+  damage: 100,
 };
 
 const stage16 = {
@@ -365,7 +351,7 @@ const stage16 = {
   miniEnergyPosition: [2600, 8600, 14600, 20600, 26600],
   goodPatternPosition: [10000, 20000],
   jellyPatternPosition: [5000, 15000, 25000],
-  damage: 560,
+  damage: 100,
 };
 
 const stage17 = {
@@ -387,7 +373,7 @@ const stage17 = {
   miniEnergyPosition: [2800, 8800, 14800, 20800, 26800],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 580,
+  damage: 100,
 };
 
 const stage18 = {
@@ -409,7 +395,7 @@ const stage18 = {
   miniEnergyPosition: [3200, 9200, 15200, 21200, 27200],
   goodPatternPosition: [6000, 16000, 26000],
   jellyPatternPosition: [10000, 20000],
-  damage: 600,
+  damage: 100,
 };
 
 const stage19 = {
@@ -431,7 +417,7 @@ const stage19 = {
   miniEnergyPosition: [3000, 9000, 15000, 21000, 27000],
   goodPatternPosition: [5000, 15000, 25000],
   jellyPatternPosition: [10000, 20000],
-  damage: 620,
+  damage: 100,
 };
 
 const stage20 = {
@@ -453,7 +439,7 @@ const stage20 = {
   miniEnergyPosition: [2400, 8400, 14400, 20400, 26400],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 640,
+  damage: 100,
 };
 
 const stage21 = {
@@ -475,7 +461,7 @@ const stage21 = {
   miniEnergyPosition: [2600, 8600, 14600, 20600, 26600],
   goodPatternPosition: [9000, 19000, 29000],
   jellyPatternPosition: [5000, 15000, 25000],
-  damage: 660,
+  damage: 100,
 };
 
 // 마지막 3개 스테이지
@@ -499,11 +485,11 @@ const stage22 = {
   miniEnergyPosition: [2800, 8800, 14800, 20800, 26800],
   goodPatternPosition: [4000, 14000, 24000],
   jellyPatternPosition: [7000, 17000, 27000],
-  damage: 680,
+  damage: 300,
 };
 
 const stage23 = {
-  name: "디지털 아트 갤러리",
+  name: "봄이다",
   backgroundUrl: "digital_art.png",
   groundUrl: "canvas.png",
   length: 30000,
@@ -521,11 +507,11 @@ const stage23 = {
   miniEnergyPosition: [3200, 9200, 15200, 21200, 27200],
   goodPatternPosition: [10000, 20000],
   jellyPatternPosition: [6000, 16000, 26000],
-  damage: 700,
+  damage: 300,
 };
 
 const stage24 = {
-  name: "소프트웨어 개발자의 영광",
+  name: "최종단계의 영광",
   backgroundUrl: "developer_dream.png",
   groundUrl: "code_path.png",
   length: 30000,
@@ -543,5 +529,5 @@ const stage24 = {
   miniEnergyPosition: [3000, 9000, 15000, 21000, 27000],
   goodPatternPosition: [5000, 15000, 25000],
   jellyPatternPosition: [10000, 20000],
-  damage: 750,
+  damage: 250,
 };
