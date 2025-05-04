@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <title>학교탈출</title>
+    <title>DAL GGA</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="lobby.css" />
     <script
@@ -26,6 +26,13 @@
           <div class="rank_image" onclick="rankGuide()"></div>
           <div class="rank"><div class="rank_text"></div></div>
         </div>
+
+        <button class="music_button" onclick="toggleMusic()">
+          <i class="fa-solid fa-music"></i> 로비 음악 재생
+        </button>
+
+        <audio id="lobbyMusic" src="메인로비.mp3" loop></audio>
+
         <div class="score_box">
           <div class="highest_score">
             <div class="highest_score_text"></div>
