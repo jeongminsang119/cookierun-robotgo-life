@@ -142,3 +142,16 @@ const init = () => {
 window.onload = () => {
   init();
 };
+
+const music = document.getElementById("lobbyMusic");
+const musicButton = document.querySelector(".music_button");
+
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    musicButton.innerHTML = '<i class="fa-solid fa-pause"></i> 음악 일시정지';
+  } else {
+    music.pause();
+    musicButton.innerHTML = '<i class="fa-solid fa-music"></i> 로비 음악 재생';
+  }
+}
