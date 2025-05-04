@@ -36,7 +36,7 @@ const stage1 = {
 
 const stage2 = {
   name: "납떔의 집",
-  backgroundUrl: "납땜의쿠기.png",
+  backgroundUrl: "납.png",
   groundUrl: "pink_crystal.png",
   length: 10000 /*10000*/,
   jumpObstacle: "obstacle green_crystal",
@@ -102,7 +102,7 @@ const stage4 = {
 
 const stage5 = {
   name: "편의점가는길",
-  backgroundUrl: "편의점가는쿠키.png",
+  backgroundUrl: "눈.png",
   groundUrl: "mud.png",
   length: 20000 /*20000*/,
   jumpObstacle: "obstacle mini_snack",
