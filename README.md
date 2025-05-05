@@ -1,4 +1,4 @@
-플레이 하실거면
+플레이 하실거면(PLAY GAME) under link
 https://jeongminsang119.github.io/cookierun-robotgo-life/
 ![Image](https://github.com/user-attachments/assets/7eeee457-15ef-435a-a773-36144669b1a9)
 ![Image](https://github.com/user-attachments/assets/487bb1ba-ae67-4c03-a159-c27e09d7e69d)
