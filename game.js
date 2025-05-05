@@ -208,14 +208,14 @@ const windowEvent = () => {
     const action = key.keyValue[e.which];
 
     if (!key.keyDown[action]) {
-      // 중복입력 방지
-      if (action === "jump" && !key.keyDown["slide"]) {
+      if (action === "jump") {
         if (cookie.jumpState < 2) {
           cookie.jumpState++;
           cookie.jumpTimer = 0; // 즉시 반응
         }
       }
     }
+  
 
     key.keyDown[action] = true;
   });
