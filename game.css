@@ -638,6 +638,15 @@ body {
   background-image: url("로봇.png");
   background-size: 110px 300px;
 }
+.obstacle.clocks {
+  /* 2단 */
+  position: absolute;
+  width: 100px;
+  height: 300px;
+  background-image: url("clock.png");
+  background-size: 440px 300px;
+  animation: clocks 1s infinite steps(4);
+}
 .obstacle.pink_crystal {
   /* 2단 */
   position: absolute;
@@ -668,7 +677,7 @@ body {
   position: absolute;
   width: 110px;
   height: 300px;
-  background-image: url("로봇.png");
+  background-image: url("dragon_tail.png");
   background-size: 110px 300px;
 }
 .obstacle.doci {
@@ -687,7 +696,30 @@ body {
   background-image: url("큰산.png");
   background-size: 110px 300px;
 }
+.obstacle.bigtaco {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("산꼬점프.png");
+  background-size: 110px 300px;
+}
+.obstacle.bigdevelop {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("개발자더블.png");
+  background-size: 110px 300px;
+}
 
+.obstacle.develop {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("개발자점프.png");
+  background-size: 110px 110px;
+}
 /*1단*/
 .obstacle.table {
   /* 1단 */
@@ -706,12 +738,36 @@ body {
   background-image: url("green_crystal.png");
   background-size: 110px 110px;
 }
+.obstacle.smalldoci {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("작은도치.png");
+  background-size: 110px 110px;
+}
+.obstacle.taco {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("산꼬.png");
+  background-size: 110px 110px;
+}
 .obstacle.mini_snack {
   /* 1단 */
   position: absolute;
   width: 110px;
   height: 110px;
   background-image: url("mini_snack.png");
+  background-size: 110px 110px;
+}
+.obstacle.ghost {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("유령점프.png");
   background-size: 110px 110px;
 }
 .obstacle.small_mushroom {
@@ -732,6 +788,14 @@ body {
   background-image: url("lamp.png");
   background-size: 300px 570px;
 }
+.obstacle.chco {
+  /* 슬라이드 */
+  position: absolute;
+  width: 300px;
+  height: 570px;
+  background-image: url("초콜릿.png");
+  background-size: 300px 570px;
+}
 .obstacle.lamp.broken {
   background-image: url("lamp_broken.png");
   width: 431px;
@@ -744,6 +808,24 @@ body {
   width: 230px;
   height: 570px;
   background-image: url("long_crystal.png");
+  background-size: 460px 570px;
+  animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.ghostslide {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("유령슬라이드.png");
+  background-size: 460px 570px;
+  animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.tree {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("통나무.png");
   background-size: 460px 570px;
   animation: long_crystal 1s infinite steps(2);
 }
@@ -763,6 +845,40 @@ body {
   background-image: url("onion_frog.png");
   background-size: 460px 570px;
   animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.coconut {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("코코넛.png");
+  background-size: 460px 570px;
+  animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.mushroom {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("mushroom_reverse.png");
+  background-size: 230px 570px;
+}
+.obstacle.slidebot {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("슬로봇.png");
+  background-size: 230px 570px;
+}
+.obstacle.bird {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("새.png");
+  background-size: 460px 570px;
+  animation: long_crystal 0.7s infinite steps(3);
 }
 
 .item {
