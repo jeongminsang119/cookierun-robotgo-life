@@ -155,3 +155,126 @@ function toggleMusic() {
     musicButton.innerHTML = '<i class="fa-solid fa-music"></i> 로비 음악 재생';
   }
 }
+
+// ... existing code ...
+
+// 뽑기 캐릭터 목록 (예시)
+const allCharacters = [
+  { name: "붕뜬요한 쿠키", img: "요한.png" },
+  { name: "화난요한 쿠키", img: "화난요한.png" },
+  { name: "궁금요한 쿠키", img: "궁금요한.png" },
+  { name: "시험공부요한 쿠키", img: "시험공부요한.png" },
+  { name: "무싸티요한 쿠키", img: "무싸티요한.png" },
+  // ... 추가 가능
+];
+
+// 내 캐릭터 목록 불러오기
+function getMyCharacters() {
+  return JSON.parse(localStorage.getItem("myCharacters") || "[]");
+}
+
+// 뽑기 팝업 열기
+function openGacha() {
+  // 효과음 재생
+  const gachaAudio = document.getElementById("gachaEffect");
+  if (gachaAudio) {
+    gachaAudio.currentTime = 0;
+    gachaAudio.play();
+  }
+
+  const idx = Math.floor(Math.random() * allCharacters.length);
+  const char = allCharacters[idx];
+
+  // 내 캐릭터에 저장 (중복X)
+  let myChars = getMyCharacters();
+  if (!myChars.find((c) => c.name === char.name)) {
+    myChars.push(char);
+    localStorage.setItem("myCharacters", JSON.stringify(myChars));
+  }
+
+  document.querySelector(".gacha_popup").style.display = "flex";
+  const charDiv = document.querySelector(".gacha_character");
+  charDiv.style.background = `url('${char.img}') center/contain no-repeat`;
+  charDiv.innerHTML = "";
+
+  // 애니메이션 재생을 위해 클래스 리셋
+  const boxDiv = document.querySelector(".gacha_box");
+  const lightDiv = document.querySelector(".gacha_light");
+  boxDiv.style.animation = "none";
+  lightDiv.style.animation = "none";
+  charDiv.style.animation = "none";
+  void boxDiv.offsetWidth;
+  void lightDiv.offsetWidth;
+  void charDiv.offsetWidth;
+
+  boxDiv.style.backgroundImage = "url('gacha_box_closed.png')";
+  boxDiv.style.animation = "boxOpen 1.2s forwards";
+  lightDiv.style.animation = "lightShow 0.7s 1s forwards";
+  charDiv.style.animation = "charPop 0.5s 1.3s forwards";
+}
+
+// 뽑기 팝업 닫기
+function closeGacha() {
+  document.querySelector(".gacha_popup").style.display = "none";
+}
+
+// 캐릭터 선택창 열기
+function openCharacterList() {
+  const myChars = getMyCharacters();
+  const listDiv = document.querySelector(".character_list");
+  if (myChars.length === 0) {
+    listDiv.innerHTML = "<div>뽑은 캐릭터가 없습니다!</div>";
+  } else {
+    listDiv.innerHTML = myChars
+      .map(
+        (char) => `
+      <div style="margin:10px;">
+        <img src="${char.img}" style="width:80px;vertical-align:middle;">
+        <span style="margin:0 10px;">${char.name}</span>
+        <button onclick="selectCharacter('${char.name}')">선택</button>
+      </div>
+    `
+      )
+      .join("");
+  }
+  document.querySelector(".character_list_popup").style.display = "flex";
+}
+
+// 캐릭터 선택창 닫기
+function closeCharacterList() {
+  document.querySelector(".character_list_popup").style.display = "none";
+}
+
+// 캐릭터 선택
+function selectCharacter(name) {
+  const myChars = getMyCharacters();
+  const char = myChars.find((c) => c.name === name);
+  if (char) {
+    localStorage.setItem("selectedCharacter", JSON.stringify(char));
+    setLobbyCharacter();
+    alert(`${char.name} 캐릭터로 변경되었습니다!`);
+    closeCharacterList();
+  }
+}
+
+// 로비 쿠키 이미지 변경
+function setLobbyCharacter() {
+  const char = JSON.parse(localStorage.getItem("selectedCharacter") || "null");
+  const lobbyDiv = document.querySelector(".cookie_lobby");
+  if (char && char.img) {
+    lobbyDiv.style.backgroundImage = `url('${char.img}')`;
+  } else {
+    lobbyDiv.style.backgroundImage = `url('키키.png')`; // 기본 이미지
+  }
+}
+
+// 기존 init 함수에 setLobbyCharacter 추가
+const oldInit = init;
+init = function () {
+  oldInit && oldInit();
+  setLobbyCharacter();
+};
+
+window.onload = () => {
+  init();
+};
