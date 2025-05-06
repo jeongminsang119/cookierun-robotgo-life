@@ -160,11 +160,11 @@ function toggleMusic() {
 
 // 뽑기 캐릭터 목록 (예시)
 const allCharacters = [
-  { name: "붕뜬요한 쿠키", img: "요한.png" },
-  { name: "화난요한 쿠키", img: "화난요한.png" },
-  { name: "궁금요한 쿠키", img: "궁금요한.png" },
-  { name: "시험공부요한 쿠키", img: "시험공부요한.png" },
-  { name: "무싸티요한 쿠키", img: "무싸티요한.png" },
+  { name: "붕뜬요한 쿠키", img: "요한.png", level: 1 },
+  { name: "화난요한 쿠키", img: "화난요한.png", level: 1 },
+  { name: "궁금요한 쿠키", img: "궁금요한.png", level: 1 },
+  { name: "시험공부요한 쿠키", img: "시험공부요한.png", level: 1 },
+  { name: "무싸티요한 쿠키", img: "무싸티요한.png", level: 1 },
   // ... 추가 가능
 ];
 
@@ -185,21 +185,16 @@ function openGacha() {
   const idx = Math.floor(Math.random() * allCharacters.length);
   const char = allCharacters[idx];
 
-  // 내 캐릭터에 저장 (중복X)
+  // 내 캐릭터에 저장 (중복시 레벨업)
   let myChars = getMyCharacters();
-  if (!myChars.find((c) => c.name === char.name)) {
-    myChars.push(char);
-    localStorage.setItem("myCharacters", JSON.stringify(myChars));
-  }
+  const existingChar = myChars.find((c) => c.name === char.name);
 
   document.querySelector(".gacha_popup").style.display = "flex";
   const charDiv = document.querySelector(".gacha_character");
-  charDiv.style.background = `url('${char.img}') center/contain no-repeat`;
-  charDiv.innerHTML = "";
-
-  // 애니메이션 재생을 위해 클래스 리셋
   const boxDiv = document.querySelector(".gacha_box");
   const lightDiv = document.querySelector(".gacha_light");
+
+  // 애니메이션 초기화
   boxDiv.style.animation = "none";
   lightDiv.style.animation = "none";
   charDiv.style.animation = "none";
@@ -207,10 +202,37 @@ function openGacha() {
   void lightDiv.offsetWidth;
   void charDiv.offsetWidth;
 
-  boxDiv.style.backgroundImage = "url('gacha_box_closed.png')";
-  boxDiv.style.animation = "boxOpen 1.2s forwards";
-  lightDiv.style.animation = "lightShow 0.7s 1s forwards";
-  charDiv.style.animation = "charPop 0.5s 1.3s forwards";
+  if (existingChar) {
+    if (existingChar.level < 10) {
+      existingChar.level++;
+      // 레벨업 문구 먼저 표시
+      showLevelUpAnimation(char.name, existingChar.level);
+      // 1초 후에 상자 열기
+      setTimeout(() => {
+        boxDiv.style.backgroundImage = "url('gacha_box_closed.png')";
+        boxDiv.style.animation = "boxOpen 1.2s forwards";
+        lightDiv.style.animation = "lightShow 0.7s 1s forwards";
+        charDiv.style.background = `url('${char.img}') center/contain no-repeat`;
+        charDiv.style.animation = "charPop 0.5s 1.3s forwards";
+      }, 1000);
+    } else {
+      alert(`${char.name}은(는) 이미 최대 레벨입니다!`);
+      boxDiv.style.backgroundImage = "url('gacha_box_closed.png')";
+      boxDiv.style.animation = "boxOpen 1.2s forwards";
+      lightDiv.style.animation = "lightShow 0.7s 1s forwards";
+      charDiv.style.background = `url('${char.img}') center/contain no-repeat`;
+      charDiv.style.animation = "charPop 0.5s 1.3s forwards";
+    }
+  } else {
+    myChars.push({ ...char, level: 1 });
+    boxDiv.style.backgroundImage = "url('gacha_box_closed.png')";
+    boxDiv.style.animation = "boxOpen 1.2s forwards";
+    lightDiv.style.animation = "lightShow 0.7s 1s forwards";
+    charDiv.style.background = `url('${char.img}') center/contain no-repeat`;
+    charDiv.style.animation = "charPop 0.5s 1.3s forwards";
+  }
+
+  localStorage.setItem("myCharacters", JSON.stringify(myChars));
 }
 
 // 뽑기 팝업 닫기
@@ -228,9 +250,17 @@ function openCharacterList() {
     listDiv.innerHTML = myChars
       .map(
         (char) => `
-      <div style="margin:10px;">
-        <img src="${char.img}" style="width:80px;vertical-align:middle;">
-        <span style="margin:0 10px;">${char.name}</span>
+      <div>
+        <img src="${char.img}" alt="${char.name}">
+        <div class="char-info">
+          <div class="char-name">${char.name}</div>
+          <div class="char-level">Level ${char.level}/10</div>
+          <div class="level-bar">
+            <div class="level-progress" style="width: ${
+              (char.level / 10) * 100
+            }%"></div>
+          </div>
+        </div>
         <button onclick="selectCharacter('${char.name}')">선택</button>
       </div>
     `
@@ -278,3 +308,19 @@ init = function () {
 window.onload = () => {
   init();
 };
+
+// 레벨업 애니메이션 표시
+function showLevelUpAnimation(charName, newLevel) {
+  const animationDiv = document.querySelector(".level-up-animation");
+  animationDiv.textContent = `${charName} Level Up! (${newLevel})`;
+  animationDiv.style.display = "block";
+
+  // 애니메이션 재시작
+  animationDiv.style.animation = "none";
+  void animationDiv.offsetWidth; // 리플로우 강제
+  animationDiv.style.animation = "levelUp 1s ease-out";
+
+  setTimeout(() => {
+    animationDiv.style.display = "none";
+  }, 1000);
+}
