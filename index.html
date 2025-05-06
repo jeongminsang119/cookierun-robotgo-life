@@ -16,6 +16,21 @@
     </style>
   </head>
   <body>
+    <button class="gacha_button" onclick="openGacha()">뽑기!</button>
+    <div class="gacha_popup" style="display: none">
+      <div class="gacha_animation_box">
+        <div class="gacha_box"></div>
+        <div class="gacha_light"></div>
+        <div class="gacha_character"></div>
+      </div>
+      <button onclick="closeGacha()">닫기 ✕</button>
+      <button onclick="openCharacterList()">내 캐릭터 보기 🍪</button>
+    </div>
+    <div class="character_list_popup" style="display: none">
+      <div class="character_list"></div>
+      <button onclick="closeCharacterList()">닫기 ✕</button>
+    </div>
+
     <div class="lobby">
       <div class="loading_box"><span>Loading...</span></div>
 
@@ -32,6 +47,7 @@
         </button>
 
         <audio id="lobbyMusic" src="메인로비.mp3" loop></audio>
+        <audio id="gachaEffect" src="뽑기.mp3"></audio>
 
         <div class="score_box">
           <div class="highest_score">
