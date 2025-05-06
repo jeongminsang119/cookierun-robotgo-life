@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <title>DAL GGA</title>
+    <title>간성</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="lobby.css" />
     <script
@@ -22,12 +22,15 @@
         <div class="gacha_box"></div>
         <div class="gacha_light"></div>
         <div class="gacha_character"></div>
+        <div class="level-up-animation"></div>
       </div>
       <button onclick="closeGacha()">닫기 ✕</button>
       <button onclick="openCharacterList()">내 캐릭터 보기 🍪</button>
     </div>
     <div class="character_list_popup" style="display: none">
-      <div class="character_list"></div>
+      <div class="character_list">
+        <!-- 캐릭터 목록이 여기에 동적으로 추가됩니다 -->
+      </div>
       <button onclick="closeCharacterList()">닫기 ✕</button>
     </div>
 
