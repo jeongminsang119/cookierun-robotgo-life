@@ -396,7 +396,8 @@ class Cookie {
     this.el = document.querySelector(el);
     this.movex = 0;
     this.movey = 0;
-    this.speed = 10;
+    this.defaultSpeed = 10;
+    this.speed = this.defaultSpeed;
     this.jumpState = 0; //0: 점프 가능(점프 안하는중), 1:1단 점프중, 2: 2단 점프중(점프 불가능), 3: 2단 점프중인데 또 눌렀을 때(2와 구분해 점프타이머 초기화시키지 않기 위해 설정)
     this.jumpSpeed = 15;
     this.jumpTimer = 0;
@@ -715,7 +716,7 @@ class Item {
   }
   blast() {
     document.querySelector(".cookie").classList.add("blast");
-    cookie.speed *= 2;
+    cookie.speed = cookie.defaultSpeed * 2;
     cookie.superCookie = true;
 
     setTimeout(() => {
@@ -723,7 +724,7 @@ class Item {
       if (!document.querySelector(".cookie").classList.contains("giant")) {
         document.querySelector(".cookie").classList.add("supper");
       }
-      cookie.speed /= 2;
+      cookie.speed = cookie.defaultSpeed;
     }, 1500);
     setTimeout(() => {
       cookie.eatenItem--;
@@ -742,6 +743,7 @@ class Item {
       if (!document.querySelector(".cookie").classList.contains("blast")) {
         document.querySelector(".cookie").classList.add("supper");
       }
+      cookie.speed = cookie.defaultSpeed;
     }, 2000);
     setTimeout(() => {
       cookie.eatenItem--;
