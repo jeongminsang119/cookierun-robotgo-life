@@ -550,7 +550,7 @@ body {
   white-space: nowrap;
   animation: stageStart 1.5s;
   animation-fill-mode: both;
-  color: black;
+  color: rgb(247, 178, 4);
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: white;
 }
@@ -605,6 +605,7 @@ body {
     background-position-x: -460px;
   }
 }
+
 @keyframes broken {
   0% {
     transform: translate(0px, 0px) rotate(0deg);
@@ -664,6 +665,42 @@ body {
   background-size: 550px 300px;
   animation: snacks 1s infinite steps(5);
 }
+.obstacle.turtle {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("찐거북.png");
+  background-size: 550px 300px;
+  animation: snacks 1s infinite steps(2);
+}
+.obstacle.dessert {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("사막.png");
+  background-size: 550px 300px;
+  animation: clocks 1s infinite steps(2);
+}
+.obstacle.ca1 {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("케르짱.png");
+  background-size: 550px 300px;
+  animation: clocks 1s infinite steps(2);
+}
+.obstacle.ala {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("알라딘.png");
+  background-size: 550px 300px;
+  animation: clocks 1s infinite steps(2);
+}
 .obstacle.cake {
   /* 2단 */
   position: absolute;
@@ -704,12 +741,28 @@ body {
   background-image: url("산꼬점프.png");
   background-size: 110px 300px;
 }
+.obstacle.bigmou {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("큰산.png");
+  background-size: 110px 300px;
+}
 .obstacle.bigdevelop {
   /* 2단 */
   position: absolute;
   width: 110px;
   height: 300px;
   background-image: url("개발자더블.png");
+  background-size: 110px 300px;
+}
+.obstacle.bigkal {
+  /* 2단 */
+  position: absolute;
+  width: 110px;
+  height: 300px;
+  background-image: url("칼칼.png");
   background-size: 110px 300px;
 }
 
@@ -730,12 +783,46 @@ body {
   background-size: 550px 110px;
   animation: table 1s infinite steps(5);
 }
+.obstacle.ca {
+  /* 1단 */
+  position: absolute;
+  width: 100px;
+  height: 110px;
+  background-image: url("케르.png");
+  background-size: 550px 110px;
+  animation: clocks 1s infinite steps(2);
+}
 .obstacle.green_crystal {
   /* 1단 */
   position: absolute;
   width: 110px;
   height: 110px;
   background-image: url("green_crystal.png");
+  background-size: 110px 110px;
+}
+.obstacle.ala1 {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("알라딘1.png");
+  background-size: 110px 110px;
+  animation: sncks 1s infinite steps(2);
+}
+.obstacle.sun {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("선인장.png");
+  background-size: 110px 110px;
+}
+.obstacle.smallkal {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("칼.png");
   background-size: 110px 110px;
 }
 .obstacle.smalldoci {
@@ -754,6 +841,14 @@ body {
   background-image: url("산꼬.png");
   background-size: 110px 110px;
 }
+.obstacle.smallmou {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("작은산.png");
+  background-size: 110px 110px;
+}
 .obstacle.mini_snack {
   /* 1단 */
   position: absolute;
@@ -768,6 +863,14 @@ body {
   width: 110px;
   height: 110px;
   background-image: url("유령점프.png");
+  background-size: 110px 110px;
+}
+.obstacle.exe {
+  /* 1단 */
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: url("운동.png");
   background-size: 110px 110px;
 }
 .obstacle.small_mushroom {
@@ -788,6 +891,14 @@ body {
   background-image: url("lamp.png");
   background-size: 300px 570px;
 }
+.obstacle.sunin {
+  /* 슬라이드 */
+  position: absolute;
+  width: 300px;
+  height: 570px;
+  background-image: url("선인장슬라이드.png");
+  background-size: 300px 570px;
+}
 .obstacle.chco {
   /* 슬라이드 */
   position: absolute;
@@ -796,9 +907,23 @@ body {
   background-image: url("초콜릿.png");
   background-size: 300px 570px;
 }
+.obstacle.gum {
+  /* 슬라이드 */
+  position: absolute;
+  width: 300px;
+  height: 570px;
+  background-image: url("대검.png");
+  background-size: 300px 570px;
+}
 .obstacle.lamp.broken {
   background-image: url("lamp_broken.png");
   width: 431px;
+  height: 570px;
+  background-size: 431px 570px;
+}
+.obstacle.ja {
+  background-image: url("국자.png");
+  width: 4px;
   height: 570px;
   background-size: 431px 570px;
 }
@@ -810,6 +935,15 @@ body {
   background-image: url("long_crystal.png");
   background-size: 460px 570px;
   animation: long_crystal 1s infinite steps(2);
+}
+.obstacle.alajelly {
+  /* 슬라이드 */
+  position: absolute;
+  width: 230px;
+  height: 570px;
+  background-image: url("알라딘제리.png");
+  background-size: 460px 570px;
+  animation: long_crystaly 1s infinite steps(2);
 }
 .obstacle.ghostslide {
   /* 슬라이드 */
@@ -915,4 +1049,122 @@ body {
 .item.mini_energy_potion {
   background-image: url("Mini Energy Potion.png");
   background-size: 100px 100px;
+}
+
+.story_overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.story_scene {
+  width: 90vw;
+  height: 60vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+.story_img {
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+  border: 6px solid #f1c40f;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+.story_img.active {
+  opacity: 1;
+}
+.story_img.left {
+  order: 0;
+}
+.story_img.right {
+  order: 2;
+}
+.story_bubble_box {
+  max-width: 40vw;
+  min-width: 320px;
+  margin: 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.story_bubble_box.right {
+  align-items: flex-end;
+}
+.story_name {
+  font-size: 32px;
+  font-weight: bold;
+  color: #8e44ad;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 0 #fff;
+}
+.story_bubble {
+  background: #fff;
+  border-radius: 30px;
+  padding: 36px 48px;
+  font-size: 28px;
+  color: #333;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  position: relative;
+  min-width: 220px;
+  max-width: 40vw;
+  text-align: left;
+}
+.story_bubble_box.left .story_bubble:after {
+  content: "";
+  position: absolute;
+  left: -32px;
+  bottom: 40px;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-right: 32px solid #fff;
+}
+.story_bubble_box.right .story_bubble:after {
+  content: "";
+  position: absolute;
+  right: -32px;
+  bottom: 40px;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-left: 32px solid #fff;
+}
+.story_btns {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+.story_next_btn,
+.story_start_btn {
+  font-size: 28px;
+  padding: 18px 60px;
+  border-radius: 16px;
+  border: none;
+  background: orange;
+  color: #fff;
+  margin: 0 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  font-family: "cookieRun Bold", sans-serif;
+  cursor: pointer;
 }
