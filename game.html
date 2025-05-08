@@ -35,6 +35,31 @@
         <button onclick="backLobby()">로비로 돌아가기</button>
       </div>
 
+      <!-- 스토리 오버레이 (쿠키런 스타일, 화면 전체, 좌우 캐릭터, 말풍선) -->
+      <div class="story_overlay" style="display: none">
+        <div class="story_bg"></div>
+        <div class="story_scene">
+          <img class="story_img left" src="" alt="" />
+          <div class="story_bubble_box left">
+            <div class="story_name"></div>
+            <div class="story_bubble">
+              <div class="story_text"></div>
+            </div>
+          </div>
+          <img class="story_img right" src="" alt="" />
+        </div>
+        <div class="story_btns">
+          <button class="story_next_btn" onclick="nextStory()">다음</button>
+          <button
+            class="story_start_btn"
+            onclick="startGame()"
+            style="display: none"
+          >
+            게임 시작
+          </button>
+        </div>
+      </div>
+
       <div class="game">
         <div class="cookie_box">
           <div class="cookie run"></div>
