@@ -208,6 +208,7 @@ const windowEvent = () => {
     const action = key.keyValue[e.which];
 
     if (!key.keyDown[action]) {
+      // 중복입력 방지
       if (action === "jump") {
         if (cookie.jumpState < 2) {
           cookie.jumpState++;
@@ -215,7 +216,6 @@ const windowEvent = () => {
         }
       }
     }
-  
 
     key.keyDown[action] = true;
   });
@@ -290,3 +290,76 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
+// 쿠키런 스타일 4단계 스토리 데이터
+const storyList = [
+  {
+    name: "대표님쿠키",
+    img: "탄쿠키.png",
+    text: "치킨매출이 너무 줄어들고 있잖어어",
+
+    side: "left",
+  },
+  {
+    name: "배달원쿠키",
+    img: "배달원.png",
+    text: "나도 너무 슬퍼 1달전만해도 세계최고의 치킨배달원이었는데",
+
+    side: "right",
+  },
+  {
+    name: "타버린쿠키",
+    img: "탄쿠키.png",
+    text: "우리 얼른 기운차려서 매출을 올려보자!",
+
+    side: "left",
+  },
+  {
+    name: "배달원쿠키",
+    img: "배달원.png",
+    text: "좋아, 한번 배달해볼까나!",
+
+    side: "right",
+  },
+];
+let storyIndex = 0;
+
+function showStory() {
+  document.querySelector(".story_overlay").style.display = "flex";
+  // 배경 이미지 적용
+  document.querySelector(".story_bg").style.backgroundImage = `url('${
+    storyList[storyIndex].bg || ""
+  }')`;
+  // 좌우 캐릭터 이미지 및 말풍선 위치
+  document.querySelector(".story_img.left").src =
+    storyList[storyIndex].side === "left" ? storyList[storyIndex].img : "";
+  document.querySelector(".story_img.right").src =
+    storyList[storyIndex].side === "right" ? storyList[storyIndex].img : "";
+  document
+    .querySelector(".story_img.left")
+    .classList.toggle("active", storyList[storyIndex].side === "left");
+  document
+    .querySelector(".story_img.right")
+    .classList.toggle("active", storyList[storyIndex].side === "right");
+  document.querySelector(".story_bubble_box").className =
+    "story_bubble_box " + (storyList[storyIndex].side || "left");
+  document.querySelector(".story_name").innerText = storyList[storyIndex].name;
+  document.querySelector(".story_text").innerText = storyList[storyIndex].text;
+  document.querySelector(".story_next_btn").style.display =
+    storyIndex < storyList.length - 1 ? "inline-block" : "none";
+  document.querySelector(".story_start_btn").style.display =
+    storyIndex === storyList.length - 1 ? "inline-block" : "none";
+}
+function nextStory() {
+  if (storyIndex < storyList.length - 1) {
+    storyIndex++;
+    showStory();
+  }
+}
+function startGame() {
+  document.querySelector(".story_overlay").style.display = "none";
+  if (typeof init === "function") init();
+}
+window.onload = () => {
+  showStory();
+};
