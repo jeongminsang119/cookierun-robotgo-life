@@ -417,11 +417,11 @@ const stage19 = {
   miniEnergyPosition: [3000, 9000, 15000, 21000, 27000],
   goodPatternPosition: [5000, 15000, 25000],
   jellyPatternPosition: [10000, 20000],
-  damage: 100,
+  damage: 300,
 };
 
 const stage20 = {
-  name: "로봇고졸업",
+  name: "마지막 로봇고 졸업",
   backgroundUrl: "옷장집.png",
   groundUrl: "mint_wood.png",
   length: 30000,
@@ -439,5 +439,5 @@ const stage20 = {
   miniEnergyPosition: [2400, 8400, 14400, 20400, 26400],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 100,
+  damage: 400,
 };
