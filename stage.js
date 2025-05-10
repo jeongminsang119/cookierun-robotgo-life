@@ -159,7 +159,7 @@ const stage8 = {
   backgroundUrl: "포크.jpg",
   groundUrl: "포크땅.png",
   length: 30000,
-  jumpObstacle: "obstacle kal",
+  jumpObstacle: "obstacle smallkal",
   jumpObstaclePosition: [2000, 6600, 11200, 15800, 20400, 25000, 29600],
   doubleJumpObstacle: "obstacle bigkal",
   doubleJumpObstaclePosition: [3400, 8000, 12600, 17200, 21800, 26400],
