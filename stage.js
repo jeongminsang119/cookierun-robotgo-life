@@ -373,7 +373,7 @@ const stage17 = {
   miniEnergyPosition: [2800, 8800, 14800, 20800, 26800],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 100,
+  damage: 300,
 };
 
 const stage18 = {
@@ -395,7 +395,7 @@ const stage18 = {
   miniEnergyPosition: [3200, 9200, 15200, 21200, 27200],
   goodPatternPosition: [6000, 16000, 26000],
   jellyPatternPosition: [10000, 20000],
-  damage: 100,
+  damage: 300,
 };
 
 const stage19 = {
@@ -439,5 +439,5 @@ const stage20 = {
   miniEnergyPosition: [2400, 8400, 14400, 20400, 26400],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 400,
+  damage: 1000,
 };
