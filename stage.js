@@ -88,7 +88,7 @@ const stage4 = {
 
 const stage5 = {
   name: "편의점가는길",
-  backgroundUrl: "눈.png",
+  backgroundUrl: "구름땅.png",
   groundUrl: "mud.png",
   length: 20000 /*20000*/,
   jumpObstacle: "obstacle smalldoci",
