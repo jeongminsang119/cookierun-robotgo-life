@@ -324,3 +324,13 @@ function showLevelUpAnimation(charName, newLevel) {
     animationDiv.style.display = "none";
   }, 1000);
 }
+
+// 스토리 팝업 열기
+function openStory() {
+  document.querySelector(".story_popup").style.display = "flex";
+}
+
+// 스토리 팝업 닫기
+function closeStory() {
+  document.querySelector(".story_popup").style.display = "none";
+}
