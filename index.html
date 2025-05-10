@@ -17,6 +17,7 @@
   </head>
   <body>
     <button class="gacha_button" onclick="openGacha()">뽑기!</button>
+    <button class="story_button" onclick="openStory()">스토리!</button>
     <div class="gacha_popup" style="display: none">
       <div class="gacha_animation_box">
         <div class="gacha_box"></div>
@@ -32,6 +33,83 @@
         <!-- 캐릭터 목록이 여기에 동적으로 추가됩니다 -->
       </div>
       <button onclick="closeCharacterList()">닫기 ✕</button>
+    </div>
+
+    <!-- 스토리 팝업 내용 수정 -->
+    <div class="story_popup" style="display: none">
+      <div class="story_content">
+        <h2>간성대표님의 치킨집 스토리</h2>
+        <div class="story_image">
+          <img src="탄쿠키.png" alt="간성대표님" />
+          <div class="image_caption">치킨집 대표</div>
+        </div>
+        <div class="story_text">
+          <div class="story_chapter">
+            <h3>Chapter 1. 꿈의 시작</h3>
+            <p>
+              어느 날, 간성대표님은 치킨집을 열기로 결심했습니다. "이제는 내가
+              직접 치킨을 만들어야겠어!" 라고 생각한 대표님은 바로 행동에
+              옮겼습니다.
+            </p>
+          </div>
+
+          <div class="story_chapter">
+            <h3>Chapter 2. 비밀 레시피의 탄생</h3>
+            <p>
+              첫 번째 도전은 레시피 개발이었습니다. "일반적인 치킨은 너무
+              평범해. 내만의 특별한 맛을 만들어야 해!" 대표님은 밤새 레시피를
+              연구했습니다. 마침내 특별한 비법을 발견했는데, 그것은 바로
+              '간성대표님의 비밀 소스'였습니다.
+            </p>
+          </div>
+
+          <div class="story_chapter">
+            <h3>Chapter 3. 특별한 이름</h3>
+            <p>
+              가게를 오픈하기 전, 대표님은 치킨의 이름을 고민했습니다. "내
+              이름을 딴 치킨을 만들자! '간성치킨'으로 하자!" 하지만 이내 생각을
+              바꿨습니다. "아니, 더 특별한 이름이 필요해. '간성대표님의 특제
+              치킨'으로 하자!"
+            </p>
+          </div>
+
+          <div class="story_chapter">
+            <h3>Chapter 4. 첫 손님들</h3>
+            <p>
+              가게 오픈 첫날, 손님들이 몰려들었습니다. 대표님은 손님들에게 특제
+              치킨을 대접하며 행복해했습니다. "이 맛이야말로 진정한 치킨의
+              맛이지!" 손님들의 반응도 뜨거웠습니다.
+            </p>
+          </div>
+
+          <div class="story_chapter">
+            <h3>Chapter 5. 새로운 도전</h3>
+            <p>
+              하지만 성공적인 시작에도 불구하고, 대표님은 계속해서 새로운 메뉴를
+              개발했습니다. "치킨만으로는 부족해. 사이드 메뉴도 필요해!" 그렇게
+              '간성대표님의 특제 감자튀김'과 '간성대표님의 특제 콜라'가
+              탄생했습니다.
+            </p>
+          </div>
+
+          <div class="story_chapter">
+            <h3>Chapter 6. 더 큰 꿈</h3>
+            <p>
+              지금도 대표님은 매일 새로운 레시피를 연구하며, 더 맛있는 치킨을
+              만들기 위해 노력하고 있습니다. "이제는 전국적으로 유명한 치킨집을
+              만들어야지!" 라는 꿈을 향해 달려가고 있답니다.
+            </p>
+          </div>
+
+          <div class="story_ending">
+            <p>
+              여러분도 한번 '간성대표님의 특제 치킨'을 맛보러 오시겠어요?
+              대표님이 직접 만든 특별한 맛을 경험해보세요!
+            </p>
+          </div>
+        </div>
+      </div>
+      <button onclick="closeStory()">닫기 ✕</button>
     </div>
 
     <div class="lobby">
