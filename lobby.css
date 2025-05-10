@@ -574,3 +574,135 @@ body {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
+.story_button {
+  position: absolute;
+  right: 5vw;
+  bottom: 240px; /* gacha_button 위에 위치하도록 */
+  width: 15%;
+  height: 80px;
+  background-color: green;
+  border-radius: 10px;
+  border-color: wheat;
+  border-width: 5px;
+  font-size: 50px;
+  color: white;
+  text-shadow: 1.5px 1.5px 1.5px #000;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.story_popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.story_image {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.story_image img {
+  max-width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image_caption {
+  margin-top: 10px;
+  font-size: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.story_chapter {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story_chapter h3 {
+  color: #8e44ad;
+  margin-bottom: 15px;
+  font-size: 22px;
+  border-bottom: 2px solid #8e44ad;
+  padding-bottom: 5px;
+}
+
+.story_chapter p {
+  margin: 0;
+  text-indent: 1em;
+  line-height: 1.8;
+}
+
+.story_ending {
+  margin-top: 40px;
+  padding: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+.story_content {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.story_content h2 {
+  color: #8e44ad;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 32px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story_text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.story_popup button {
+  font-family: "cookieRun Bold";
+  margin: 10px;
+  padding: 15px 30px;
+  font-size: 24px;
+  color: white;
+  background-color: #8e44ad;
+  border: 4px solid #f1c40f;
+  border-radius: 15px;
+  cursor: pointer;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 0 #6c3483;
+  transition: all 0.1s;
+}
+
+.story_popup button:hover {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #6c3483;
+}
+
+.story_popup button:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
