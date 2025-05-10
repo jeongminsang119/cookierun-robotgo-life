@@ -185,7 +185,7 @@ const stage9 = {
   jumpObstaclePosition: [2200, 6800, 11400, 16000, 20600, 25200, 29800],
   doubleJumpObstacle: "obstacle clocks",
   doubleJumpObstaclePosition: [3600, 8200, 12800, 17400, 22000, 26600],
-  slideObstacle: "obstacle lamp",
+  slideObstacle: "obstacle jelly",
   slideObstaclePosition: [1400, 6000, 10600, 15200, 19800, 24400, 29000],
   blastPosition: [9000, 19000, 29000],
   coinMagicPosition: [8800, 18800, 28800],
