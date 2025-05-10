@@ -725,7 +725,7 @@ body {
   background-image: url("고슴도치.png");
   background-size: 110px 300px;
 }
-.obstacle.mountain {
+.obstacle.bigmou {
   /* 2단 */
   position: absolute;
   width: 110px;
