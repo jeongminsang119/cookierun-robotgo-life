@@ -699,7 +699,6 @@ body {
   height: 300px;
   background-image: url("알라딘.png");
   background-size: 550px 300px;
-  animation: clocks 1s infinite steps(2);
 }
 .obstacle.cake {
   /* 2단 */
@@ -997,12 +996,12 @@ body {
   background-image: url("mushroom_reverse.png");
   background-size: 230px 570px;
 }
-.obstacle.slidebot {
+.obstacle.sin {
   /* 슬라이드 */
   position: absolute;
   width: 230px;
   height: 570px;
-  background-image: url("슬로봇.png");
+  background-image: url("선인장슬라이드.png");
   background-size: 230px 570px;
 }
 .obstacle.bird {
