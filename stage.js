@@ -157,7 +157,7 @@ const stage7 = {
 const stage8 = {
   name: "로봇고 개발자의 꿈",
   backgroundUrl: "포크.jpg",
-  groundUrl: "mint_wood.png",
+  groundUrl: "포크땅.png",
   length: 30000,
   jumpObstacle: "obstacle develop",
   jumpObstaclePosition: [2000, 6600, 11200, 15800, 20400, 25000, 29600],
