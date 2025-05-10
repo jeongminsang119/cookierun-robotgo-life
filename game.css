@@ -936,14 +936,14 @@ body {
   background-size: 460px 570px;
   animation: long_crystal 1s infinite steps(2);
 }
-.obstacle.alajelly {
+.obstacle.jelly {
   /* 슬라이드 */
   position: absolute;
   width: 230px;
   height: 570px;
-  background-image: url("알라딘제리.png");
+  background-image: url("젤리.png");
   background-size: 460px 570px;
-  animation: long_crystaly 1s infinite steps(2);
+  animation: long_crystal 1s infinite steps(2);
 }
 .obstacle.ghostslide {
   /* 슬라이드 */
