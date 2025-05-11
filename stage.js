@@ -439,5 +439,5 @@ const stage20 = {
   miniEnergyPosition: [2400, 8400, 14400, 20400, 26400],
   goodPatternPosition: [7000, 17000, 27000],
   jellyPatternPosition: [4000, 14000, 24000],
-  damage: 300,
+  damage: 400,
 };
