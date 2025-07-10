@@ -173,3 +173,4 @@ https://jeongminsang119.github.io/cookierun-robotgo-life/
 ![Image](https://github.com/user-attachments/assets/3ae5b2d1-a6e1-4b00-b317-6d3557dc06d7)
 
 <img width="1080" height="1080" alt="Image" src="https://github.com/user-attachments/assets/faed3eba-ffe0-487c-aec7-bbd08216d138" />
+<img width="594" height="420" alt="Image" src="https://github.com/user-attachments/assets/07b1bb4b-9de4-4b8d-b3ad-c37929cc7ba9" />
