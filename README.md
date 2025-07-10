@@ -1,7 +1,7 @@
 플레이 하실거면(PLAY GAME) under link
 제 코드쓰실분들은 index.html을 실행한다음 플레이를 하면 게임하는 화면이보입니다
 https://jeongminsang119.github.io/cookierun-robotgo-life/
-
+<img width="442" height="525" alt="Image" src="https://github.com/user-attachments/assets/18306e66-45fd-4f11-81ae-61c1fcaf1db8" />
 ![Image](https://github.com/user-attachments/assets/7eeee457-15ef-435a-a773-36144669b1a9)
 ![Image](https://github.com/user-attachments/assets/487bb1ba-ae67-4c03-a159-c27e09d7e69d)
 <img width="594" height="420" alt="Image" src="https://github.com/user-attachments/assets/11e08b77-099f-4f1d-838d-a5614cc29e47" />
