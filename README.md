@@ -4,6 +4,7 @@ https://jeongminsang119.github.io/cookierun-robotgo-life/
 
 ![Image](https://github.com/user-attachments/assets/7eeee457-15ef-435a-a773-36144669b1a9)
 ![Image](https://github.com/user-attachments/assets/487bb1ba-ae67-4c03-a159-c27e09d7e69d)
+<img width="594" height="420" alt="Image" src="https://github.com/user-attachments/assets/11e08b77-099f-4f1d-838d-a5614cc29e47" />
 ![Image](https://github.com/user-attachments/assets/6b84a675-3164-4b3e-afcc-18d0491c9fa1)
 ![Image](https://github.com/user-attachments/assets/782d7ed8-0062-4372-a324-b379456a5595)
 ![Image](https://github.com/user-attachments/assets/96d062a4-9ce5-4960-8299-36553c5087ef)
