@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>한국 주식 거래소</title>
+    <link rel="stylesheet" href="크레.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <span class="logo-text">주식톡</span>
+        </div>
+        <div class="user-wallet">
+          <div class="wallet-item">
+            <span class="label">예수금</span>
+            <span id="cashBalance" class="value">100,000,000원</span>
+          </div>
+          <div class="wallet-item">
+            <span class="label">총자산</span>
+            <span id="totalAssets" class="value">100,000,000원</span>
+          </div>
+          <div class="wallet-item">
+            <span class="label">평가손익</span>
+            <span id="totalPnL" class="value positive">0원 (0%)</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container">
+      <div class="trading-layout">
+        <aside class="market-panel">
+          <div class="search-box">
+            <input type="text" id="stoc kSearch" placeholder="종목 검색" />
+          </div>
+          <div class="market-tabs">
+            <button class="tab-btn active" data-tab="all">전체</button>
+            <button class="tab-btn" data-tab="kospi">코스피</button>
+            <button class="tab-btn" data-tab="kosdaq">코스닥</button>
+          </div>
+          <div class="stock-list" id="stockList"></div>
+        </aside>
+
+        <section class="main-panel">
+          <div class="stock-header">
+            <div class="stock-info">
+              <h2 id="selectedStockName">삼성전자</h2>
+              <div class="stock-code" id="stockCode">005930</div>
+            </div>
+            <div class="price-info">
+              <div class="current-price" id="currentPrice">67,800</div>
+              <div class="price-change positive" id="priceChange">
+                <span class="change-amount">▲ 1,200</span>
+                <span class="change-percent">(+1.80%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-controls">
+              <button class="time-btn active" data-time="1D">1일</button>
+              <button class="time-btn" data-time="1W">1주</button>
+              <button class="time-btn" data-time="1M">1개월</button>
+              <button class="time-btn" data-time="3M">3개월</button>
+              <button class="time-btn" data-time="1Y">1년</button>
+            </div>
+            <canvas id="priceChart"></canvas>
+          </div>
+
+          <div class="trading-panel">
+            <div class="order-tabs">
+              <button class="order-tab active" data-order="limit">
+                지정가
+              </button>
+              <button class="order-tab" data-order="market">시장가</button>
+            </div>
+            <div class="order-form">
+              <div class="form-row">
+                <label>주문수량</label>
+                <div class="quantity-input">
+                  <input type="number" id="orderQuantity" min="1" step="1" />
+                  <div class="quantity-controls">
+                    <button class="qty-btn" data-qty="10">10주</button>
+                    <button class="qty-btn" data-qty="50">50주</button>
+                    <button class="qty-btn" data-qty="100">100주</button>
+                    <button class="qty-btn" data-qty="max">최대</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label>주문가격</label>
+                <div class="price-input">
+                  <input type="number" id="orderPrice" step="100" />
+                  <div class="price-controls">
+                    <button class="price-btn" data-adjust="-1">-1호가</button>
+                    <button class="price-btn" data-adjust="1">+1호가</button>
+                  </div>
+                </div>
+              </div>
+              <div class="order-summary">
+                <div class="summary-item">
+                  <span>주문총액</span>
+                  <span id="orderTotal">0원</span>
+                </div>
+                <div class="summary-item">
+                  <span>주문가능</span>
+                  <span id="availableBalance">100,000,000원</span>
+                </div>
+              </div>
+              <div class="order-buttons">
+                <button id="buyButton" class="order-btn buy">매수</button>
+                <button id="sellButton" class="order-btn sell">매도</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="portfolio-panel">
+          <h3>보유종목</h3>
+          <div class="holdings-list" id="holdingsList"></div>
+          <div class="order-history">
+            <h3>주문내역</h3>
+            <div class="history-list" id="orderHistory"></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <script src="크레.js"></script>
+  </body>
+</html>
+
+
+
+
+
