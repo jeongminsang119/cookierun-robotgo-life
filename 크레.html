@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="크레.css" />
   </head>
   <body>
+    <!-- 실시간 뉴스 영역을 body 맨 위에 추가 -->
+    <div id="newsArea"></div>
     <nav class="navbar">
       <div class="nav-container">
         <div class="logo">
@@ -58,15 +60,25 @@
             </div>
           </div>
 
-          <div class="chart-container">
-            <div class="chart-controls">
-              <button class="time-btn active" data-time="1D">1일</button>
-              <button class="time-btn" data-time="1W">1주</button>
-              <button class="time-btn" data-time="1M">1개월</button>
-              <button class="time-btn" data-time="3M">3개월</button>
-              <button class="time-btn" data-time="1Y">1년</button>
+          <div style="display:flex; gap:32px;">
+            <div class="chart-container" style="flex:2;">
+              <div id="chartTools"></div>
+              <div class="chart-controls">
+                <button class="time-btn active" data-time="1D">1일</button>
+                <button class="time-btn" data-time="1W">1주</button>
+                <button class="time-btn" data-time="1M">1개월</button>
+                <button class="time-btn" data-time="3M">3개월</button>
+                <button class="time-btn" data-time="1Y">1년</button>
+              </div>
+              <canvas id="priceChart"></canvas>
             </div>
-            <canvas id="priceChart"></canvas>
+            <!-- 호가창(매수/매도 호가) 추가 -->
+            <div class="orderbook-container" style="flex:1; min-width:180px;">
+              <h4 style="margin-bottom:8px; color:#ffd600;">실시간 호가</h4>
+              <div id="orderbook" style="background:#222; border-radius:8px; padding:8px 0; font-size:15px;">
+                <!-- 호가 데이터가 JS로 채워짐 -->
+              </div>
+            </div>
           </div>
 
           <div class="trading-panel">
