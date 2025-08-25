@@ -383,7 +383,7 @@ function injectNewsArea() {
     newsDiv.id = "newsArea";
     newsDiv.style = `
       position:fixed;
-      top:0;
+      top:60px;
       left:0;
       width:100vw;
       z-index:2000;
@@ -409,21 +409,41 @@ function showNews(text) {
   if (newsText) newsText.innerHTML = text;
 }
 
-// --- 실시간 뉴스 및 가격 영향 ---
+// 뉴스 기사 다양하게 추가
 const newsPool = [
+  { headline: "비트코인, 1억 돌파! 투자자 환호", impact: { code: "BTCFUT", effect: 0.03 } },
+  { headline: "비트코인, 급락! 규제 이슈로 10% 하락", impact: { code: "BTCFUT", effect: -0.04 } },
   { headline: "삼성전자, AI 반도체 출시! 기대감 ↑", impact: { code: "005930", effect: 0.015 } },
-  { headline: "카카오, 서비스 장애 발생… 약세", impact: { code: "035720", effect: -0.018 } },
-  { headline: "SK하이닉스, 메모리 가격 하락 우려", impact: { code: "000660", effect: -0.012 } },
+  { headline: "삼성전자, 실적 부진… 주가 하락", impact: { code: "005930", effect: -0.012 } },
+  { headline: "SK하이닉스, 메모리 가격 반등! 강세", impact: { code: "000660", effect: 0.018 } },
+  { headline: "SK하이닉스, 글로벌 공급망 차질", impact: { code: "000660", effect: -0.015 } },
   { headline: "NAVER, 해외 진출 성공! 상승세", impact: { code: "035420", effect: 0.013 } },
+  { headline: "NAVER, 서비스 장애 발생… 약세", impact: { code: "035420", effect: -0.014 } },
+  { headline: "카카오, 신규 서비스 출시! 기대감", impact: { code: "035720", effect: 0.012 } },
+  { headline: "카카오, 서비스 장애 발생… 약세", impact: { code: "035720", effect: -0.018 } },
+  { headline: "LG전자, 신제품 TV 흥행", impact: { code: "066570", effect: 0.011 } },
+  { headline: "LG전자, 해외 시장 부진", impact: { code: "066570", effect: -0.009 } },
+  { headline: "현대차, 전기차 수출 급증! 자동차주 강세", impact: { code: "005380", effect: 0.012 } },
+  { headline: "현대차, 노사 갈등… 생산 차질", impact: { code: "005380", effect: -0.013 } },
+  { headline: "기아, 친환경차 판매 호조", impact: { code: "000270", effect: 0.008 } },
+  { headline: "기아, 실적 부진… 주가 하락", impact: { code: "000270", effect: -0.009 } },
+  { headline: "POSCO홀딩스, 철강 가격 인상 발표", impact: { code: "005490", effect: 0.01 } },
+  { headline: "POSCO홀딩스, 원자재 가격 급등 부담", impact: { code: "005490", effect: -0.012 } },
+  { headline: "셀트리온, 신약 임상 성공! 제약주 강세", impact: { code: "068270", effect: 0.02 } },
+  { headline: "셀트리온, 신약 임상 실패… 제약주 하락", impact: { code: "068270", effect: -0.02 } },
+  { headline: "삼성바이오로직스, 대규모 투자 소식", impact: { code: "207940", effect: 0.011 } },
+  { headline: "삼성바이오로직스, 규제 리스크 부각", impact: { code: "207940", effect: -0.013 } },
 ];
+
+// 뉴스가 10초마다 항상 갱신되도록
 function triggerNews() {
-  const news = newsPool[Math.floor(Math.random()*newsPool.length)];
+  const news = newsPool[Math.floor(Math.random() * newsPool.length)];
   showNews(`📢 <span style="color:#ffd600">${news.headline}</span>`);
   const stock = stocks.find(s => s.code === news.impact.code);
   if (stock) {
-    const effect = news.impact.effect * (Math.random()*0.7+0.7);
-    stock.price = Math.max(Math.round(stock.price*(1+effect)/PRICE_STEP)*PRICE_STEP, stock.price*0.7);
-    stock.priceHistory.push({time:Date.now(),price:stock.price,volume:Math.floor(Math.random()*100000)+50000});
+    const effect = news.impact.effect * (Math.random() * 0.7 + 0.7);
+    stock.price = Math.max(Math.round(stock.price * (1 + effect) / PRICE_STEP) * PRICE_STEP, stock.price * 0.7);
+    stock.priceHistory.push({ time: Date.now(), price: stock.price, volume: Math.floor(Math.random() * 100000) + 50000 });
     stock.priceHistory.shift();
   }
   updateUI();
