@@ -289,3 +289,4 @@ setInterval(() => {
     showSpeechBubble("riderIcon2", rider2Messages);
   }, 1500);
 }, 5000);
+
