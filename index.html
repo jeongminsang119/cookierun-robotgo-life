@@ -118,11 +118,17 @@
     <div class="lobby">
       <div class="loading_box"><span>Loading...</span></div>
 
-      <!-- 오른쪽에 바로가기 버튼들 추가 -->
-      <div style="position:fixed; right:130px; top:450px; z-index:999;">
+      <!-- 오른쪽에 바로가기 버튼들 깔끔하게 배치 -->
+      <div style="position:fixed; right:40px; top:320px; z-index:999; display:flex; flex-direction:column; gap:16px;">
+        <button
+          onclick="window.open('크레.html','_blank')"
+          style="background:#1e88e5; color:#fff; font-weight:bold; border:none; border-radius:10px; padding:15px 25px; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.15); cursor:pointer;"
+        >
+          📊 크레 거래소 바로가기
+        </button>
         <button
           onclick="window.open('gino.html','_blank')"
-          style="background:#ffb800; color:#000; font-weight:bold; border:none; border-radius:10px; padding:15px 25px; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.15); cursor:pointer; margin-bottom:10px; display:block; width:100%;"
+          style="background:#ffb800; color:#000; font-weight:bold; border:none; border-radius:10px; padding:15px 25px; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.15); cursor:pointer;"
         >
           🎰 LuckySpin 카지노
         </button>
