@@ -18,9 +18,6 @@
         <nav class="nav" id="nav">
           <a href="#" class="nav-link active" data-page="home">홈</a>
           <a href="#" class="nav-link" data-page="games">게임</a>
-          <a href="#" class="nav-link" data-page="live">게임장</a>
-          <a href="#" class="nav-link" data-page="sports">스포츠</a>
-          <a href="#" class="nav-link" data-page="events">이벤트</a>
         </nav>
 
         <div class="header-actions">
@@ -67,28 +64,46 @@
           <div class="container">
             <h2 class="section-title">인기 게임</h2>
             <div class="games-grid">
+              <div class="game-card" data-game="aviator">
+                <div class="game-image">🛩️</div>
+                <h3>에비에이터</h3>
+                <p>상승 배수 타이밍 캐시아웃!</p>
+                <button class="btn btn-primary">바로 플레이</button>
+              </div>
               <div class="game-card" data-game="slot">
                 <div class="game-image">🎰</div>
                 <h3>메가 슬롯</h3>
-                <p>최고 잭팟: ₩50,000,000</p>
-                <button class="btn btn-primary">바로 플레이</button>
-              </div>
-              <div class="game-card" data-game="blackjack">
-                <div class="game-image">🃏</div>
-                <h3>블랙잭 21</h3>
-                <p>클래식 카드 게임</p>
+                <p>클래식 3릴 슬롯</p>
                 <button class="btn btn-primary">바로 플레이</button>
               </div>
               <div class="game-card" data-game="roulette">
                 <div class="game-image">🎲</div>
-                <h3>유럽 룰렛</h3>
-                <p>행운의 바퀴</p>
+                <h3>룰렛</h3>
+                <p>단일 0 룰렛</p>
                 <button class="btn btn-primary">바로 플레이</button>
               </div>
               <div class="game-card" data-game="crash">
                 <div class="game-image">🚀</div>
-                <h3>크래시 게임</h3>
-                <p>스릴 넘치는 배당</p>
+                <h3>크래시</h3>
+                <p>배수 상승, 타이밍</p>
+                <button class="btn btn-primary">바로 플레이</button>
+              </div>
+              <div class="game-card" data-game="mines">
+                <div class="game-image">💎</div>
+                <h3>마인스</h3>
+                <p>지뢰 피하고 보상</p>
+                <button class="btn btn-primary">바로 플레이</button>
+              </div>
+              <div class="game-card" data-game="rps">
+                <div class="game-image">✂️</div>
+                <h3>가위바위보</h3>
+                <p>간단한 승부</p>
+                <button class="btn btn-primary">바로 플레이</button>
+              </div>
+              <div class="game-card" data-game="tictactoe">
+                <div class="game-image">⭕❌</div>
+                <h3>틱택토</h3>
+                <p>AI 대결</p>
                 <button class="btn btn-primary">바로 플레이</button>
               </div>
             </div>
@@ -133,41 +148,37 @@
             <button class="category-btn active" data-category="all">
               전체
             </button>
+            <button class="category-btn" data-category="aviator">
+              에비에이터
+            </button>
             <button class="category-btn" data-category="slots">슬롯</button>
             <button class="category-btn" data-category="table">테이블</button>
-            <button class="category-btn" data-category="live">라이브</button>
             <button class="category-btn" data-category="arcade">
               아케이드
             </button>
           </div>
           <div class="games-container">
+            <div class="game-item" data-category="aviator" data-game="aviator">
+              <div class="game-thumbnail">🛩️</div>
+              <h3>에비에이터</h3>
+              <p>상승 배수, 타이밍 캐시아웃</p>
+              <button class="btn btn-primary">플레이</button>
+            </div>
             <div class="game-item" data-category="slots" data-game="slot">
               <div class="game-thumbnail">🎰</div>
               <h3>메가 슬롯</h3>
               <p>RTP: 96.5%</p>
               <button class="btn btn-primary">플레이</button>
             </div>
-            <div class="game-item" data-category="slots" data-game="fruit-slot">
-              <div class="game-thumbnail">🍒</div>
-              <h3>프루트 머신</h3>
-              <p>RTP: 94.8%</p>
-              <button class="btn btn-primary">플레이</button>
-            </div>
-            <div class="game-item" data-category="table" data-game="blackjack">
-              <div class="game-thumbnail">🃏</div>
-              <h3>블랙잭 21</h3>
-              <p>클래식 21</p>
-              <button class="btn btn-primary">플레이</button>
-            </div>
             <div class="game-item" data-category="table" data-game="roulette">
               <div class="game-thumbnail">🎲</div>
-              <h3>유럽 룰렛</h3>
+              <h3>룰렛</h3>
               <p>단일 0 룰렛</p>
               <button class="btn btn-primary">플레이</button>
             </div>
             <div class="game-item" data-category="arcade" data-game="crash">
               <div class="game-thumbnail">🚀</div>
-              <h3>크래시 게임</h3>
+              <h3>크래시</h3>
               <p>스릴 넘치는 배당</p>
               <button class="btn btn-primary">플레이</button>
             </div>
@@ -175,6 +186,18 @@
               <div class="game-thumbnail">💎</div>
               <h3>마인스</h3>
               <p>지뢰 찾기 게임</p>
+              <button class="btn btn-primary">플레이</button>
+            </div>
+            <div class="game-item" data-category="arcade" data-game="rps">
+              <div class="game-thumbnail">✂️</div>
+              <h3>가위바위보</h3>
+              <p>간단 대결</p>
+              <button class="btn btn-primary">플레이</button>
+            </div>
+            <div class="game-item" data-category="arcade" data-game="tictactoe">
+              <div class="game-thumbnail">⭕❌</div>
+              <h3>틱택토</h3>
+              <p>AI와 한 판</p>
               <button class="btn btn-primary">플레이</button>
             </div>
           </div>
@@ -212,5 +235,3 @@
     <script src="gino.js"></script>
   </body>
 </html>
-
-
