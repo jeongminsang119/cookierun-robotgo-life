@@ -1,4 +1,3 @@
-
 // Global state
 let gameState = {
     balance: 10000,
@@ -28,6 +27,7 @@ let gameState = {
   
   // DOM elements
   const balanceAmount = document.getElementById("balanceAmount");
+  const betAmountInput = document.getElementById("betAmount");
   const gameModal = document.getElementById("gameModal");
   const gameTitle = document.getElementById("gameTitle");
   const gameBalance = document.getElementById("gameBalance");
@@ -56,6 +56,30 @@ let gameState = {
         updateNavigation(page);
       });
     });
+
+    // Betting amount input
+    if (betAmountInput) {
+      betAmountInput.addEventListener("input", (e) => {
+        const newBet = parseInt(e.target.value) || 100;
+        gameState.currentBet = Math.max(1, Math.min(newBet, gameState.balance));
+        e.target.value = gameState.currentBet;
+      });
+
+      // Handle betting amount changes
+      betAmountInput.addEventListener("change", (e) => {
+        const newBet = parseInt(e.target.value) || 100;
+        gameState.currentBet = Math.max(1, Math.min(newBet, gameState.balance));
+        e.target.value = gameState.currentBet;
+        
+        // Update any game displays that show the current bet
+        if (gameState.currentGame === "blackjack" || gameState.currentGame === "baccarat") {
+          const newGameBtn = document.querySelector(".btn-primary");
+          if (newGameBtn && newGameBtn.textContent.includes("새 게임")) {
+            newGameBtn.textContent = `새 게임 (₩${gameState.currentBet})`;
+          }
+        }
+      });
+    }
   
     // Game cards
     document.querySelectorAll(".game-card, .game-item").forEach((card) => {
@@ -148,6 +172,12 @@ let gameState = {
       gameBalance.textContent = gameState.balance.toLocaleString();
     }
   }
+
+  function updateBettingAmount() {
+    if (betAmountInput) {
+      betAmountInput.value = gameState.currentBet;
+    }
+  }
   
   function addBonus(amount) {
     gameState.balance += amount;
@@ -160,29 +190,34 @@ let gameState = {
     gameState.currentGame = gameType;
     gameTitle.textContent = getGameTitle(gameType);
     updateBalance();
+    updateBettingAmount();
     loadGameContent(gameType);
   }
   
   function getGameTitle(gameType) {
     const titles = {
+      aviator: "에비에이터",
       slot: "메가 슬롯",
       "fruit-slot": "프루트 머신",
-      blackjack: "블랙잭 21",
-      roulette: "유럽 룰렛",
+      roulette: "룰렛",
       crash: "크래시 게임",
       mines: "마인스",
+      rps: "가위바위보",
+      tictactoe: "틱택토",
+      blackjack: "블랙젝",
+      baccarat: "바카라",
     };
     return titles[gameType] || "게임";
   }
   
   function loadGameContent(gameType) {
     switch (gameType) {
+      case "aviator":
+        loadAviator();
+        break;
       case "slot":
       case "fruit-slot":
         loadSlotMachine();
-        break;
-      case "blackjack":
-        loadBlackjack();
         break;
       case "roulette":
         loadRoulette();
@@ -193,31 +228,43 @@ let gameState = {
       case "mines":
         loadMinesGame();
         break;
+      case "rps":
+        loadRPS();
+        break;
+      case "tictactoe":
+        loadTicTacToe();
+        break;
+      case "blackjack":
+        loadBlackjack();
+        break;
+      case "baccarat":
+        loadBaccarat();
+        break;
       default:
         gameArea.innerHTML = "<p>게임을 불러오는 중...</p>";
     }
   }
   
-  // Slot Machine Game
+  // Slot Machine Game (restored)
   function loadSlotMachine() {
     gameArea.innerHTML = `
-          <div class="slot-machine">
-              <div class="slot-reels">
-                  <div class="slot-reel" id="reel1">${slotSymbols[0]}</div>
-                  <div class="slot-reel" id="reel2">${slotSymbols[1]}</div>
-                  <div class="slot-reel" id="reel3">${slotSymbols[2]}</div>
-              </div>
-              <div class="slot-controls">
-                  <div class="bet-controls">
-                      <button class="bet-btn" onclick="changeBet(-50)">-₩50</button>
-                      <div class="bet-amount">베팅금액: ₩<span id="betAmount">${gameState.currentBet}</span></div>
-                      <button class="bet-btn" onclick="changeBet(50)">+₩50</button>
-                  </div>
-                  <button class="spin-btn" onclick="spinSlot()" id="spinBtn">스핀</button>
-                  <div class="game-result" id="gameResult"></div>
-              </div>
-          </div>
-      `;
+            <div class="slot-machine">
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel1">${slotSymbols[0]}</div>
+                    <div class="slot-reel" id="reel2">${slotSymbols[1]}</div>
+                    <div class="slot-reel" id="reel3">${slotSymbols[2]}</div>
+                </div>
+                <div class="slot-controls">
+                    <div class="bet-controls">
+                        <button class="bet-btn" onclick="changeBet(-50)">-₩50</button>
+                        <div class="bet-amount">베팅금액: ₩<span id="betAmount">${gameState.currentBet}</span></div>
+                        <button class="bet-btn" onclick="changeBet(50)">+₩50</button>
+                    </div>
+                    <button class="spin-btn" onclick="spinSlot()" id="spinBtn">스핀</button>
+                    <div class="game-result" id="gameResult"></div>
+                </div>
+            </div>
+        `;
   }
   
   function changeBet(amount) {
@@ -226,7 +273,9 @@ let gameState = {
       Math.min(gameState.currentBet + amount, gameState.balance)
     );
     gameState.currentBet = newBet;
-    document.getElementById("betAmount").textContent = newBet;
+    updateBettingAmount();
+    const el = document.getElementById("betAmount");
+    if (el) el.textContent = newBet;
   }
   
   function spinSlot() {
@@ -330,30 +379,214 @@ let gameState = {
     }, 100);
   }
   
+  // Aviator Game
+  function loadAviator() {
+    gameArea.innerHTML = `
+            <div class="crash-game">
+                <div class="crash-chart" style="position:relative;overflow:hidden">
+                    <canvas id="aviatorCanvas" width="800" height="260" style="width:100%;max-width:900px;height:260px;background:#0b0b0b;border:2px solid #ffb800;border-radius:12px"></canvas>
+                    <div class="crash-multiplier" id="crashMultiplier">1.00x</div>
+                </div>
+                <div class="crash-controls">
+                    <input type="number" class="crash-bet-input" id="crashBetInput" value="${gameState.currentBet}" min="50" max="${gameState.balance}">
+                    <button class="btn btn-primary" onclick="startAviator()" id="aviatorStartBtn">베팅 시작</button>
+                    <button class="crash-cashout-btn" onclick="aviatorCashout()" id="crashCashoutBtn" disabled>캐시아웃</button>
+                </div>
+                <div style="text-align:center;margin-top:1rem;color:#ffb800">
+                    <div id="crashStatus">라운드를 시작하세요!</div>
+                </div>
+            </div>
+        `;
+  
+    gameState.aviator = {
+      isActive: false,
+      multiplier: 1.0,
+      betAmount: 0,
+      crashPoint: 0,
+      hasCashedOut: false,
+      anim: null,
+      startTs: 0,
+    };
+  
+    // draw baseline
+    const canvas = document.getElementById("aviatorCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#333";
+    ctx.beginPath();
+    ctx.moveTo(40, canvas.height - 30);
+    ctx.lineTo(canvas.width - 10, canvas.height - 30);
+    ctx.stroke();
+  }
+  
+  function startAviator() {
+    const av = gameState.aviator;
+    if (av.isActive) return;
+  
+    const betInput = document.getElementById("crashBetInput");
+    const betAmount = Math.max(50, parseInt(betInput.value || "0", 10));
+  
+    if (betAmount > gameState.balance) {
+      alert("잔액이 부족합니다!");
+      return;
+    }
+  
+    gameState.balance -= betAmount;
+    updateBalance();
+  
+    av.isActive = true;
+    av.betAmount = betAmount;
+    av.multiplier = 1.0;
+    av.hasCashedOut = false;
+    av.crashPoint = getAviatorCrashPoint();
+    av.startTs = performance.now();
+  
+    document.getElementById("crashCashoutBtn").disabled = false;
+    document.getElementById("aviatorStartBtn").disabled = true;
+    document.getElementById("crashStatus").textContent =
+      "상승 중... 캐시아웃 타이밍!";
+  
+    const canvas = document.getElementById("aviatorCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    // axes
+    drawAxes(ctx, canvas);
+  
+    const multiplierEl = document.getElementById("crashMultiplier");
+  
+    const step = (ts) => {
+      if (!av.isActive) return;
+      const dt = (ts - av.startTs) / 1000; // seconds
+      av.multiplier = Math.max(1, 1 + Math.pow(dt, 1.3));
+      multiplierEl.textContent = av.multiplier.toFixed(2) + "x";
+  
+      // draw flight path
+      drawAviatorPath(ctx, canvas, dt);
+  
+      if (av.multiplier >= av.crashPoint) {
+        av.isActive = false;
+        multiplierEl.classList.add("crashed");
+        multiplierEl.textContent = "CRASHED!";
+        document.getElementById(
+          "crashStatus"
+        ).textContent = `${av.crashPoint.toFixed(2)}x 에서 추락!`;
+        document.getElementById("crashCashoutBtn").disabled = true;
+        document.getElementById("aviatorStartBtn").disabled = false;
+        setTimeout(() => multiplierEl.classList.remove("crashed"), 1200);
+        return;
+      }
+  
+      av.anim = requestAnimationFrame(step);
+    };
+  
+    av.anim = requestAnimationFrame(step);
+  }
+  
+  function aviatorCashout() {
+    const av = gameState.aviator;
+    if (!av.isActive || av.hasCashedOut) return;
+    av.hasCashedOut = true;
+    const winAmount = Math.floor(av.betAmount * av.multiplier);
+    gameState.balance += winAmount;
+    updateBalance();
+    document.getElementById("crashCashoutBtn").disabled = true;
+    showWinNotification(
+      `에비에이터 캐시아웃! ${av.multiplier.toFixed(
+        2
+      )}x +₩${winAmount.toLocaleString()}`
+    );
+  }
+  
+  function getAviatorCrashPoint() {
+    // Heavier tail: mix of low and occasional high crash points
+    const r = Math.random();
+    if (r < 0.6) return 1 + Math.random() * 2.2; // 1x - 3.2x
+    if (r < 0.9) return 3 + Math.random() * 3; // 3x - 6x
+    return 6 + Math.random() * 10; // 6x - 16x
+  }
+  
+  function drawAxes(ctx, canvas) {
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(40, canvas.height - 30);
+    ctx.lineTo(canvas.width - 10, canvas.height - 30);
+    ctx.stroke();
+    for (let i = 1; i <= 10; i++) {
+      const x = 40 + (i * (canvas.width - 60)) / 10;
+      ctx.strokeStyle = "#222";
+      ctx.beginPath();
+      ctx.moveTo(x, 10);
+      ctx.lineTo(x, canvas.height - 30);
+      ctx.stroke();
+    }
+  }
+  
+  function drawAviatorPath(ctx, canvas, t) {
+    const maxT = 10; // seconds visualized
+    const samples = 200;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawAxes(ctx, canvas);
+  
+    ctx.strokeStyle = "#ffb800";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    const baseY = canvas.height - 30;
+    for (let i = 0; i <= samples; i++) {
+      const tt = (i / samples) * Math.min(t, maxT);
+      const mult = 1 + Math.pow(tt, 1.3);
+      const x = 40 + (tt / maxT) * (canvas.width - 60);
+      const y = baseY - Math.min(1, (mult - 1) / 10) * (canvas.height - 60);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  
+    // plane icon
+    const tt = Math.min(t, maxT);
+    const mult = 1 + Math.pow(tt, 1.3);
+    const x = 40 + (tt / maxT) * (canvas.width - 60);
+    const y = baseY - Math.min(1, (mult - 1) / 10) * (canvas.height - 60);
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px sans-serif";
+    ctx.fillText("🛩️", x - 10, y - 10);
+  }
+  
   // Blackjack Game
   function loadBlackjack() {
     gameArea.innerHTML = `
-          <div class="blackjack-game">
-              <div class="blackjack-table">
-                  <div class="card-area">
-                      <div class="dealer-cards">
-                          <h4>딜러 <span id="dealerScore">(0)</span></h4>
-                          <div class="cards" id="dealerCards"></div>
-                      </div>
-                      <div class="player-cards">
-                          <h4>플레이어 <span id="playerScore">(0)</span></h4>
-                          <div class="cards" id="playerCards"></div>
-                      </div>
-                  </div>
-              </div>
-              <div class="blackjack-controls">
-                  <button class="btn btn-primary" onclick="blackjackHit()">히트</button>
-                  <button class="btn btn-secondary" onclick="blackjackStand()">스탠드</button>
-                  <button class="btn btn-primary" onclick="blackjackDouble()">더블</button>
-                  <button class="btn btn-primary" onclick="startBlackjack()">새 게임 (₩${gameState.currentBet})</button>
-              </div>
-          </div>
-      `;
+            <div class="blackjack-game">
+                <div class="blackjack-table">
+                    <div class="dealer-section">
+                        <div class="dealer-avatar">👨‍💼</div>
+                        <div class="dealer-info">
+                            <h4>딜러 마이크 <span id="dealerScore">(0)</span></h4>
+                            <p class="dealer-status">카드를 섞고 있습니다...</p>
+                        </div>
+                        <div class="dealer-cards">
+                            <div class="cards" id="dealerCards"></div>
+                        </div>
+                    </div>
+                    <div class="player-section">
+                        <div class="player-avatar">👤</div>
+                        <div class="player-info">
+                            <h4>플레이어 <span id="playerScore">(0)</span></h4>
+                            <p class="player-status">게임을 기다리는 중...</p>
+                        </div>
+                        <div class="player-cards">
+                            <div class="cards" id="playerCards"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="blackjack-controls">
+                    <button class="btn btn-primary" onclick="blackjackHit()" id="hitBtn" disabled>히트</button>
+                    <button class="btn btn-secondary" onclick="blackjackStand()" id="standBtn" disabled>스탠드</button>
+                    <button class="btn btn-primary" onclick="blackjackDouble()" id="doubleBtn" disabled>더블</button>
+                    <button class="btn btn-primary" onclick="startBlackjack()">새 게임 (₩${gameState.currentBet})</button>
+                </div>
+            </div>
+        `;
   
     // Initialize blackjack state
     gameState.blackjack = {
@@ -374,6 +607,17 @@ let gameState = {
       }
     }
     return shuffleDeck(deck);
+  }
+
+  function showCardDealingAnimation(cardElement, delay = 0) {
+    cardElement.style.transform = "translateY(-50px) rotateY(180deg)";
+    cardElement.style.opacity = "0";
+    
+    setTimeout(() => {
+      cardElement.style.transition = "all 0.5s ease-out";
+      cardElement.style.transform = "translateY(0) rotateY(0deg)";
+      cardElement.style.opacity = "1";
+    }, delay);
   }
   
   function shuffleDeck(deck) {
@@ -413,20 +657,55 @@ let gameState = {
     return score;
   }
   
-  function startBlackjack() {
+    function startBlackjack() {
     if (gameState.currentBet > gameState.balance) {
       alert("잔액이 부족합니다!");
       return;
     }
-  
+
     gameState.balance -= gameState.currentBet;
     updateBalance();
-  
+
     const bj = gameState.blackjack;
     bj.deck = createDeck();
-    bj.playerCards = [bj.deck.pop(), bj.deck.pop()];
-    bj.dealerCards = [bj.deck.pop(), bj.deck.pop()];
-    bj.gameActive = true;
+    bj.playerCards = [];
+    bj.dealerCards = [];
+    bj.gameActive = false;
+
+    // Update dealer status
+    const dealerStatus = document.querySelector(".dealer-status");
+    if (dealerStatus) dealerStatus.textContent = "카드를 섞고 있습니다...";
+
+    // Simulate dealing animation
+    setTimeout(() => {
+      dealerStatus.textContent = "플레이어에게 카드를 나누는 중...";
+      
+      setTimeout(() => {
+        bj.playerCards = [bj.deck.pop(), bj.deck.pop()];
+        updateBlackjackDisplay();
+        dealerStatus.textContent = "딜러에게 카드를 나누는 중...";
+        
+        setTimeout(() => {
+          bj.dealerCards = [bj.deck.pop(), bj.deck.pop()];
+          updateBlackjackDisplay();
+          bj.gameActive = true;
+          
+          // Enable game buttons
+          document.getElementById("hitBtn").disabled = false;
+          document.getElementById("standBtn").disabled = false;
+          document.getElementById("doubleBtn").disabled = false;
+          
+          dealerStatus.textContent = "게임 진행 중...";
+          
+          // Check for blackjack
+          if (calculateScore(bj.playerCards) === 21) {
+            setTimeout(() => {
+              blackjackStand();
+            }, 1000);
+          }
+        }, 800);
+      }, 800);
+    }, 1000);
   
     updateBlackjackDisplay();
   }
@@ -440,11 +719,14 @@ let gameState = {
   
     // Player cards
     playerCardsEl.innerHTML = "";
-    bj.playerCards.forEach((card) => {
+    bj.playerCards.forEach((card, index) => {
       const cardEl = document.createElement("div");
       cardEl.className = "playing-card";
       cardEl.textContent = `${card.value}${card.suit}`;
       playerCardsEl.appendChild(cardEl);
+      
+      // Add dealing animation
+      showCardDealingAnimation(cardEl, index * 200);
     });
   
     // Dealer cards (hide second card if game is active)
@@ -459,6 +741,9 @@ let gameState = {
         cardEl.textContent = `${card.value}${card.suit}`;
       }
       dealerCardsEl.appendChild(cardEl);
+      
+      // Add dealing animation
+      showCardDealingAnimation(cardEl, index * 200);
     });
   
     bj.playerScore = calculateScore(bj.playerCards);
@@ -475,48 +760,100 @@ let gameState = {
     } else if (bj.playerScore > 21) {
       endBlackjack("플레이어 버스트! 딜러 승리");
     }
+
+    // Update status messages
+    const playerStatus = document.querySelector(".player-status");
+    const dealerStatus = document.querySelector(".dealer-status");
+    
+    if (playerStatus) {
+      if (bj.playerCards.length > 0) {
+        playerStatus.textContent = `카드: ${bj.playerScore}점`;
+      } else {
+        playerStatus.textContent = "게임을 기다리는 중...";
+      }
+    }
+    
+    if (dealerStatus && !bj.gameActive) {
+      if (bj.dealerCards.length > 0) {
+        dealerStatus.textContent = `카드: ${bj.dealerScore}점`;
+      } else {
+        dealerStatus.textContent = "게임을 기다리는 중...";
+      }
+    }
   }
   
-  function blackjackHit() {
+    function blackjackHit() {
     const bj = gameState.blackjack;
     if (!bj.gameActive) return;
-  
+
+    // Update dealer status
+    const dealerStatus = document.querySelector(".dealer-status");
+    if (dealerStatus) dealerStatus.textContent = "플레이어가 카드를 받았습니다...";
+
     bj.playerCards.push(bj.deck.pop());
     updateBlackjackDisplay();
+    
+    // Reset dealer status after a delay
+    setTimeout(() => {
+      if (dealerStatus) dealerStatus.textContent = "게임 진행 중...";
+    }, 1500);
   }
   
-  function blackjackStand() {
+    function blackjackStand() {
     const bj = gameState.blackjack;
     if (!bj.gameActive) return;
-  
+
+    // Update dealer status
+    const dealerStatus = document.querySelector(".dealer-status");
+    if (dealerStatus) dealerStatus.textContent = "딜러가 카드를 확인하고 있습니다...";
+
     bj.gameActive = false;
   
     // Dealer draws cards
-    while (bj.dealerScore < 17) {
-      bj.dealerCards.push(bj.deck.pop());
-      bj.dealerScore = calculateScore(bj.dealerCards);
-    }
+    let cardIndex = 0;
+    const drawDealerCards = () => {
+      if (bj.dealerScore < 17) {
+        if (dealerStatus) dealerStatus.textContent = `딜러가 ${cardIndex + 1}번째 카드를 뽑고 있습니다...`;
+        
+        setTimeout(() => {
+          bj.dealerCards.push(bj.deck.pop());
+          bj.dealerScore = calculateScore(bj.dealerCards);
+          updateBlackjackDisplay();
+          cardIndex++;
+          
+          if (bj.dealerScore < 17) {
+            drawDealerCards();
+          } else {
+            if (dealerStatus) dealerStatus.textContent = "딜러가 카드 뽑기를 완료했습니다...";
+            setTimeout(() => {
+              updateBlackjackDisplay();
+              
+              // Determine winner
+              let result = "";
+              let winAmount = 0;
+              
+              if (bj.dealerScore > 21) {
+                result = "딜러 버스트! 플레이어 승리!";
+                winAmount = gameState.currentBet * 2;
+              } else if (bj.playerScore > bj.dealerScore) {
+                result = "플레이어 승리!";
+                winAmount = gameState.currentBet * 2;
+              } else if (bj.playerScore < bj.dealerScore) {
+                result = "딜러 승리!";
+              } else {
+                result = "무승부!";
+                winAmount = gameState.currentBet;
+              }
+              
+              endBlackjack(result, winAmount);
+            }, 1000);
+          }
+        }, 1000);
+      }
+    };
+    
+    drawDealerCards();
   
-    updateBlackjackDisplay();
-  
-    // Determine winner
-    let result = "";
-    let winAmount = 0;
-  
-    if (bj.dealerScore > 21) {
-      result = "딜러 버스트! 플레이어 승리!";
-      winAmount = gameState.currentBet * 2;
-    } else if (bj.playerScore > bj.dealerScore) {
-      result = "플레이어 승리!";
-      winAmount = gameState.currentBet * 2;
-    } else if (bj.playerScore < bj.dealerScore) {
-      result = "딜러 승리!";
-    } else {
-      result = "무승부!";
-      winAmount = gameState.currentBet;
-    }
-  
-    endBlackjack(result, winAmount);
   }
   
   function blackjackDouble() {
@@ -548,153 +885,424 @@ let gameState = {
       alert(message);
     }, 500);
   }
+
+           // Baccarat Game
+         function loadBaccarat() {
+           gameArea.innerHTML = `
+                   <div class="baccarat-game">
+                       <div class="baccarat-table">
+                           <div class="dealer-section">
+                               <div class="dealer-avatar">👨‍💼</div>
+                               <div class="dealer-info">
+                                   <h4>딜러 마이크 <span id="dealerScore">(0)</span></h4>
+                                   <p class="dealer-status">카드를 섞고 있습니다...</p>
+                               </div>
+                               <div class="dealer-cards">
+                                   <div class="cards" id="dealerCards"></div>
+                               </div>
+                           </div>
+                           <div class="card-area">
+                               <div class="banker-section">
+                                   <div class="banker-avatar">🎭</div>
+                                   <div class="banker-info">
+                                       <h4>뱅커 <span id="bankerScore">(0)</span></h4>
+                                       <p class="banker-status">게임을 기다리는 중...</p>
+                                   </div>
+                                   <div class="banker-cards">
+                                       <div class="cards" id="bankerCards"></div>
+                                   </div>
+                               </div>
+                               <div class="player-section">
+                                   <div class="player-avatar">👤</div>
+                                   <div class="player-info">
+                                       <h4>플레이어 <span id="playerScore">(0)</span></h4>
+                                       <p class="player-status">게임을 기다리는 중...</p>
+                                   </div>
+                                   <div class="player-cards">
+                                       <div class="cards" id="playerCards"></div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="baccarat-controls">
+                           <button class="btn btn-primary" onclick="startBaccarat()">새 게임 (₩${gameState.currentBet})</button>
+                           <div class="betting-options">
+                               <button class="btn btn-secondary" onclick="betOnPlayer()">플레이어 베팅</button>
+                               <button class="btn btn-secondary" onclick="betOnBanker()">뱅커 베팅</button>
+                               <button class="btn btn-secondary" onclick="betOnTie()">타이 베팅</button>
+                           </div>
+                           <div class="baccarat-result" id="baccaratResult"></div>
+                       </div>
+                   </div>
+               `;
+
+    // Initialize baccarat state
+    gameState.baccarat = {
+      deck: createDeck(),
+      playerCards: [],
+      bankerCards: [],
+      gameActive: false,
+      playerScore: 0,
+      bankerScore: 0,
+      currentBet: 0,
+      betType: null, // 'player', 'banker', 'tie'
+    };
+  }
+
+           function startBaccarat() {
+           if (gameState.currentBet > gameState.balance) {
+             alert("잔액이 부족합니다!");
+             return;
+           }
+         
+           gameState.balance -= gameState.currentBet;
+           updateBalance();
+         
+           const bacc = gameState.baccarat;
+           bacc.deck = createDeck();
+           bacc.playerCards = [];
+           bacc.bankerCards = [];
+           bacc.gameActive = false;
+           bacc.currentBet = gameState.currentBet;
+
+           // Update dealer status
+           const dealerStatus = document.querySelector(".dealer-status");
+           if (dealerStatus) dealerStatus.textContent = "카드를 섞고 있습니다...";
+
+           // Simulate dealing animation
+           setTimeout(() => {
+             dealerStatus.textContent = "플레이어에게 카드를 나누는 중...";
+             
+             setTimeout(() => {
+               bacc.playerCards = [bacc.deck.pop(), bacc.deck.pop()];
+               updateBaccaratDisplay();
+               dealerStatus.textContent = "뱅커에게 카드를 나누는 중...";
+               
+               setTimeout(() => {
+                 bacc.bankerCards = [bacc.deck.pop(), bacc.deck.pop()];
+                 updateBaccaratDisplay();
+                 bacc.gameActive = true;
+                 
+                 dealerStatus.textContent = "게임 진행 중...";
+                 
+                 // Determine winner after a short delay
+                 setTimeout(() => {
+                   determineBaccaratWinner();
+                 }, 1000);
+               }, 800);
+             }, 800);
+           }, 1000);
+         }
+
+  function betOnPlayer() {
+    if (gameState.baccarat.gameActive) return;
+    gameState.baccarat.betType = 'player';
+    startBaccarat();
+  }
+
+  function betOnBanker() {
+    if (gameState.baccarat.gameActive) return;
+    gameState.baccarat.betType = 'banker';
+    startBaccarat();
+  }
+
+  function betOnTie() {
+    if (gameState.baccarat.gameActive) return;
+    gameState.baccarat.betType = 'tie';
+    startBaccarat();
+  }
+
+  function updateBaccaratDisplay() {
+    const bacc = gameState.baccarat;
+    const playerCardsEl = document.getElementById("playerCards");
+    const bankerCardsEl = document.getElementById("bankerCards");
+    const playerScoreEl = document.getElementById("playerScore");
+    const bankerScoreEl = document.getElementById("bankerScore");
+
+    // Player cards
+    playerCardsEl.innerHTML = "";
+    bacc.playerCards.forEach((card, index) => {
+      const cardEl = document.createElement("div");
+      cardEl.className = "playing-card";
+      cardEl.textContent = `${card.value}${card.suit}`;
+      playerCardsEl.appendChild(cardEl);
+      
+      // Add dealing animation
+      showCardDealingAnimation(cardEl, index * 200);
+    });
+
+    // Banker cards
+    bankerCardsEl.innerHTML = "";
+    bacc.bankerCards.forEach((card, index) => {
+      const cardEl = document.createElement("div");
+      cardEl.className = "playing-card";
+      cardEl.textContent = `${card.value}${card.suit}`;
+      bankerCardsEl.appendChild(cardEl);
+      
+      // Add dealing animation
+      showCardDealingAnimation(cardEl, index * 200);
+    });
+
+    bacc.playerScore = calculateBaccaratScore(bacc.playerCards);
+    bacc.bankerScore = calculateBaccaratScore(bacc.bankerCards);
+
+    playerScoreEl.textContent = `(${bacc.playerScore})`;
+    bankerScoreEl.textContent = `(${bacc.bankerScore})`;
+
+    // Update status messages
+    const playerStatus = document.querySelector(".player-status");
+    const bankerStatus = document.querySelector(".banker-status");
+    
+    if (playerStatus) {
+      if (bacc.playerCards.length > 0) {
+        playerStatus.textContent = `카드: ${bacc.playerScore}점`;
+      } else {
+        playerStatus.textContent = "게임을 기다리는 중...";
+      }
+    }
+    
+          if (bankerStatus) {
+        if (bacc.bankerCards.length > 0) {
+          bankerStatus.textContent = `카드: ${bacc.bankerScore}점`;
+        } else {
+          bankerStatus.textContent = "게임을 기다리는 중...";
+        }
+      }
+  }
+
+  function calculateBaccaratScore(cards) {
+    let score = 0;
+    for (let card of cards) {
+      if (card.value === "A") {
+        score += 1;
+      } else if (["J", "Q", "K"].includes(card.value)) {
+        score += 0;
+      } else {
+        score += parseInt(card.value);
+      }
+    }
+    return score % 10;
+  }
+
+  function determineBaccaratWinner() {
+    const bacc = gameState.baccarat;
+    let result = "";
+    let winAmount = 0;
+
+    if (bacc.playerScore === bacc.bankerScore) {
+      result = "타이!";
+      if (bacc.betType === 'tie') {
+        winAmount = bacc.currentBet * 8; // 8:1 payout for tie
+      }
+    } else if (bacc.playerScore > bacc.bankerScore) {
+      result = "플레이어 승리!";
+      if (bacc.betType === 'player') {
+        winAmount = bacc.currentBet * 2;
+      }
+    } else {
+      result = "뱅커 승리!";
+      if (bacc.betType === 'banker') {
+        winAmount = bacc.currentBet * 1.95; // 5% commission
+      }
+    }
+
+    endBaccarat(result, winAmount);
+  }
+
+  function endBaccarat(message, winAmount = 0) {
+    const bacc = gameState.baccarat;
+    bacc.gameActive = false;
+
+    if (winAmount > 0) {
+      gameState.balance += winAmount;
+      updateBalance();
+      showWinNotification(`${message} +₩${winAmount.toLocaleString()}`);
+    }
+
+    const resultEl = document.getElementById("baccaratResult");
+    resultEl.textContent = message;
+    resultEl.style.color = winAmount > 0 ? "#00ff00" : "#ff4444";
+
+    setTimeout(() => {
+      resultEl.textContent = "";
+    }, 3000);
+  }
   
   // Roulette Game
   function loadRoulette() {
+    // Single multiplier wheel with bonus jackpot sectors
     gameArea.innerHTML = `
-          <div class="roulette-game">
-              <div class="roulette-wheel-container">
-                  <div class="roulette-wheel" id="rouletteWheel">
-                      🎯
-                      <div class="roulette-ball" id="rouletteBall"></div>
-                  </div>
-              </div>
-              <div class="roulette-betting" id="rouletteBetting">
-                  ${generateRouletteNumbers()}
-              </div>
-              <div style="text-align: center; margin-top: 1rem;">
-                  <div style="margin-bottom: 1rem;">
-                      <span style="color: #ffb800; font-weight: bold;">선택된 번호: </span>
-                      <span id="selectedNumbers">없음</span>
-                  </div>
-                  <button class="btn btn-primary" onclick="spinRoulette()">룰렛 스핀 (₩${
-                    gameState.currentBet
-                  })</button>
-                  <button class="btn btn-secondary" onclick="clearRouletteBets()">베팅 초기화</button>
-              </div>
-          </div>
-      `;
+            <div class="roulette-game">
+                <div class="roulette-wheel-container">
+                    <div class="roulette-wheel" id="rouletteWheel">🎡</div>
+                    <div id="jackpotCharacter" style="display:none;position:absolute;transform:translateY(20px);opacity:0;font-size:3rem;">🧙‍♂️</div>
+                </div>
+                <div style="text-align:center;margin-top:1rem;">
+                    <div style="display:flex;gap:0.5rem;justify-content:center;align-items:center;margin-bottom:0.5rem;">
+                        <input type="number" id="rouletteBetInput" min="50" value="${gameState.currentBet}" class="crash-bet-input" style="width:140px"/>
+                        <span style="color:#aaa">₩ 베팅</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="spinRoulette()" id="rouletteSpinBtn">룰렛 스핀</button>
+                    <div id="rouletteResult" style="margin-top:0.75rem;color:#ffb800;font-weight:bold;min-height:24px"></div>
+                </div>
+            </div>
+        `;
   
     gameState.roulette = {
-      selectedNumbers: [],
       isSpinning: false,
+      betAmount: 0,
     };
-  }
-  
-  function generateRouletteNumbers() {
-    let html = "";
-  
-    // Green 0
-    html += `<button class="roulette-number green" onclick="selectRouletteNumber(0)">0</button>`;
-  
-    // Red and black numbers
-    const redNumbers = [
-      1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-    ];
-  
-    for (let i = 1; i <= 36; i++) {
-      const color = redNumbers.includes(i) ? "red" : "black";
-      html += `<button class="roulette-number ${color}" onclick="selectRouletteNumber(${i})">${i}</button>`;
-    }
-  
-    return html;
-  }
-  
-  function selectRouletteNumber(number) {
-    const roulette = gameState.roulette;
-    if (roulette.isSpinning) return;
-  
-    const numberBtn = event.target;
-  
-    if (roulette.selectedNumbers.includes(number)) {
-      // Remove selection
-      roulette.selectedNumbers = roulette.selectedNumbers.filter(
-        (n) => n !== number
-      );
-      numberBtn.classList.remove("selected");
-    } else {
-      // Add selection
-      roulette.selectedNumbers.push(number);
-      numberBtn.classList.add("selected");
-    }
-  
-    document.getElementById("selectedNumbers").textContent =
-      roulette.selectedNumbers.length > 0
-        ? roulette.selectedNumbers.join(", ")
-        : "없음";
-  }
-  
-  function clearRouletteBets() {
-    const roulette = gameState.roulette;
-    roulette.selectedNumbers = [];
-    document.querySelectorAll(".roulette-number").forEach((btn) => {
-      btn.classList.remove("selected");
-    });
-    document.getElementById("selectedNumbers").textContent = "없음";
   }
   
   function spinRoulette() {
     const roulette = gameState.roulette;
-    if (roulette.isSpinning || roulette.selectedNumbers.length === 0) {
-      if (roulette.selectedNumbers.length === 0) {
-        alert("번호를 선택해주세요!");
-      }
-      return;
-    }
+    if (roulette.isSpinning) return;
   
-    if (gameState.currentBet > gameState.balance) {
+    const betInput = document.getElementById("rouletteBetInput");
+    const betAmount = Math.max(
+      50,
+      parseInt((betInput && betInput.value) || "0", 10)
+    );
+    if (betAmount > gameState.balance) {
       alert("잔액이 부족합니다!");
       return;
     }
   
-    gameState.balance -= gameState.currentBet;
+    gameState.balance -= betAmount;
     updateBalance();
   
     roulette.isSpinning = true;
+    roulette.betAmount = betAmount;
     const wheel = document.getElementById("rouletteWheel");
+    const spinBtn = document.getElementById("rouletteSpinBtn");
+    const resultEl = document.getElementById("rouletteResult");
+    resultEl.textContent = "스핀 중...";
+    spinBtn.disabled = true;
     wheel.classList.add("spinning");
   
     setTimeout(() => {
       wheel.classList.remove("spinning");
   
-      // Generate winning number
-      const winningNumber = Math.floor(Math.random() * 37);
+      // Determine multiplier sector (include negatives and jackpot)
+      const sectors = [
+        -1,
+        -1,
+        -0.5,
+        -0.5,
+        0,
+        1.1,
+        1.2,
+        1.3,
+        1.5,
+        2,
+        2,
+        2.5,
+        3,
+        4,
+        5,
+        10,
+        "JACKPOT",
+      ];
+      const pick = sectors[Math.floor(Math.random() * sectors.length)];
   
-      // Check if player won
-      let winAmount = 0;
-      if (roulette.selectedNumbers.includes(winningNumber)) {
-        winAmount = gameState.currentBet * (36 / roulette.selectedNumbers.length);
-        gameState.balance += winAmount;
-        updateBalance();
-        showWinNotification(
-          `룰렛 승리! 당첨번호: ${winningNumber} +₩${winAmount.toLocaleString()}`
+      if (pick === "JACKPOT") {
+        resultEl.textContent = "잭팟 진입! 캐릭터 등장";
+        const ch = document.getElementById("jackpotCharacter");
+        ch.style.display = "block";
+        ch.animate(
+          [
+            { transform: "translateY(20px)", opacity: 0 },
+            { transform: "translateY(0)", opacity: 1 },
+          ],
+          { duration: 500, fill: "forwards" }
         );
+        setTimeout(() => {
+          resultEl.textContent = "보너스 룰렛 스핀!";
+          runJackpotWheel(betAmount);
+        }, 700);
       } else {
-        alert(`당첨번호: ${winningNumber}. 다음 기회에!`);
+        let msg = "";
+        if (pick <= 0) {
+          const extraLoss = Math.floor(Math.abs(pick) * betAmount);
+          if (extraLoss > 0) {
+            gameState.balance = Math.max(0, gameState.balance - extraLoss);
+          }
+          updateBalance();
+          msg =
+            pick === 0
+              ? "0x.. 환급 없음"
+              : `${pick}x 패널티! -₩${extraLoss.toLocaleString()}`;
+        } else {
+          const winAmount = Math.floor(betAmount * pick);
+          gameState.balance += winAmount;
+          updateBalance();
+          msg = `${pick}x 당첨! +₩${winAmount.toLocaleString()}`;
+          if (winAmount > betAmount) {
+            showWinNotification(
+              `룰렛 승리! ${pick}x +₩${(winAmount - betAmount).toLocaleString()}`
+            );
+          }
+        }
+        resultEl.textContent = msg;
+        roulette.isSpinning = false;
+        spinBtn.disabled = false;
       }
+    }, 2500);
+  }
   
+  function runJackpotWheel(baseBet) {
+    const roulette = gameState.roulette;
+    const resultEl = document.getElementById("rouletteResult");
+    const spinBtn = document.getElementById("rouletteSpinBtn");
+    const wheel = document.getElementById("rouletteWheel");
+    resultEl.textContent = "보너스 룰렛 스핀 중...";
+    wheel.classList.add("spinning");
+  
+    setTimeout(() => {
+      wheel.classList.remove("spinning");
+      const bonusPool = [20, 20, 50, 50, 100, 100, 200, 500, 1000];
+      const bonus = bonusPool[Math.floor(Math.random() * bonusPool.length)];
+      const capped = Math.min(1000, bonus);
+      const winAmount = baseBet * capped;
+      gameState.balance += winAmount;
+      updateBalance();
+      resultEl.textContent = `JACKPOT! ${capped}x +₩${winAmount.toLocaleString()}`;
+      showWinNotification(`JACKPOT ${capped}x +₩${winAmount.toLocaleString()}`);
       roulette.isSpinning = false;
-      clearRouletteBets();
-    }, 3000);
+      spinBtn.disabled = false;
+      const ch = document.getElementById("jackpotCharacter");
+      if (ch) {
+        ch.animate(
+          [
+            { transform: "translateY(0)", opacity: 1 },
+            { transform: "translateY(-20px)", opacity: 0 },
+          ],
+          { duration: 400, fill: "forwards" }
+        );
+        setTimeout(() => {
+          ch.style.display = "none";
+        }, 500);
+      }
+    }, 2200);
   }
   
   // Crash Game
   function loadCrashGame() {
     gameArea.innerHTML = `
-          <div class="crash-game">
-              <div class="crash-chart">
-                  <div class="crash-multiplier" id="crashMultiplier">1.00x</div>
-              </div>
-              <div class="crash-controls">
-                  <input type="number" class="crash-bet-input" id="crashBetInput" value="${gameState.currentBet}" min="50" max="${gameState.balance}">
-                  <button class="btn btn-primary" onclick="startCrash()">베팅</button>
-                  <button class="crash-cashout-btn" onclick="crashCashout()" id="crashCashoutBtn" disabled>캐시아웃</button>
-              </div>
-              <div style="text-align: center; margin-top: 1rem; color: #ffb800;">
-                  <div id="crashStatus">베팅을 시작하세요!</div>
-              </div>
-          </div>
-      `;
+            <div class="crash-game">
+                <div class="crash-chart">
+                    <div class="crash-multiplier" id="crashMultiplier">1.00x</div>
+                </div>
+                <div class="crash-controls">
+                    <input type="number" class="crash-bet-input" id="crashBetInput" value="${gameState.currentBet}" min="50" max="${gameState.balance}">
+                    <button class="btn btn-primary" onclick="startCrash()">베팅</button>
+                    <button class="crash-cashout-btn" onclick="crashCashout()" id="crashCashoutBtn" disabled>캐시아웃</button>
+                </div>
+                <div style="text-align: center; margin-top: 1rem; color: #ffb800;">
+                    <div id="crashStatus">베팅을 시작하세요!</div>
+                </div>
+            </div>
+        `;
   
     gameState.crash = {
       isActive: false,
@@ -788,21 +1396,27 @@ let gameState = {
   // Mines Game
   function loadMinesGame() {
     gameArea.innerHTML = `
-          <div class="mines-game">
-              <div class="mines-grid" id="minesGrid">
-                  ${generateMinesGrid()}
-              </div>
-              <div class="mines-controls">
-                  <div class="mines-info">
-                      <div>베팅: ₩${gameState.currentBet}</div>
-                      <div id="minesMultiplier">배수: 1.00x</div>
-                      <div id="minesRevealed">발견: 0/20</div>
-                  </div>
-                  <button class="btn btn-primary" onclick="startMines()">새 게임</button>
-                  <button class="btn btn-secondary" onclick="minesCashout()" id="minesCashoutBtn" disabled>캐시아웃</button>
-              </div>
-          </div>
-      `;
+            <div class="mines-game">
+                <div class="mines-grid" id="minesGrid">
+                    ${generateMinesGrid()}
+                </div>
+                <div class="mines-controls">
+                    <div class="mines-info">
+                        <div style="display:flex;gap:0.5rem;align-items:center;justify-content:center;">
+                          <span>베팅:</span>
+                          <input id="minesBetInput" type="number" min="50" value="${
+                            gameState.currentBet
+                          }" class="crash-bet-input" style="width:120px"/>
+                          <span>₩</span>
+                        </div>
+                        <div id="minesMultiplier">배수: 1.00x</div>
+                        <div id="minesRevealed">발견: 0/20</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="startMines()">새 게임</button>
+                    <button class="btn btn-secondary" onclick="minesCashout()" id="minesCashoutBtn" disabled>캐시아웃</button>
+                </div>
+            </div>
+        `;
   
     gameState.mines = {
       isActive: false,
@@ -824,16 +1438,21 @@ let gameState = {
   function startMines() {
     const mines = gameState.mines;
   
-    if (gameState.currentBet > gameState.balance) {
+    const betInput = document.getElementById("minesBetInput");
+    const betAmount = Math.max(
+      50,
+      parseInt((betInput && betInput.value) || "0", 10)
+    );
+    if (betAmount > gameState.balance) {
       alert("잔액이 부족합니다!");
       return;
     }
   
-    gameState.balance -= gameState.currentBet;
+    gameState.balance -= betAmount;
     updateBalance();
   
     mines.isActive = true;
-    mines.betAmount = gameState.currentBet;
+    mines.betAmount = betAmount;
     mines.revealedCells = 0;
     mines.multiplier = 1.0;
   
@@ -923,6 +1542,205 @@ let gameState = {
     );
   }
   
+  // Rock Paper Scissors Game
+  function loadRPS() {
+    gameArea.innerHTML = `
+            <div style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
+              <div style="font-size:1.2rem;color:#ffb800;">베팅: ₩<span id="rpsBet">${gameState.currentBet}</span></div>
+              <div id="rpsStatus" style="min-height:24px;color:#ccc;">선택하세요!</div>
+              <div style="display:flex;gap:1rem;">
+                <button class="btn btn-secondary" onclick="playRPS('rock')">✊ 바위</button>
+                <button class="btn btn-secondary" onclick="playRPS('paper')">✋ 보</button>
+                <button class="btn btn-secondary" onclick="playRPS('scissors')">✌️ 가위</button>
+              </div>
+              <div id="rpsResult" style="font-size:1.5rem;font-weight:bold;color:#ffb800;"></div>
+            </div>
+          `;
+    gameState.rps = { isActive: true };
+  }
+  
+  function playRPS(playerChoice) {
+    const options = ["rock", "paper", "scissors"];
+    const aiChoice = options[Math.floor(Math.random() * 3)];
+    const bet = gameState.currentBet;
+    if (bet > gameState.balance) {
+      alert("잔액이 부족합니다!");
+      return;
+    }
+    gameState.balance -= bet;
+    updateBalance();
+  
+    const outcome = getRPSOutcome(playerChoice, aiChoice);
+    let message = `나: ${emojiRPS(playerChoice)}  vs  AI: ${emojiRPS(
+      aiChoice
+    )} → `;
+    let winAmount = 0;
+    if (outcome === "win") {
+      winAmount = bet * 2;
+      message += "승리!";
+    } else if (outcome === "draw") {
+      winAmount = bet; // refund
+      message += "무승부";
+    } else {
+      message += "패배";
+    }
+    if (winAmount > 0) {
+      gameState.balance += winAmount;
+      updateBalance();
+      if (winAmount > bet) {
+        showWinNotification(
+          `가위바위보 승리! +₩${(winAmount - bet).toLocaleString()}`
+        );
+      }
+    }
+    document.getElementById("rpsResult").textContent = message;
+  }
+  
+  function getRPSOutcome(p, a) {
+    if (p === a) return "draw";
+    if (
+      (p === "rock" && a === "scissors") ||
+      (p === "paper" && a === "rock") ||
+      (p === "scissors" && a === "paper")
+    )
+      return "win";
+    return "lose";
+  }
+  
+  function emojiRPS(x) {
+    return x === "rock" ? "✊" : x === "paper" ? "✋" : "✌️";
+  }
+  
+  // TicTacToe Game
+  function loadTicTacToe() {
+    gameArea.innerHTML = `
+            <div style="display:flex;flex-direction:column;gap:1rem;align-items:center;width:100%">
+              <div style="font-size:1.2rem;color:#ffb800;">베팅: ₩${
+                gameState.currentBet
+              }</div>
+              <div id="tttBoard" style="display:grid;grid-template-columns:repeat(3,100px);gap:8px;">
+                ${Array.from({ length: 9 })
+                  .map(
+                    (_, i) =>
+                      `<button class=\"btn\" style=\"width:100px;height:100px;font-size:2rem;background:rgba(255,255,255,0.05);border:2px solid #ffb800;color:#fff\" onclick=\"tttMove(${i})\" id=\"ttt${i}\"></button>`
+                  )
+                  .join("")}
+              </div>
+              <div id="tttStatus" style="min-height:24px;color:#ccc;">내 턴 (X)</div>
+            </div>
+          `;
+  
+    const bet = gameState.currentBet;
+    if (bet > gameState.balance) {
+      alert("잔액이 부족합니다!");
+      return;
+    }
+    gameState.balance -= bet;
+    updateBalance();
+  
+    gameState.ttt = {
+      board: Array(9).fill(null),
+      player: "X",
+      ai: "O",
+      active: true,
+      betAmount: bet,
+    };
+  }
+  
+  function tttMove(idx) {
+    const t = gameState.ttt;
+    if (!t || !t.active || t.board[idx]) return;
+    t.board[idx] = t.player;
+    document.getElementById(`ttt${idx}`).textContent = t.player;
+    const winner = tttCheckWinner(t.board);
+    if (winner || t.board.every(Boolean)) return tttFinish(winner);
+  
+    // AI move (simple best: win > block > random)
+    const aiIdx = tttChooseAIMove(t.board, t.ai, t.player);
+    if (aiIdx !== -1) {
+      t.board[aiIdx] = t.ai;
+      document.getElementById(`ttt${aiIdx}`).textContent = t.ai;
+    }
+    const winner2 = tttCheckWinner(t.board);
+    if (winner2 || t.board.every(Boolean)) return tttFinish(winner2);
+  }
+  
+  function tttLines() {
+    return [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+  }
+  
+  function tttCheckWinner(b) {
+    for (const [a, c, d] of tttLines()) {
+      if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
+    }
+    return null;
+  }
+  
+  function tttChooseAIMove(board, ai, player) {
+    // Try winning move
+    for (let i = 0; i < 9; i++) {
+      if (!board[i]) {
+        board[i] = ai;
+        if (tttCheckWinner(board) === ai) {
+          board[i] = null;
+          return i;
+        }
+        board[i] = null;
+      }
+    }
+    // Block player
+    for (let i = 0; i < 9; i++) {
+      if (!board[i]) {
+        board[i] = player;
+        if (tttCheckWinner(board) === player) {
+          board[i] = null;
+          return i;
+        }
+        board[i] = null;
+      }
+    }
+    // Center, corners, sides preference
+    const order = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+    for (const i of order) if (!board[i]) return i;
+    return -1;
+  }
+  
+  function tttFinish(winner) {
+    const t = gameState.ttt;
+    if (!t) return;
+    t.active = false;
+    let msg = "무승부";
+    let payout = 0;
+    if (winner === t.player) {
+      msg = "승리!";
+      payout = t.betAmount * 2;
+    } else if (winner === t.ai) {
+      msg = "패배";
+    } else {
+      payout = t.betAmount; // refund
+    }
+    if (payout > 0) {
+      gameState.balance += payout;
+      updateBalance();
+      if (payout > t.betAmount) {
+        showWinNotification(
+          `틱택토 승리! +₩${(payout - t.betAmount).toLocaleString()}`
+        );
+      }
+    }
+    const el = document.getElementById("tttStatus");
+    if (el) el.textContent = `결과: ${msg}`;
+  }
+  
   // Utility functions
   function showWinNotification(message) {
     const notification = winNotification;
@@ -991,4 +1809,5 @@ let gameState = {
       });
     });
   });
+  
   
