@@ -648,8 +648,32 @@ body {
 }
 
 .game-modal-content {
-  height: 90vh;
-  max-height: 800px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 3px solid #ffb800;
+  border-radius: 20px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffb800 #1a1a2e;
+}
+
+.game-modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.game-modal-content::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 5px;
+}
+
+.game-modal-content::-webkit-scrollbar-thumb {
+  background: #ffb800;
+  border-radius: 5px;
+}
+
+.game-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #ffd700;
 }
 
 .close {
@@ -699,17 +723,30 @@ body {
 }
 
 .game-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 184, 0, 0.1);
-  position: relative;
-  overflow: hidden;
+  padding: 20px;
+  min-height: 400px;
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffb800 #1a1a2e;
+}
+
+.game-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.game-area::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 4px;
+}
+
+.game-area::-webkit-scrollbar-thumb {
+  background: #ffb800;
+  border-radius: 4px;
+}
+
+.game-area::-webkit-scrollbar-thumb:hover {
+  background: #ffd700;
 }
 
 /* Slot Machine */
@@ -916,16 +953,130 @@ body {
 .dealer-avatar,
 .player-avatar,
 .banker-avatar {
-  font-size: 3rem;
   width: 80px;
   height: 80px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: rgba(255, 184, 0, 0.1);
   border-radius: 50%;
   border: 2px solid rgba(255, 184, 0, 0.5);
   animation: avatarGlow 2s ease-in-out infinite alternate;
+  position: relative;
+  overflow: hidden;
+}
+
+.dealer-head,
+.player-head,
+.banker-head {
+  width: 50px;
+  height: 50px;
+  background: #f4d03f;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dealer-face,
+.player-face,
+.banker-face {
+  width: 40px;
+  height: 40px;
+  background: #f4d03f;
+  border-radius: 50%;
+  position: relative;
+}
+
+.dealer-eyes,
+.player-eyes,
+.banker-eyes {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.dealer-eye,
+.player-eye,
+.banker-eye {
+  width: 6px;
+  height: 6px;
+  background: #2c3e50;
+  border-radius: 50%;
+}
+
+.dealer-eye.left,
+.player-eye.left,
+.banker-eye.left {
+  margin-left: 8px;
+}
+
+.dealer-eye.right,
+.player-eye.right,
+.banker-eye.right {
+  margin-right: 8px;
+}
+
+.dealer-mouth,
+.player-mouth,
+.banker-mouth {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 6px;
+  background: #e74c3c;
+  border-radius: 0 0 6px 6px;
+}
+
+.dealer-hair,
+.player-hair,
+.banker-hair {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 25px;
+  background: #8b4513;
+  border-radius: 30px 30px 0 0;
+}
+
+.dealer-body,
+.player-body,
+.banker-body {
+  width: 60px;
+  height: 30px;
+  background: #3498db;
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  margin-top: -5px;
+}
+
+.dealer-shirt,
+.player-shirt,
+.banker-suit {
+  width: 100%;
+  height: 100%;
+  background: #3498db;
+  border-radius: 0 0 30px 30px;
+}
+
+.dealer-tie {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 20px;
+  background: #e74c3c;
+  border-radius: 4px;
 }
 
 @keyframes avatarGlow {
@@ -959,24 +1110,24 @@ body {
   font-style: italic;
 }
 
-/* Baccarat */
+/* Baccarat Game */
 .baccarat-game {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 30px rgba(255, 184, 0, 0.2);
   width: 100%;
-  height: 100%;
+  min-height: auto;
+  overflow-y: visible;
 }
 
 .baccarat-table {
-  background: linear-gradient(45deg, #1a0a1a, #2d0d2d);
-  border-radius: 20px;
-  padding: 2rem;
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
   border: 3px solid #ffb800;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .banker-section {
@@ -1481,13 +1632,202 @@ body {
   .banker-avatar {
     width: 60px;
     height: 60px;
-    font-size: 2rem;
+  }
+
+  .dealer-head,
+  .player-head,
+  .banker-head {
+    width: 35px;
+    height: 35px;
+  }
+
+  .dealer-face,
+  .player-face,
+  .banker-face {
+    width: 28px;
+    height: 28px;
+  }
+
+  .dealer-body,
+  .player-body,
+  .banker-body {
+    width: 40px;
+    height: 20px;
+  }
+
+  .dealer-hair,
+  .player-hair,
+  .banker-hair {
+    width: 40px;
+    height: 18px;
   }
 
   .mine-cell {
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
+  }
+}
+
+/* Texas Hold'em */
+.texas-holdem-game {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.poker-table {
+  background: linear-gradient(45deg, #0d4a0d, #1a5f1a);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 3px solid #ffb800;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+}
+
+.community-cards {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 184, 0, 0.3);
+}
+
+.community-cards h4 {
+  color: #ffb800;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.poker-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.betting-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.poker-result {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.result-message {
+  color: #ffb800;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem;
+  background: rgba(255, 184, 0, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 184, 0, 0.3);
+}
+
+/* Betting Options and Countdown - 위치를 더 위쪽으로 */
+.betting-options {
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #ffb800;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  text-align: center;
+  max-width: 600px;
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.betting-options h4 {
+  color: #ffb800;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+}
+
+.bet-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.bet-buttons .btn {
+  min-width: 140px;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.bet-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.5);
+}
+
+.countdown {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ff6b6b;
+  text-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+  margin: 20px 0;
+  animation: countdownPulse 1s ease-in-out infinite;
+}
+
+@keyframes countdownPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.betting-info {
+  background: rgba(255, 184, 0, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.betting-info p {
+  color: #fff;
+  margin: 8px 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.betting-info strong {
+  color: #ffb800;
+}
+
+/* Responsive adjustments for betting options */
+@media (max-width: 768px) {
+  .betting-options {
+    margin: 15px;
+    padding: 15px;
+  }
+  
+  .bet-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bet-buttons .btn {
+    min-width: 200px;
+  }
+  
+  .countdown {
+    font-size: 1.5rem;
   }
 }
 
