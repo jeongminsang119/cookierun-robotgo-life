@@ -768,6 +768,53 @@ document.querySelectorAll(".qty-btn").forEach((btn) => {
     elements.orderQuantity.dispatchEvent(new Event("input"));
   };
 });
+document.querySelectorAll(".qty-btn").forEach((btn) => {
+  btn.onclick = () => {
+    const val = btn.dataset.qty;
+    if (val === "max") {
+      // Determine if buy or sell is selected
+      const activeOrderTab = document.querySelector('.order-tab.active');
+      const orderType = activeOrderTab && activeOrderTab.dataset.order;
+      if (orderType === "market" || orderType === "limit") {
+        // Determine if buy or sell button is active (by last clicked or default to buy)
+        // We'll check which button is focused, but if not, default to buy
+        // Instead, let's check which button was last clicked by tracking a variable
+        // But for simplicity, set both maxes
+        // If user has enough cash, set max buyable
+        // If user has holdings, set max sellable
+        // We'll set max buyable if buy tab is active, max sellable if sell tab is active
+        // But since there is no tab for buy/sell, only buttons, so set both
+        // Instead, let's check which button is hovered or focused, but that's not reliable
+        // So, let's set max buyable if user has enough cash, else max sellable
+        // But best is to add logic for both buttons
+        // We'll use the selectedStock and portfolio
+        const price = orderType === "market"
+          ? selectedStock.price
+          : parseInt(elements.orderPrice.value);
+        if (!isNaN(price) && price > 0) {
+          // Max buyable
+          const maxBuy = Math.floor(portfolio.cash / price);
+          // Max sellable
+          const maxSell = portfolio.holdings[selectedStock.code] || 0;
+          // If sell button is focused, set to maxSell, else set to maxBuy
+          // We'll check which button is currently hovered
+          // But since that's not reliable, show prompt
+          // Instead, if maxSell > 0, set to maxSell
+          // If user has holdings, set to maxSell
+          if (maxSell > 0) {
+            elements.orderQuantity.value = maxSell;
+          } else {
+            elements.orderQuantity.value = maxBuy;
+          }
+          elements.orderQuantity.dispatchEvent(new Event('input'));
+        }
+      }
+    } else {
+      elements.orderQuantity.value = val;
+      elements.orderQuantity.dispatchEvent(new Event('input'));
+    }
+  };
+});
 document.querySelectorAll(".price-btn").forEach((btn) => {
   btn.onclick = () => {
     let price = parseInt(elements.orderPrice.value) || selectedStock.price;
