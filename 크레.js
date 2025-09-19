@@ -1,3 +1,13 @@
+// 주문가격 입력란 '현재가' 버튼 기능
+document.addEventListener('DOMContentLoaded', () => {
+  const lastBtn = document.getElementById('lastPriceBtn');
+  if (lastBtn) {
+    lastBtn.onclick = function() {
+      elements.orderPrice.value = selectedStock.price;
+      elements.orderPrice.dispatchEvent(new Event('input'));
+    };
+  }
+});
 const TICK_INTERVAL = 1000;
 const MAX_CHART_POINTS = 300;
 const PRICE_DECIMALS = 0;
@@ -6,76 +16,35 @@ const PRICE_STEP = 100;
 
 // 시장데이터
 const stocks = [
-  {
-    code: "005930",
-    name: "삼성전자",
-    market: "KOSPI",
-    price: 67800,
-    sector: "전자",
-  },
-  {
-    code: "000660",
-    name: "SK하이닉스",
-    market: "KOSPI",
-    price: 138000,
-    sector: "반도체",
-  },
-  {
-    code: "035420",
-    name: "NAVER",
-    market: "KOSPI",
-    price: 203000,
-    sector: "IT",
-  },
-  {
-    code: "035720",
-    name: "카카오",
-    market: "KOSPI",
-    price: 56700,
-    sector: "IT",
-  },
-  {
-    code: "066570",
-    name: "LG전자",
-    market: "KOSPI",
-    price: 98400,
-    sector: "전자",
-  },
-  {
-    code: "005380",
-    name: "현대차",
-    market: "KOSPI",
-    price: 176500,
-    sector: "자동차",
-  },
-  {
-    code: "000270",
-    name: "기아",
-    market: "KOSPI",
-    price: 82900,
-    sector: "자동차",
-  },
-  {
-    code: "005490",
-    name: "POSCO홀딩스",
-    market: "KOSPI",
-    price: 458000,
-    sector: "철강",
-  },
-  {
-    code: "068270",
-    name: "셀트리온",
-    market: "KOSPI",
-    price: 156800,
-    sector: "제약",
-  },
-  {
-    code: "207940",
-    name: "삼성바이오로직스",
-    market: "KOSPI",
-    price: 748000,
-    sector: "바이오",
-  },
+  { code: "005930", name: "삼성전자", market: "KOSPI", price: 67800, sector: "전자" },
+  { code: "000660", name: "SK하이닉스", market: "KOSPI", price: 138000, sector: "반도체" },
+  { code: "035420", name: "NAVER", market: "KOSPI", price: 203000, sector: "IT" },
+  { code: "035720", name: "카카오", market: "KOSPI", price: 56700, sector: "IT" },
+  { code: "066570", name: "LG전자", market: "KOSPI", price: 98400, sector: "전자" },
+  { code: "005380", name: "현대차", market: "KOSPI", price: 176500, sector: "자동차" },
+  { code: "000270", name: "기아", market: "KOSPI", price: 82900, sector: "자동차" },
+  { code: "005490", name: "POSCO홀딩스", market: "KOSPI", price: 458000, sector: "철강" },
+  { code: "068270", name: "셀트리온", market: "KOSPI", price: 156800, sector: "제약" },
+  { code: "207940", name: "삼성바이오로직스", market: "KOSPI", price: 748000, sector: "바이오" },
+  // 가상 종목(유지)
+  { code: "123456", name: "간성치킨", market: "KOSDAQ", price: 25000, sector: "외식" },
+  { code: "234567", name: "로봇고", market: "KOSDAQ", price: 42000, sector: "로봇" },
+  // 실제 상장 종목 추가
+  { code: "051910", name: "LG화학", market: "KOSPI", price: 350000, sector: "화학" },
+  { code: "028260", name: "삼성물산", market: "KOSPI", price: 120000, sector: "건설" },
+  { code: "017670", name: "SK텔레콤", market: "KOSPI", price: 54000, sector: "통신" },
+  { code: "105560", name: "KB금융", market: "KOSPI", price: 60000, sector: "금융" },
+  { code: "032830", name: "삼성생명", market: "KOSPI", price: 70000, sector: "보험" },
+  { code: "003550", name: "LG", market: "KOSPI", price: 90000, sector: "지주" },
+  { code: "000810", name: "삼성화재", market: "KOSPI", price: 210000, sector: "보험" },
+  { code: "086790", name: "하나금융지주", market: "KOSPI", price: 48000, sector: "금융" },
+  { code: "055550", name: "신한지주", market: "KOSPI", price: 40000, sector: "금융" },
+  { code: "034730", name: "SK", market: "KOSPI", price: 220000, sector: "지주" },
+  { code: "018260", name: "삼성에스디에스", market: "KOSPI", price: 130000, sector: "IT" },
+  { code: "009150", name: "삼성전기", market: "KOSPI", price: 150000, sector: "전자부품" },
+  { code: "010950", name: "S-Oil", market: "KOSPI", price: 90000, sector: "정유" },
+  { code: "003490", name: "대한항공", market: "KOSPI", price: 25000, sector: "운수" },
+  { code: "000100", name: "유한양행", market: "KOSPI", price: 70000, sector: "제약" },
 ].map((stock) => ({
   ...stock,
   initialPrice: stock.price,
@@ -278,15 +247,38 @@ function updatePortfolio() {
   // 주문내역 업데이트
   elements.orderHistory.innerHTML = portfolio.orders
     .map(
-      (order) => `
+      (order, idx) => `
       <div class="history-item">
-        <div>${order.time.toLocaleString()} [${order.type === "buy" ? "매수" : "매도"}] ${order.name} ${order.quantity}주 @ ${order.price.toLocaleString()}원 
-        <span style="color:${order.status==="체결"?"#00b894":"#ffd600"}">[${order.status}]</span>
+        <div>
+          ${order.time.toLocaleString()} [${order.type === "buy" ? "매수" : "매도"}] ${order.name} ${order.quantity}주 @ ${order.price.toLocaleString()}원 
+          <span style="color:${order.status==="체결"?"#00b894":"#ffd600"}">[${order.status}]</span>
+          ${order.status === "예약중" ? `<button class="cancel-btn" data-idx="${idx}" style="margin-left:8px;padding:2px 8px;font-size:0.9em;cursor:pointer;">취소</button>` : ""}
         </div>
       </div>
     `
     )
     .join("");
+
+  // 취소 버튼 이벤트 바인딩
+  document.querySelectorAll('.cancel-btn').forEach(btn => {
+    btn.onclick = function() {
+      const idx = parseInt(this.dataset.idx);
+      cancelOrder(idx);
+    };
+  });
+// 예약 주문 취소 함수
+function cancelOrder(idx) {
+  const order = portfolio.orders[idx];
+  if (!order || order.status !== "예약중") return;
+  // 예수금/보유수량 복원
+  if (order.type === "buy") {
+    portfolio.cash += order.total;
+  } else {
+    portfolio.holdings[order.code] = (portfolio.holdings[order.code] || 0) + order.quantity;
+  }
+  order.status = "취소됨";
+  updateUI();
+}
 }
 
 // 거래기능
@@ -409,39 +401,104 @@ function showNews(text) {
   if (newsText) newsText.innerHTML = text;
 }
 
-// 뉴스 기사 다양하게 추가
+// 비트코인 뉴스 제거, 종목별 뉴스 대량 추가 및 신규 종목 뉴스 추가
 const newsPool = [
-  { headline: "비트코인, 1억 돌파! 투자자 환호", impact: { code: "BTCFUT", effect: 0.03 } },
-  { headline: "비트코인, 급락! 규제 이슈로 10% 하락", impact: { code: "BTCFUT", effect: -0.04 } },
+  // 간성치킨
+  { headline: "간성치킨, 신메뉴 출시 대박행진", impact: { code: "123456", effect: 0.03 } },
+  { headline: "간성치킨, 위생 논란에 주가 급락", impact: { code: "123456", effect: -0.025 } },
+  { headline: "간성치킨, 전국 매장 1000호점 돌파", impact: { code: "123456", effect: 0.025 } },
+  { headline: "간성치킨, 치킨값 인상 소식", impact: { code: "123456", effect: 0.012 } },
+  { headline: "간성치킨, 원가 상승 부담", impact: { code: "123456", effect: -0.011 } },
+  // 로봇고
+  { headline: "로봇고, 신형 로봇 출시! 기대감↑", impact: { code: "234567", effect: 0.022 } },
+  { headline: "로봇고, 로봇 결함 논란", impact: { code: "234567", effect: -0.018 } },
+  { headline: "로봇고, 해외 수주 대박 소식", impact: { code: "234567", effect: 0.019 } },
+  { headline: "로봇고, 연구개발비 증가로 적자", impact: { code: "234567", effect: -0.012 } },
+
+  // 삼성전자
   { headline: "삼성전자, AI 반도체 출시! 기대감 ↑", impact: { code: "005930", effect: 0.015 } },
   { headline: "삼성전자, 실적 부진… 주가 하락", impact: { code: "005930", effect: -0.012 } },
+  { headline: "삼성전자, 배당 확대 소식에 강세", impact: { code: "005930", effect: 0.02 } },
+  { headline: "삼성전자, 글로벌 점유율 1위 탈환", impact: { code: "005930", effect: 0.018 } },
+  { headline: "삼성전자, 반도체 공장 화재 발생", impact: { code: "005930", effect: -0.025 } },
+  { headline: "삼성전자, 신제품 스마트폰 흥행", impact: { code: "005930", effect: 0.013 } },
+  { headline: "삼성전자, 환율 급등에 수익성 악화", impact: { code: "005930", effect: -0.01 } },
+  // SK하이닉스
   { headline: "SK하이닉스, 메모리 가격 반등! 강세", impact: { code: "000660", effect: 0.018 } },
   { headline: "SK하이닉스, 글로벌 공급망 차질", impact: { code: "000660", effect: -0.015 } },
+  { headline: "SK하이닉스, 신공장 가동 소식", impact: { code: "000660", effect: 0.014 } },
+  { headline: "SK하이닉스, 대규모 투자 발표", impact: { code: "000660", effect: 0.012 } },
+  { headline: "SK하이닉스, 기술 유출 논란", impact: { code: "000660", effect: -0.02 } },
+  { headline: "SK하이닉스, 실적 기대감에 상승", impact: { code: "000660", effect: 0.011 } },
+  // NAVER
   { headline: "NAVER, 해외 진출 성공! 상승세", impact: { code: "035420", effect: 0.013 } },
   { headline: "NAVER, 서비스 장애 발생… 약세", impact: { code: "035420", effect: -0.014 } },
+  { headline: "NAVER, AI 번역 서비스 출시", impact: { code: "035420", effect: 0.012 } },
+  { headline: "NAVER, 쇼핑 거래액 역대 최대", impact: { code: "035420", effect: 0.017 } },
+  { headline: "NAVER, 개인정보 유출 사고", impact: { code: "035420", effect: -0.018 } },
+  { headline: "NAVER, 웹툰 글로벌 흥행", impact: { code: "035420", effect: 0.014 } },
+  // 카카오
   { headline: "카카오, 신규 서비스 출시! 기대감", impact: { code: "035720", effect: 0.012 } },
   { headline: "카카오, 서비스 장애 발생… 약세", impact: { code: "035720", effect: -0.018 } },
+  { headline: "카카오, 카카오택시 요금 인상", impact: { code: "035720", effect: 0.01 } },
+  { headline: "카카오, 카카오뱅크 실적 호조", impact: { code: "035720", effect: 0.013 } },
+  { headline: "카카오, 카카오게임즈 신작 흥행", impact: { code: "035720", effect: 0.011 } },
+  { headline: "카카오, 공정위 제재 소식", impact: { code: "035720", effect: -0.012 } },
+  // LG전자
   { headline: "LG전자, 신제품 TV 흥행", impact: { code: "066570", effect: 0.011 } },
   { headline: "LG전자, 해외 시장 부진", impact: { code: "066570", effect: -0.009 } },
+  { headline: "LG전자, 가전 부문 실적 호조", impact: { code: "066570", effect: 0.012 } },
+  { headline: "LG전자, 전장사업 성장 기대", impact: { code: "066570", effect: 0.013 } },
+  { headline: "LG전자, 원자재 가격 상승 부담", impact: { code: "066570", effect: -0.011 } },
+  { headline: "LG전자, 배당 확대 소식", impact: { code: "066570", effect: 0.01 } },
+  // 현대차
   { headline: "현대차, 전기차 수출 급증! 자동차주 강세", impact: { code: "005380", effect: 0.012 } },
   { headline: "현대차, 노사 갈등… 생산 차질", impact: { code: "005380", effect: -0.013 } },
+  { headline: "현대차, 신차 출시 대박", impact: { code: "005380", effect: 0.015 } },
+  { headline: "현대차, 해외 판매 호조", impact: { code: "005380", effect: 0.011 } },
+  { headline: "현대차, 환율 변동성 확대", impact: { code: "005380", effect: -0.01 } },
+  { headline: "현대차, 친환경차 라인업 강화", impact: { code: "005380", effect: 0.013 } },
+  // 기아
   { headline: "기아, 친환경차 판매 호조", impact: { code: "000270", effect: 0.008 } },
   { headline: "기아, 실적 부진… 주가 하락", impact: { code: "000270", effect: -0.009 } },
+  { headline: "기아, 신차 출시 기대감", impact: { code: "000270", effect: 0.012 } },
+  { headline: "기아, 해외 시장 점유율 확대", impact: { code: "000270", effect: 0.011 } },
+  { headline: "기아, 노사 협상 결렬", impact: { code: "000270", effect: -0.012 } },
+  { headline: "기아, 배당 확대 소식", impact: { code: "000270", effect: 0.009 } },
+  // POSCO홀딩스
   { headline: "POSCO홀딩스, 철강 가격 인상 발표", impact: { code: "005490", effect: 0.01 } },
   { headline: "POSCO홀딩스, 원자재 가격 급등 부담", impact: { code: "005490", effect: -0.012 } },
+  { headline: "POSCO홀딩스, 신사업 진출 소식", impact: { code: "005490", effect: 0.013 } },
+  { headline: "POSCO홀딩스, 실적 호조", impact: { code: "005490", effect: 0.012 } },
+  { headline: "POSCO홀딩스, 환경 규제 강화", impact: { code: "005490", effect: -0.011 } },
+  { headline: "POSCO홀딩스, 배당 확대 소식", impact: { code: "005490", effect: 0.01 } },
+  // 셀트리온
   { headline: "셀트리온, 신약 임상 성공! 제약주 강세", impact: { code: "068270", effect: 0.02 } },
   { headline: "셀트리온, 신약 임상 실패… 제약주 하락", impact: { code: "068270", effect: -0.02 } },
+  { headline: "셀트리온, 바이오시밀러 수출 확대", impact: { code: "068270", effect: 0.013 } },
+  { headline: "셀트리온, 실적 기대감에 상승", impact: { code: "068270", effect: 0.012 } },
+  { headline: "셀트리온, 특허 소송 패소", impact: { code: "068270", effect: -0.015 } },
+  { headline: "셀트리온, 배당 확대 소식", impact: { code: "068270", effect: 0.01 } },
+  // 삼성바이오로직스
   { headline: "삼성바이오로직스, 대규모 투자 소식", impact: { code: "207940", effect: 0.011 } },
   { headline: "삼성바이오로직스, 규제 리스크 부각", impact: { code: "207940", effect: -0.013 } },
+  { headline: "삼성바이오로직스, 신공장 가동 소식", impact: { code: "207940", effect: 0.012 } },
+  { headline: "삼성바이오로직스, 글로벌 수주 확대", impact: { code: "207940", effect: 0.013 } },
+  { headline: "삼성바이오로직스, 실적 기대감에 상승", impact: { code: "207940", effect: 0.011 } },
+  { headline: "삼성바이오로직스, 배당 확대 소식", impact: { code: "207940", effect: 0.01 } },
 ];
 
 // 뉴스가 10초마다 항상 갱신되도록
 function triggerNews() {
   const news = newsPool[Math.floor(Math.random() * newsPool.length)];
-  showNews(`📢 <span style="color:#ffd600">${news.headline}</span>`);
+  showNews(`📢 <span style=\"color:#ffd600\">${news.headline}</span>`);
   const stock = stocks.find(s => s.code === news.impact.code);
   if (stock) {
-    const effect = news.impact.effect * (Math.random() * 0.7 + 0.7);
+    let effect = news.impact.effect * (Math.random() * 0.7 + 0.7);
+    // 5% 확률로 300% 폭등
+    if (Math.random() < 0.05) {
+      effect = 3.0;
+    }
     stock.price = Math.max(Math.round(stock.price * (1 + effect) / PRICE_STEP) * PRICE_STEP, stock.price * 0.7);
     stock.priceHistory.push({ time: Date.now(), price: stock.price, volume: Math.floor(Math.random() * 100000) + 50000 });
     stock.priceHistory.shift();
