@@ -1415,26 +1415,47 @@
 
         // 초기화
         function init() {
+            // 데스크톱 캔버스 초기화
             canvas = document.getElementById('mainChart');
-            ctx = canvas.getContext('2d');
+            if (canvas) {
+                ctx = canvas.getContext('2d');
+                
+                // 캔버스 크기 설정
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                
+                // 마우스 이벤트
+                canvas.addEventListener('mousedown', onMouseDown);
+                canvas.addEventListener('mousemove', onMouseMove);
+                canvas.addEventListener('mouseup', onMouseUp);
+                canvas.addEventListener('mouseleave', onMouseLeave);
+                canvas.addEventListener('wheel', onWheel);
+            }
             
-            // 캔버스 크기 설정
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
-            // 마우스 이벤트
-            canvas.addEventListener('mousedown', onMouseDown);
-            canvas.addEventListener('mousemove', onMouseMove);
-            canvas.addEventListener('mouseup', onMouseUp);
-            canvas.addEventListener('mouseleave', onMouseLeave);
-            canvas.addEventListener('wheel', onWheel);
-            
-            // 모바일 캔버스 이벤트
+            // 모바일 캔버스 초기화
             const mobileCanvas = document.getElementById('mobileMainChart');
             if (mobileCanvas) {
-                mobileCanvas.addEventListener('touchstart', onTouchStart);
-                mobileCanvas.addEventListener('touchmove', onTouchMove);
-                mobileCanvas.addEventListener('touchend', onTouchEnd);
+                const mobileCtx = mobileCanvas.getContext('2d');
+                
+                // 모바일 캔버스 크기 설정
+                function resizeMobileCanvas() {
+                    const container = mobileCanvas.parentElement;
+                    mobileCanvas.width = container.clientWidth;
+                    mobileCanvas.height = container.clientHeight;
+                    if (document.getElementById('versionSelect').value === 'mobile') {
+                        canvas = mobileCanvas;
+                        ctx = mobileCtx;
+                        drawChart();
+                    }
+                }
+                
+                resizeMobileCanvas();
+                window.addEventListener('resize', resizeMobileCanvas);
+                
+                // 터치 이벤트
+                mobileCanvas.addEventListener('touchstart', onTouchStart, { passive: false });
+                mobileCanvas.addEventListener('touchmove', onTouchMove, { passive: false });
+                mobileCanvas.addEventListener('touchend', onTouchEnd, { passive: false });
             }
             
             // 각 주식 초기 데이터 생성
@@ -1457,14 +1478,28 @@
             document.getElementById('orderType').addEventListener('change', toggleLimitPrice);
             document.getElementById('quantity').addEventListener('input', updateEstimatedAmount);
             document.getElementById('limitPrice').addEventListener('input', updateEstimatedAmount);
+            
+            // 초기 차트 그리기
+            setTimeout(() => {
+                drawChart();
+            }, 100);
         }
 
         // 캔버스 크기 조정
         function resizeCanvas() {
+            if (!canvas) return;
             const container = canvas.parentElement;
+            if (!container) return;
+            
             canvas.width = container.clientWidth;
             canvas.height = container.clientHeight;
-            drawChart();
+            
+            // 캔버스가 실제로 크기를 가지고 있을 때만 차트 그리기
+            if (canvas.width > 0 && canvas.height > 0) {
+                setTimeout(() => {
+                    drawChart();
+                }, 50);
+            }
         }
 
         // 초기 데이터 생성
@@ -1794,12 +1829,23 @@
 
         // 차트 그리기
         function drawChart() {
-            if (!canvas || !ctx) return;
+            if (!canvas || !ctx) {
+                console.log('Canvas or context not available');
+                return;
+            }
+            
+            if (canvas.width === 0 || canvas.height === 0) {
+                console.log('Canvas has no size');
+                return;
+            }
             
             const stock = gameState.stocks[gameState.selectedStock];
-            const candleData = stock.candleData;
+            if (!stock || !stock.candleData || stock.candleData.length === 0) {
+                console.log('No stock data available');
+                return;
+            }
             
-            if (!candleData || candleData.length === 0) return;
+            const candleData = stock.candleData;
             
             // 캔버스 클리어
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1816,28 +1862,38 @@
             const chartWidth = width - padding.left - padding.right;
             const chartHeight = height - padding.top - padding.bottom;
             
+            if (chartWidth <= 0 || chartHeight <= 0) {
+                console.log('Invalid chart dimensions');
+                return;
+            }
+            
             // 배경
             const isDark = gameState.theme === 'dark';
             ctx.fillStyle = isDark ? '#0a0e1a' : '#ffffff';
             ctx.fillRect(0, 0, width, height);
             
             // 줌과 오프셋을 고려한 표시할 캔들 수 계산
-            const maxVisibleCandles = Math.floor(gameState.chart.maxCandles / gameState.chart.zoom);
+            const maxVisibleCandles = Math.max(10, Math.floor(gameState.chart.maxCandles / gameState.chart.zoom));
             const totalCandles = candleData.length;
             const endIndex = Math.min(totalCandles, totalCandles - gameState.chart.offset);
             const startIndex = Math.max(0, endIndex - maxVisibleCandles);
             const visibleCandles = endIndex - startIndex;
-            const candleWidth = chartWidth / maxVisibleCandles;
+            const candleWidth = Math.max(2, chartWidth / maxVisibleCandles);
             
             // 가격 범위 계산
             const visibleData = candleData.slice(startIndex, endIndex);
+            if (visibleData.length === 0) {
+                console.log('No visible data');
+                return;
+            }
+            
             const allPrices = visibleData.flatMap(candle => [candle.high, candle.low]);
             const minPrice = Math.min(...allPrices);
             const maxPrice = Math.max(...allPrices);
-            const priceRange = maxPrice - minPrice || 1;
+            const priceRange = Math.max(maxPrice - minPrice, 1);
             
             // 그리드 그리기
-            drawGrid(padding, chartWidth, chartHeight, minPrice, maxPrice, isDark);
+            drawGrid(padding, chartWidth, chartHeight, minPrice, maxPrice, isDark, isMobile);
             
             // 볼린저 밴드
             if (gameState.indicators.bollinger) {
@@ -1873,12 +1929,12 @@
             
             // 십자선 그리기
             if (gameState.chart.crosshair.visible && gameState.drawingTool === 'cursor') {
-                drawCrosshair(padding, chartWidth, chartHeight, minPrice, priceRange, visibleData, candleWidth, isDark);
+                drawCrosshair(padding, chartWidth, chartHeight, minPrice, priceRange, visibleData, candleWidth, isDark, isMobile);
             }
         }
 
         // 그리드 그리기
-        function drawGrid(padding, chartWidth, chartHeight, minPrice, maxPrice, isDark) {
+        function drawGrid(padding, chartWidth, chartHeight, minPrice, maxPrice, isDark, isMobile) {
             ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
             ctx.lineWidth = 1;
             
@@ -2163,8 +2219,9 @@
         }
 
         // 십자선 그리기
-        function drawCrosshair(padding, chartWidth, chartHeight, minPrice, priceRange, visibleData, candleWidth, isDark) {
+        function drawCrosshair(padding, chartWidth, chartHeight, minPrice, priceRange, visibleData, candleWidth, isDark, isMobile) {
             const crosshair = gameState.chart.crosshair;
+            const maxPrice = minPrice + priceRange;
             
             // 십자선
             ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)';
@@ -2194,7 +2251,7 @@
                 
                 // 가격 텍스트
                 ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-                ctx.font = '12px Arial';
+                ctx.font = isMobile ? '10px Arial' : '12px Arial';
                 ctx.textAlign = 'left';
                 ctx.fillText('₩' + Math.round(price).toLocaleString(), padding.left + chartWidth + 6, crosshair.y + 4);
             }
@@ -2705,13 +2762,28 @@
                 stock.indicators.bollinger = Math.max(0, Math.min(1, stock.indicators.bollinger + (Math.random() - 0.5) * 0.1));
             });
             
-            renderStockList();
+            // 현재 버전에 따라 적절한 렌더링 함수 호출
+            const currentVersion = document.getElementById('versionSelect').value;
             
-            if (gameState.selectedStock) {
-                selectStock(gameState.selectedStock);
+            if (currentVersion === 'mobile') {
+                // 모바일 버전 업데이트
+                renderMobileStockList();
+                if (gameState.selectedStock) {
+                    renderMobileOrderbook();
+                    updateMobileDisplay();
+                }
+                renderMobilePortfolio();
+            } else {
+                // 데스크톱 버전 업데이트
+                renderStockList();
+                if (gameState.selectedStock) {
+                    selectStock(gameState.selectedStock);
+                }
+                renderPortfolio();
             }
             
-            renderPortfolio();
+            // 차트는 공통으로 업데이트
+            drawChart();
         }
 
         function updateMarketTime() {
@@ -2801,20 +2873,25 @@
                         canvas = mobileCanvas;
                         ctx = canvas.getContext('2d');
                         
-                        // 모바일 터치 이벤트 추가
-                        canvas.addEventListener('touchstart', onTouchStart);
-                        canvas.addEventListener('touchmove', onTouchMove);
-                        canvas.addEventListener('touchend', onTouchEnd);
+                        // 캔버스 크기 설정
+                        const container = mobileCanvas.parentElement;
+                        mobileCanvas.width = container.clientWidth;
+                        mobileCanvas.height = container.clientHeight;
                         
-                        resizeCanvas();
+                        console.log('Mobile canvas size:', mobileCanvas.width, mobileCanvas.height);
+                        
                         drawChart();
                     }
-                }, 100);
+                }, 200);
                 
-                renderMobileStockList();
-                renderMobileOrderbook();
-                renderMobilePortfolio();
-                updateMobileDisplay();
+                // 모바일 UI 초기화
+                setTimeout(() => {
+                    renderMobileStockList();
+                    renderMobileOrderbook();
+                    renderMobilePortfolio();
+                    updateMobileDisplay();
+                }, 300);
+                
             } else {
                 desktopLayout.style.display = 'grid';
                 mobileLayout.classList.remove('active');
@@ -2825,10 +2902,25 @@
                     if (desktopCanvas) {
                         canvas = desktopCanvas;
                         ctx = canvas.getContext('2d');
-                        resizeCanvas();
+                        
+                        // 캔버스 크기 설정
+                        const container = desktopCanvas.parentElement;
+                        desktopCanvas.width = container.clientWidth;
+                        desktopCanvas.height = container.clientHeight;
+                        
+                        console.log('Desktop canvas size:', desktopCanvas.width, desktopCanvas.height);
+                        
                         drawChart();
                     }
-                }, 100);
+                }, 200);
+                
+                // 데스크톱 UI 초기화
+                setTimeout(() => {
+                    renderStockList();
+                    renderOrderbook();
+                    renderPortfolio();
+                    updateDisplay();
+                }, 300);
             }
         }
 
@@ -2854,13 +2946,15 @@
         // 모바일 주식 목록 렌더링
         function renderMobileStockList() {
             const mobileStockList = document.getElementById('mobileStockList');
+            if (!mobileStockList) return;
+            
             mobileStockList.innerHTML = '';
             
             Object.entries(gameState.stocks).forEach(([code, stock]) => {
                 const stockItem = document.createElement('div');
                 stockItem.className = `mobile-stock-item ${code === gameState.selectedStock ? 'selected' : ''}`;
                 stockItem.onclick = () => {
-                    selectStock(code);
+                    gameState.selectedStock = code;
                     renderMobileStockList();
                     renderMobileOrderbook();
                     updateMobileDisplay();
@@ -2896,10 +2990,13 @@
         function renderMobileOrderbook() {
             const stock = gameState.stocks[gameState.selectedStock];
             const mobileOrderbookList = document.getElementById('mobileOrderbookList');
+            
+            if (!stock || !mobileOrderbookList) return;
+            
             mobileOrderbookList.innerHTML = '';
             
             // 세력 알림 표시
-            if (stock.orderbook.whaleInfo) {
+            if (stock.orderbook && stock.orderbook.whaleInfo) {
                 const whaleAlert = document.createElement('div');
                 whaleAlert.style.cssText = `
                     background: linear-gradient(45deg, #ffc107, #ff8f00);
@@ -2918,24 +3015,26 @@
             }
             
             // 매도 호가 (상위 3개)
-            stock.orderbook.asks.slice().reverse().slice(0, 3).forEach(ask => {
-                const row = document.createElement('div');
-                row.className = 'mobile-orderbook-row ask';
-                row.onclick = () => setMobileOrderPrice(ask.price);
-                
-                row.innerHTML = `
-                    <div class="quantity">${ask.quantity.toLocaleString()}${ask.isWhale ? ' 🐋' : ''}</div>
-                    <div class="price">₩${ask.price.toLocaleString()}</div>
-                    <div class="quantity"></div>
-                `;
-                
-                if (ask.isWhale) {
-                    row.style.borderLeft = '2px solid #ffc107';
-                    row.style.fontWeight = 'bold';
-                }
-                
-                mobileOrderbookList.appendChild(row);
-            });
+            if (stock.orderbook && stock.orderbook.asks) {
+                stock.orderbook.asks.slice().reverse().slice(0, 3).forEach(ask => {
+                    const row = document.createElement('div');
+                    row.className = 'mobile-orderbook-row ask';
+                    row.onclick = () => setMobileOrderPrice(ask.price);
+                    
+                    row.innerHTML = `
+                        <div class="quantity">${ask.quantity.toLocaleString()}${ask.isWhale ? ' 🐋' : ''}</div>
+                        <div class="price">₩${ask.price.toLocaleString()}</div>
+                        <div class="quantity"></div>
+                    `;
+                    
+                    if (ask.isWhale) {
+                        row.style.borderLeft = '2px solid #ffc107';
+                        row.style.fontWeight = 'bold';
+                    }
+                    
+                    mobileOrderbookList.appendChild(row);
+                });
+            }
             
             // 현재가
             const currentRow = document.createElement('div');
@@ -2948,24 +3047,26 @@
             mobileOrderbookList.appendChild(currentRow);
             
             // 매수 호가 (하위 3개)
-            stock.orderbook.bids.slice(0, 3).forEach(bid => {
-                const row = document.createElement('div');
-                row.className = 'mobile-orderbook-row bid';
-                row.onclick = () => setMobileOrderPrice(bid.price);
-                
-                row.innerHTML = `
-                    <div class="quantity">${bid.quantity.toLocaleString()}${bid.isWhale ? ' 🐋' : ''}</div>
-                    <div class="price">₩${bid.price.toLocaleString()}</div>
-                    <div class="quantity"></div>
-                `;
-                
-                if (bid.isWhale) {
-                    row.style.borderLeft = '2px solid #ffc107';
-                    row.style.fontWeight = 'bold';
-                }
-                
-                mobileOrderbookList.appendChild(row);
-            });
+            if (stock.orderbook && stock.orderbook.bids) {
+                stock.orderbook.bids.slice(0, 3).forEach(bid => {
+                    const row = document.createElement('div');
+                    row.className = 'mobile-orderbook-row bid';
+                    row.onclick = () => setMobileOrderPrice(bid.price);
+                    
+                    row.innerHTML = `
+                        <div class="quantity">${bid.quantity.toLocaleString()}${bid.isWhale ? ' 🐋' : ''}</div>
+                        <div class="price">₩${bid.price.toLocaleString()}</div>
+                        <div class="quantity"></div>
+                    `;
+                    
+                    if (bid.isWhale) {
+                        row.style.borderLeft = '2px solid #ffc107';
+                        row.style.fontWeight = 'bold';
+                    }
+                    
+                    mobileOrderbookList.appendChild(row);
+                });
+            }
         }
         
         // 모바일 호가 클릭시 주문가격 설정
@@ -3113,15 +3214,23 @@
         // 모바일 디스플레이 업데이트
         function updateMobileDisplay() {
             const stock = gameState.stocks[gameState.selectedStock];
+            if (!stock) return;
             
             // 차트 헤더 업데이트
-            document.getElementById('mobileChartStockName').textContent = stock.name;
+            const mobileChartStockName = document.getElementById('mobileChartStockName');
+            const mobileChartStockPrice = document.getElementById('mobileChartStockPrice');
             
-            const changeClass = stock.change >= 0 ? 'positive' : 'negative';
-            const changeSign = stock.change >= 0 ? '+' : '';
-            document.getElementById('mobileChartStockPrice').textContent = 
-                `₩${stock.price.toLocaleString()} (${changeSign}${stock.change.toLocaleString()})`;
-            document.getElementById('mobileChartStockPrice').className = changeClass;
+            if (mobileChartStockName) {
+                mobileChartStockName.textContent = stock.name;
+            }
+            
+            if (mobileChartStockPrice) {
+                const changeClass = stock.change >= 0 ? 'positive' : 'negative';
+                const changeSign = stock.change >= 0 ? '+' : '';
+                mobileChartStockPrice.textContent = 
+                    `₩${stock.price.toLocaleString()} (${changeSign}${stock.change.toLocaleString()})`;
+                mobileChartStockPrice.className = changeClass;
+            }
             
             updateMobileEstimatedAmount();
         }
@@ -3153,5 +3262,5 @@
         init();
         addMobileEventListeners();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9819aeb55616ea2c',t:'MTc1ODI5MTE5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9819bb54e1b1ea9a',t:'MTc1ODI5MTcxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
