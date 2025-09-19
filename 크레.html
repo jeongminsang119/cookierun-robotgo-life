@@ -106,8 +106,9 @@
               </div>
               <div class="form-row">
                 <label>주문가격</label>
-                <div class="price-input">
-                  <input type="number" id="orderPrice" step="100" />
+                <div class="price-input" style="display:flex;gap:8px;align-items:center;">
+                  <input type="number" id="orderPrice" step="100" style="flex:1;" />
+                  <button id="lastPriceBtn" type="button" style="padding:0.5rem 0.8rem;background:#2196f3;color:#fff;border:none;border-radius:4px;cursor:pointer;">현재가</button>
                   <div class="price-controls">
                     <button class="price-btn" data-adjust="-1">-1호가</button>
                     <button class="price-btn" data-adjust="1">+1호가</button>
