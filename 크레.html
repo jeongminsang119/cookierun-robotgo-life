@@ -615,7 +615,7 @@
         
         .mobile-main-container {
             display: grid;
-            grid-template-rows: 200px 1fr 180px;
+            grid-template-rows: 300px 1fr 200px;
             height: 100%;
             gap: 1px;
             background: var(--border-color);
@@ -667,7 +667,7 @@
         }
         
         .mobile-chart-container {
-            height: calc(100% - 40px);
+            height: calc(100% - 45px);
             position: relative;
             background: var(--bg-primary);
         }
@@ -1429,6 +1429,14 @@
             canvas.addEventListener('mouseleave', onMouseLeave);
             canvas.addEventListener('wheel', onWheel);
             
+            // 모바일 캔버스 이벤트
+            const mobileCanvas = document.getElementById('mobileMainChart');
+            if (mobileCanvas) {
+                mobileCanvas.addEventListener('touchstart', onTouchStart);
+                mobileCanvas.addEventListener('touchmove', onTouchMove);
+                mobileCanvas.addEventListener('touchend', onTouchEnd);
+            }
+            
             // 각 주식 초기 데이터 생성
             Object.keys(gameState.stocks).forEach(stockCode => {
                 const stock = gameState.stocks[stockCode];
@@ -1798,7 +1806,13 @@
             
             const width = canvas.width;
             const height = canvas.height;
-            const padding = { top: 40, right: 80, bottom: 100, left: 60 };
+            
+            // 모바일 버전인지 확인
+            const isMobile = canvas.id === 'mobileMainChart';
+            const padding = isMobile ? 
+                { top: 20, right: 40, bottom: 40, left: 40 } : 
+                { top: 40, right: 80, bottom: 100, left: 60 };
+            
             const chartWidth = width - padding.left - padding.right;
             const chartHeight = height - padding.top - padding.bottom;
             
@@ -1839,13 +1853,13 @@
                 drawBarChart(visibleData, padding, chartWidth, chartHeight, minPrice, priceRange, candleWidth);
             }
             
-            // 거래량
-            if (gameState.indicators.volume) {
+            // 거래량 (모바일에서는 숨김)
+            if (gameState.indicators.volume && !isMobile) {
                 drawVolume(visibleData, padding, chartWidth, candleWidth, isDark);
             }
             
-            // RSI
-            if (gameState.indicators.rsi) {
+            // RSI (모바일에서는 숨김)
+            if (gameState.indicators.rsi && !isMobile) {
                 drawRSI(visibleData, padding, chartWidth, chartHeight, candleWidth, isDark);
             }
             
@@ -1879,9 +1893,9 @@
                 // 가격 레이블
                 const price = maxPrice - ((maxPrice - minPrice) * i / 8);
                 ctx.fillStyle = isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)';
-                ctx.font = '12px Arial';
+                ctx.font = isMobile ? '10px Arial' : '12px Arial';
                 ctx.textAlign = 'right';
-                ctx.fillText('₩' + Math.round(price).toLocaleString(), padding.left - 10, y + 4);
+                ctx.fillText('₩' + Math.round(price).toLocaleString(), padding.left - 5, y + 4);
             }
             
             // 수직선
@@ -2198,8 +2212,8 @@
                 ];
                 
                 // 정보 박스 배경
-                const boxWidth = 180;
-                const boxHeight = 110;
+                const boxWidth = isMobile ? 140 : 180;
+                const boxHeight = isMobile ? 90 : 110;
                 const boxX = crosshair.x + 10;
                 const boxY = Math.max(10, Math.min(crosshair.y - boxHeight/2, canvas.height - boxHeight - 10));
                 
@@ -2212,11 +2226,12 @@
                 
                 // 정보 텍스트
                 ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-                ctx.font = '12px Arial';
+                ctx.font = isMobile ? '10px Arial' : '12px Arial';
                 ctx.textAlign = 'left';
                 
+                const lineHeight = isMobile ? 14 : 16;
                 infoText.forEach((text, index) => {
-                    ctx.fillText(text, boxX + 8, boxY + 20 + (index * 16));
+                    ctx.fillText(text, boxX + 6, boxY + 16 + (index * lineHeight));
                 });
             }
         }
@@ -2334,6 +2349,56 @@
             gameState.chart.offset = Math.max(0, gameState.chart.offset + offsetAdjustment);
             
             gameState.chart.zoom = newZoom;
+            drawChart();
+        }
+
+        // 터치 이벤트 핸들러
+        function onTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            gameState.chart.isDragging = true;
+            gameState.chart.lastMouseX = x;
+            gameState.chart.crosshair.x = x;
+            gameState.chart.crosshair.y = y;
+            gameState.chart.crosshair.visible = true;
+            
+            drawChart();
+        }
+
+        function onTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            gameState.chart.crosshair.x = x;
+            gameState.chart.crosshair.y = y;
+            gameState.chart.crosshair.visible = true;
+            
+            if (gameState.chart.isDragging) {
+                const deltaX = x - gameState.chart.lastMouseX;
+                const sensitivity = 0.5;
+                const candleMove = Math.round(deltaX * sensitivity);
+                
+                gameState.chart.offset = Math.max(0, 
+                    Math.min(gameState.stocks[gameState.selectedStock].candleData.length - 10, 
+                    gameState.chart.offset - candleMove));
+                
+                gameState.chart.lastMouseX = x;
+            }
+            
+            drawChart();
+        }
+
+        function onTouchEnd(e) {
+            e.preventDefault();
+            gameState.chart.isDragging = false;
+            gameState.chart.crosshair.visible = false;
             drawChart();
         }
 
@@ -2735,6 +2800,12 @@
                     if (mobileCanvas) {
                         canvas = mobileCanvas;
                         ctx = canvas.getContext('2d');
+                        
+                        // 모바일 터치 이벤트 추가
+                        canvas.addEventListener('touchstart', onTouchStart);
+                        canvas.addEventListener('touchmove', onTouchMove);
+                        canvas.addEventListener('touchend', onTouchEnd);
+                        
                         resizeCanvas();
                         drawChart();
                     }
@@ -3052,13 +3123,6 @@
                 `₩${stock.price.toLocaleString()} (${changeSign}${stock.change.toLocaleString()})`;
             document.getElementById('mobileChartStockPrice').className = changeClass;
             
-            // 기술적 지표 업데이트
-            document.getElementById('mobileRsiValue').textContent = stock.indicators.rsi.toFixed(1);
-            document.getElementById('mobileMacdValue').textContent = 
-                (stock.indicators.macd >= 0 ? '+' : '') + stock.indicators.macd.toFixed(1);
-            document.getElementById('mobileMacdValue').className = 
-                `indicator-value ${stock.indicators.macd >= 0 ? 'positive' : 'negative'}`;
-            
             updateMobileEstimatedAmount();
         }
 
@@ -3089,5 +3153,5 @@
         init();
         addMobileEventListeners();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9819a6e814c7aa41',t:'MTc1ODI5MDg3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9819aeb55616ea2c',t:'MTc1ODI5MTE5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
