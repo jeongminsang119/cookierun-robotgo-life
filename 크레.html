@@ -944,6 +944,390 @@
             text-align: right;
         }
         
+        /* 기술적 지표 패널 */
+        .indicators-panel {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 12px;
+        }
+        
+        .indicator-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 12px;
+        }
+        
+        .indicator-name {
+            font-weight: 500;
+        }
+        
+        .indicator-value {
+            font-weight: 600;
+        }
+        
+        /* 체결내역 */
+        .trades-list {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+        
+        .trade-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 2px 8px;
+            text-align: right;
+        }
+        
+        .trade-item:nth-child(even) {
+            background: rgba(255,255,255,0.02);
+        }
+        
+
+        
+        /* 모바일 레이아웃 */
+        .mobile-layout {
+            display: none;
+        }
+        
+        .mobile-layout.active {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+        }
+        
+        .mobile-main-container {
+            display: grid;
+            grid-template-rows: 300px 1fr 200px;
+            height: 100%;
+            gap: 1px;
+            background: var(--border-color);
+        }
+        
+        /* 상단: 차트 */
+        .mobile-chart-section {
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-chart-header {
+            background: var(--bg-secondary);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mobile-chart-controls {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .mobile-chart-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+        
+        .mobile-chart-btn:hover, .mobile-chart-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .mobile-chart-container {
+            height: calc(100% - 45px);
+            position: relative;
+            background: var(--bg-primary);
+        }
+        
+        /* 중단: 종목 리스트 + 호가창 */
+        .mobile-middle-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border-color);
+        }
+        
+        .mobile-stocks-panel, .mobile-orderbook-panel {
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .mobile-panel-header {
+            background: var(--bg-tertiary);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px;
+        }
+        
+        .mobile-stock-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            padding: 6px 8px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 2px solid transparent;
+            font-size: 11px;
+        }
+        
+        .mobile-stock-item:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .mobile-stock-item.selected {
+            background: var(--bg-tertiary);
+            border-left-color: var(--accent-blue);
+        }
+        
+        .mobile-stock-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        
+        .mobile-stock-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+        }
+        
+        .mobile-stock-code {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+        
+        .mobile-stock-price-info {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        
+        .mobile-stock-price {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .mobile-stock-change {
+            font-size: 9px;
+            font-weight: 500;
+        }
+        
+        /* 호가창 */
+        .mobile-orderbook {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 9px;
+            background: var(--bg-primary);
+        }
+        
+        .mobile-orderbook-header {
+            display: grid;
+            grid-template-columns: 50px 60px 40px;
+            padding: 4px 2px;
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            font-weight: 700;
+            text-align: center;
+            font-size: 8px;
+            color: #e2e8f0;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .mobile-orderbook-row {
+            display: grid;
+            grid-template-columns: 50px 60px 40px;
+            padding: 1px 2px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: background-color 0.15s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .mobile-orderbook-row:hover {
+            background: rgba(255,255,255,0.05) !important;
+        }
+        
+        .mobile-orderbook-row.ask {
+            background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.08) 100%);
+            border-left: 1px solid #3b82f6;
+        }
+        
+        .mobile-orderbook-row.ask .price {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .mobile-orderbook-row.bid {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.08) 0%, transparent 100%);
+            border-left: 1px solid #ef4444;
+        }
+        
+        .mobile-orderbook-row.bid .price {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .mobile-orderbook-row.current {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            color: #000;
+            font-weight: 800;
+            border: 1px solid #d97706;
+        }
+        
+        /* 하단: 거래 + 포트폴리오 */
+        .mobile-bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border-color);
+        }
+        
+        .mobile-trade-panel, .mobile-portfolio-panel {
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .mobile-trade-form {
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        
+        .mobile-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+        
+        .mobile-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .mobile-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .mobile-form-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .mobile-form-input, .mobile-form-select {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            transition: border-color 0.2s;
+        }
+        
+        .mobile-form-input:focus, .mobile-form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        
+        .mobile-trade-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        
+        .mobile-btn-buy, .mobile-btn-sell {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+        }
+        
+        .mobile-btn-buy {
+            background: var(--rise-color);
+            color: white;
+        }
+        
+        .mobile-btn-buy:hover {
+            background: #ff3742;
+            transform: translateY(-1px);
+        }
+        
+        .mobile-btn-sell {
+            background: var(--fall-color);
+            color: white;
+        }
+        
+        .mobile-btn-sell:hover {
+            background: #2f3cfa;
+            transform: translateY(-1px);
+        }
+        
+        /* 포트폴리오 */
+        .mobile-portfolio-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            margin-bottom: 2px;
+            font-size: 10px;
+        }
+        
+        .mobile-portfolio-name {
+            font-weight: 600;
+        }
+        
+        .mobile-portfolio-quantity {
+            color: var(--text-muted);
+            font-size: 9px;
+        }
+        
+        .mobile-portfolio-value {
+            text-align: right;
+        }
+        
         /* 스크롤바 모바일 최적화 */
         .mobile-panel-content::-webkit-scrollbar {
             width: 3px;
@@ -2128,38 +2512,69 @@
             ctx.stroke();
         }
 
-        // RSI 그리기
+        // RSI 계산 함수 추가
+        function calculateRSI(data, period = 14) {
+            if (data.length < period + 1) return [];
+            const rsiArr = [];
+            let gains = 0, losses = 0;
+
+            for (let i = 1; i <= period; i++) {
+                const diff = data[i].close - data[i - 1].close;
+                if (diff >= 0) gains += diff;
+                else losses -= diff;
+            }
+            gains /= period;
+            losses /= period;
+            rsiArr[period] = 100 - (100 / (1 + (gains / (losses || 1e-6))));
+
+            for (let i = period + 1; i < data.length; i++) {
+                const diff = data[i].close - data[i - 1].close;
+                if (diff >= 0) {
+                    gains = (gains * (period - 1) + diff) / period;
+                    losses = (losses * (period - 1)) / period;
+                } else {
+                    gains = (gains * (period - 1)) / period;
+                    losses = (losses * (period - 1) - diff) / period;
+                }
+                rsiArr[i] = 100 - (100 / (1 + (gains / (losses || 1e-6))));
+            }
+            return rsiArr;
+        }
+
+        // drawRSI 함수 개선
         function drawRSI(data, padding, chartWidth, chartHeight, candleWidth, isDark) {
             const rsiHeight = 60;
-            const rsiY = padding.top + chartHeight + 120;
-            
+            const rsiY = canvas.height - padding.bottom - rsiHeight - 10;
+
+            // RSI 계산
+            const rsiArr = calculateRSI(data, 14);
+
             // 배경
             ctx.fillStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
             ctx.fillRect(padding.left, rsiY, chartWidth, rsiHeight);
-            
+
             // RSI 선
             ctx.strokeStyle = isDark ? '#10b981' : '#059669';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            
+
             data.forEach((candle, index) => {
+                if (rsiArr[index] === undefined) return;
                 const x = padding.left + (index * candleWidth) + (candleWidth / 2);
-                const rsi = 50 + (Math.random() - 0.5) * 40; // 임시 RSI 값
-                const y = rsiY + rsiHeight - (rsi / 100 * rsiHeight);
-                
-                if (index === 0) {
+                const y = rsiY + rsiHeight - (rsiArr[index] / 100 * rsiHeight);
+
+                if (index === 0 || rsiArr[index - 1] === undefined) {
                     ctx.moveTo(x, y);
                 } else {
                     ctx.lineTo(x, y);
                 }
             });
             ctx.stroke();
-            
+
             // 기준선 (30, 70)
             ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
             ctx.lineWidth = 1;
             ctx.setLineDash([5, 5]);
-            
             [30, 70].forEach(level => {
                 const y = rsiY + rsiHeight - (level / 100 * rsiHeight);
                 ctx.beginPath();
@@ -2167,9 +2582,8 @@
                 ctx.lineTo(padding.left + chartWidth, y);
                 ctx.stroke();
             });
-            
             ctx.setLineDash([]);
-            
+
             // 레이블
             ctx.fillStyle = isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)';
             ctx.font = '12px Arial';
@@ -3071,7 +3485,7 @@
             }
         }
         
-        // 모바일 호가 클릭시 주문가격 설정
+        // 호가 클릭시 주문가격 설정
         function setMobileOrderPrice(price) {
             document.getElementById('mobileLimitPrice').value = price;
             document.getElementById('mobileOrderType').value = 'limit';
