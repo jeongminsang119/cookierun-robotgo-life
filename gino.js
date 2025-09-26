@@ -2510,74 +2510,76 @@ function finishOmok(winner) {
 
 // 더 똑똑한 AI: 공격/수비/우선순위 평가 (패턴 기반)
 function omokAIMoveSmart(board, ai, player) {
-  // 1. 즉시 승리
-  for (let i = 0; i < 225; i++) {
-    if (board[i] === 0) {
-      board[i] = ai;
-      if (checkOmokWinner(board, i) === ai) {
-        board[i] = 0;
-        return i;
+  // 완전 탐색 기반 미니맥스(알파-베타 가지치기, 깊이 제한)
+  const MAX_DEPTH = 3; // 3~4: 실시간 가능, 5 이상은 느림
+  function minimax(board, depth, maximizing, alpha, beta, lastMove) {
+    // 빠른 승패 체크
+    if (lastMove !== null) {
+      const winner = checkOmokWinner(board, lastMove);
+      if (winner === ai) return { score: 100000 - depth };
+      if (winner === player) return { score: -100000 + depth };
+    }
+    if (depth === 0) {
+      // 휴리스틱 평가
+      let score = 0;
+      for (let i = 0; i < 225; i++) {
+        if (board[i] === ai) score += omokPatternScore(board, i, ai);
+        else if (board[i] === player) score -= omokPatternScore(board, i, player);
       }
-      board[i] = 0;
+      return { score };
     }
-  }
-  // 2. 즉시 패배 방지
-  for (let i = 0; i < 225; i++) {
-    if (board[i] === 0) {
-      board[i] = player;
-      if (checkOmokWinner(board, i) === player) {
-        board[i] = 0;
-        return i;
+    // 후보 수: 최근 착수 주변만
+    let moves = [];
+    for (let i = 0; i < 225; i++) {
+      if (board[i] !== 0) continue;
+      // 인접한 돌이 있으면 후보로
+      let near = false;
+      for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) {
+        if (dx === 0 && dy === 0) continue;
+        const nx = (i % 15) + dx, ny = Math.floor(i / 15) + dy;
+        if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) continue;
+        if (board[ny * 15 + nx] !== 0) near = true;
       }
-      board[i] = 0;
+      if (near) moves.push(i);
     }
-  }
-
-  // 3. 더블쓰렛(이중공격) 탐지: 두 군데 이상에서 4개가 만들어지는 수
-  let doubleThreat = -1, doubleThreatScore = 0;
-  for (let i = 0; i < 225; i++) {
-    if (board[i] !== 0) continue;
-    board[i] = ai;
-    let threatCount = 0;
-    for (let j = 0; j < 225; j++) {
-      if (board[j] === 0) {
-        board[j] = ai;
-        if (omokPatternScore(board, j, ai) >= 10000) threatCount++;
-        board[j] = 0;
+    if (moves.length === 0) moves = board.map((v, i) => v === 0 ? i : -1).filter(i => i !== -1);
+    // 탐색
+    let bestMove = null;
+    if (maximizing) {
+      let maxEval = -Infinity;
+      for (const move of moves) {
+        board[move] = ai;
+        const evalResult = minimax(board, depth - 1, false, alpha, beta, move);
+        board[move] = 0;
+        if (evalResult.score > maxEval) {
+          maxEval = evalResult.score;
+          bestMove = move;
+        }
+        alpha = Math.max(alpha, evalResult.score);
+        if (beta <= alpha) break;
       }
-    }
-    board[i] = 0;
-    if (threatCount >= 2 && threatCount > doubleThreatScore) {
-      doubleThreat = i;
-      doubleThreatScore = threatCount;
-    }
-  }
-  if (doubleThreat !== -1) return doubleThreat;
-
-  // 4. 패턴 기반 점수 + 열린3 우선
-  let best = -1, bestScore = -99999;
-  for (let i = 0; i < 225; i++) {
-    if (board[i] !== 0) continue;
-    // 공격 점수
-    board[i] = ai;
-    let score = omokPatternScore(board, i, ai);
-    // 열린3(삼삼) 우선
-    if (omokOpenThree(board, i, ai)) score += 5000;
-    board[i] = 0;
-    // 수비 점수
-    board[i] = player;
-    score += omokPatternScore(board, i, player) * 0.95;
-    if (omokOpenThree(board, i, player)) score += 4000;
-    board[i] = 0;
-    // 중앙 가중치
-    const cx = 7, cy = 7, x = i % 15, y = Math.floor(i / 15);
-    score += 12 - (Math.abs(cx - x) + Math.abs(cy - y));
-    if (score > bestScore) {
-      bestScore = score;
-      best = i;
+      return depth === MAX_DEPTH ? bestMove : { score: maxEval };
+    } else {
+      let minEval = Infinity;
+      for (const move of moves) {
+        board[move] = player;
+        const evalResult = minimax(board, depth - 1, true, alpha, beta, move);
+        board[move] = 0;
+        if (evalResult.score < minEval) {
+          minEval = evalResult.score;
+          bestMove = move;
+        }
+        beta = Math.min(beta, evalResult.score);
+        if (beta <= alpha) break;
+      }
+      return depth === MAX_DEPTH ? bestMove : { score: minEval };
     }
   }
-  return best;
+  // 첫 수: 중앙
+  if (board.every(v => v === 0)) return 7 * 15 + 7;
+  // 미니맥스 호출
+  const move = minimax(board.slice(), MAX_DEPTH, true, -Infinity, Infinity, null);
+  return move;
 // 열린3(삼삼) 체크 함수
 function omokOpenThree(board, idx, who) {
   // 열린3: 연속 3개 + 양쪽이 비어있는 경우
