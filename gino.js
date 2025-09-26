@@ -2403,7 +2403,16 @@ function renderOmokBoard() {
     cell.style.boxShadow = board[i] ? "0 0 8px #ffb80088" : "none";
     cell.style.color = board[i] === 1 ? "#111" : "#fff";
     cell.disabled = !active || board[i] !== 0;
-    cell.textContent = board[i] === 1 ? "●" : board[i] === 2 ? "○" : "";
+    if (board[i] === 1) {
+      cell.textContent = "●";
+    } else if (board[i] === 2) {
+      cell.textContent = "●";
+      cell.style.color = "#fff";
+      cell.style.textShadow = "0 0 2px #fff, 0 0 6px #fff";
+    } else {
+      cell.textContent = "";
+      cell.style.textShadow = "none";
+    }
     cell.onmouseover = () => {
       if (!cell.disabled) cell.style.background = "#ffe4a1";
     };
@@ -2523,27 +2532,78 @@ function omokAIMoveSmart(board, ai, player) {
       board[i] = 0;
     }
   }
-  // 3. 4개 만들기(공격) or 3개 막기(수비) 등 패턴 우선순위
+
+  // 3. 더블쓰렛(이중공격) 탐지: 두 군데 이상에서 4개가 만들어지는 수
+  let doubleThreat = -1, doubleThreatScore = 0;
+  for (let i = 0; i < 225; i++) {
+    if (board[i] !== 0) continue;
+    board[i] = ai;
+    let threatCount = 0;
+    for (let j = 0; j < 225; j++) {
+      if (board[j] === 0) {
+        board[j] = ai;
+        if (omokPatternScore(board, j, ai) >= 10000) threatCount++;
+        board[j] = 0;
+      }
+    }
+    board[i] = 0;
+    if (threatCount >= 2 && threatCount > doubleThreatScore) {
+      doubleThreat = i;
+      doubleThreatScore = threatCount;
+    }
+  }
+  if (doubleThreat !== -1) return doubleThreat;
+
+  // 4. 패턴 기반 점수 + 열린3 우선
   let best = -1, bestScore = -99999;
   for (let i = 0; i < 225; i++) {
     if (board[i] !== 0) continue;
     // 공격 점수
     board[i] = ai;
     let score = omokPatternScore(board, i, ai);
+    // 열린3(삼삼) 우선
+    if (omokOpenThree(board, i, ai)) score += 5000;
     board[i] = 0;
     // 수비 점수
     board[i] = player;
-    score += omokPatternScore(board, i, player) * 0.9;
+    score += omokPatternScore(board, i, player) * 0.95;
+    if (omokOpenThree(board, i, player)) score += 4000;
     board[i] = 0;
     // 중앙 가중치
     const cx = 7, cy = 7, x = i % 15, y = Math.floor(i / 15);
-    score += 10 - (Math.abs(cx - x) + Math.abs(cy - y));
+    score += 12 - (Math.abs(cx - x) + Math.abs(cy - y));
     if (score > bestScore) {
       bestScore = score;
       best = i;
     }
   }
   return best;
+// 열린3(삼삼) 체크 함수
+function omokOpenThree(board, idx, who) {
+  // 열린3: 연속 3개 + 양쪽이 비어있는 경우
+  const x = idx % 15, y = Math.floor(idx / 15);
+  const dirs = [
+    [1, 0], [0, 1], [1, 1], [1, -1]
+  ];
+  for (const [dx, dy] of dirs) {
+    let cnt = 1, open1 = false, open2 = false;
+    // +
+    for (let d = 1; d < 4; d++) {
+      const nx = x + dx * d, ny = y + dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) { open1 = false; break; }
+      if (board[ny * 15 + nx] === who) cnt++;
+      else { open1 = board[ny * 15 + nx] === 0; break; }
+    }
+    // -
+    for (let d = 1; d < 4; d++) {
+      const nx = x - dx * d, ny = y - dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) { open2 = false; break; }
+      if (board[ny * 15 + nx] === who) cnt++;
+      else { open2 = board[ny * 15 + nx] === 0; break; }
+    }
+    if (cnt === 3 && open1 && open2) return true;
+  }
+  return false;
 }
 
 // 패턴 점수: 연속돌, 열린3, 열린4 등
@@ -2649,5 +2709,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-
-
+}
