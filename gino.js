@@ -244,6 +244,9 @@ let gameState = {
       case "texasHoldem":
         loadTexasHoldem();
         break;
+      case "omok":
+        loadOmokGame();
+        break;
       default:
         gameArea.innerHTML = "<p>게임을 불러오는 중...</p>";
     }
@@ -2259,7 +2262,6 @@ let gameState = {
     const t = gameState.ttt;
     if (!t || !t.active || t.board[idx]) return;
     t.board[idx] = t.player;
-    document.getElementById(`ttt${idx}`).textContent = t.player;
     const winner = tttCheckWinner(t.board);
     if (winner || t.board.every(Boolean)) return tttFinish(winner);
   
@@ -2267,7 +2269,6 @@ let gameState = {
     const aiIdx = tttChooseAIMove(t.board, t.ai, t.player);
     if (aiIdx !== -1) {
       t.board[aiIdx] = t.ai;
-      document.getElementById(`ttt${aiIdx}`).textContent = t.ai;
     }
     const winner2 = tttCheckWinner(t.board);
     if (winner2 || t.board.every(Boolean)) return tttFinish(winner2);
@@ -2348,74 +2349,305 @@ let gameState = {
     const el = document.getElementById("tttStatus");
     if (el) el.textContent = `결과: ${msg}`;
   }
-  
-  // Utility functions
-  function showWinNotification(message) {
-    const notification = winNotification;
-    document.getElementById("winAmount").textContent = message;
-    notification.style.display = "block";
-  
+
+  // 오목 게임 추가 (디자인 개선 + AI 강화)
+function loadOmokGame() {
+  gameArea.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;">
+      <div style="font-size:1.2rem;color:#ffb800;">베팅: ₩${gameState.currentBet}</div>
+      <div style="margin-bottom:1rem;">
+        <button class="btn btn-primary" onclick="startOmok('ai')">AI와 대국</button>
+        <button class="btn btn-secondary" onclick="startOmok('2p')">2인 대국</button>
+      </div>
+      <div id="omokStatus" style="min-height:28px;color:#ffb800;font-weight:bold;font-size:1.1rem;">모드를 선택하세요!</div>
+      <div id="omokBoard" style="display:grid;grid-template-columns:repeat(15,36px);gap:2px;margin-top:1rem;background:#e0c68c;border:6px solid #b8860b;border-radius:18px;box-shadow:0 8px 32px #0008;"></div>
+      <div id="omokLegend" style="margin-top:1rem;font-size:1rem;color:#888;">
+        <span style="margin-right:1.5rem;"><span style="font-size:1.3rem;color:#111;">●</span> 흑(선)</span>
+        <span><span style="font-size:1.3rem;color:#fff;text-shadow:0 0 2px #000;">○</span> 백</span>
+      </div>
+    </div>
+  `;
+  gameState.omok = { mode: null, board: [], turn: 1, active: false, bet: gameState.currentBet };
+}
+
+function startOmok(mode) {
+  const bet = gameState.currentBet;
+  if (bet > gameState.balance) {
+    alert("잔액이 부족합니다!");
+    return;
+  }
+  gameState.balance -= bet;
+  updateBalance();
+  const board = Array(15 * 15).fill(0);
+  gameState.omok = { mode, board, turn: 1, active: true, bet, history: [] };
+  renderOmokBoard();
+  document.getElementById("omokStatus").textContent = mode === "ai" ? "내 턴 (흑)" : "흑(플레이어1) 턴";
+}
+
+function renderOmokBoard() {
+  const { board, active } = gameState.omok;
+  const boardDiv = document.getElementById("omokBoard");
+  boardDiv.innerHTML = "";
+  for (let i = 0; i < 225; i++) {
+    const cell = document.createElement("button");
+    cell.className = "btn";
+    cell.style.width = "36px";
+    cell.style.height = "36px";
+    cell.style.background = "#e0c68c";
+    cell.style.border = "1px solid #b8860b";
+    cell.style.borderRadius = "50%";
+    cell.style.padding = "0";
+    cell.style.fontSize = "1.7rem";
+    cell.style.fontWeight = "bold";
+    cell.style.transition = "box-shadow 0.2s";
+    cell.style.boxShadow = board[i] ? "0 0 8px #ffb80088" : "none";
+    cell.style.color = board[i] === 1 ? "#111" : "#fff";
+    cell.disabled = !active || board[i] !== 0;
+    cell.textContent = board[i] === 1 ? "●" : board[i] === 2 ? "○" : "";
+    cell.onmouseover = () => {
+      if (!cell.disabled) cell.style.background = "#ffe4a1";
+    };
+    cell.onmouseout = () => {
+      if (!cell.disabled) cell.style.background = "#e0c68c";
+    };
+    cell.onclick = () => omokMove(i);
+    boardDiv.appendChild(cell);
+  }
+}
+
+function omokMove(idx) {
+  const o = gameState.omok;
+  if (!o.active || o.board[idx] !== 0) return;
+  o.board[idx] = o.turn;
+  o.history.push(idx);
+  renderOmokBoard();
+  const winner = checkOmokWinner(o.board, idx);
+  if (winner) return finishOmok(winner);
+  if (o.board.every(x => x !== 0)) return finishOmok(0);
+
+  if (o.mode === "ai") {
+    o.turn = 2;
+    document.getElementById("omokStatus").textContent = "AI(백) 생각 중...";
     setTimeout(() => {
-      notification.style.display = "none";
-    }, 2000);
+      const aiIdx = omokAIMoveSmart(o.board.slice(), 2, 1);
+      if (aiIdx !== -1) {
+        o.board[aiIdx] = 2;
+        o.history.push(aiIdx);
+        renderOmokBoard();
+        const winner2 = checkOmokWinner(o.board, aiIdx);
+        if (winner2) return finishOmok(winner2);
+        if (o.board.every(x => x !== 0)) return finishOmok(0);
+      }
+      o.turn = 1;
+      document.getElementById("omokStatus").textContent = "내 턴 (흑)";
+    }, 600);
+  } else {
+    o.turn = o.turn === 1 ? 2 : 1;
+    document.getElementById("omokStatus").textContent = o.turn === 1 ? "흑(플레이어1) 턴" : "백(플레이어2) 턴";
   }
-  
-  function startLiveStats() {
-    // Animate live statistics
-    setInterval(() => {
-      const onlineUsers = document.getElementById("onlineUsers");
-      const totalWinnings = document.getElementById("totalWinnings");
-      const gamesPlayed = document.getElementById("gamesPlayed");
-      const bigWins = document.getElementById("bigWins");
-  
-      if (onlineUsers) {
-        const currentUsers = parseInt(onlineUsers.textContent.replace(/,/g, ""));
-        const newUsers = currentUsers + Math.floor(Math.random() * 10) - 5;
-        onlineUsers.textContent = Math.max(2000, newUsers).toLocaleString();
-      }
-  
-      if (gamesPlayed) {
-        const currentGames = parseInt(gamesPlayed.textContent.replace(/,/g, ""));
-        gamesPlayed.textContent = (
-          currentGames + Math.floor(Math.random() * 5)
-        ).toLocaleString();
-      }
-  
-      if (Math.random() < 0.3 && bigWins) {
-        const currentWins = parseInt(bigWins.textContent);
-        bigWins.textContent = currentWins + 1;
-      }
-    }, 5000);
+}
+
+function checkOmokWinner(board, idx) {
+  const who = board[idx];
+  if (!who) return 0;
+  const x = idx % 15, y = Math.floor(idx / 15);
+  const dirs = [
+    [1, 0], [0, 1], [1, 1], [1, -1]
+  ];
+  for (const [dx, dy] of dirs) {
+    let cnt = 1;
+    for (let d = 1; d < 5; d++) {
+      const nx = x + dx * d, ny = y + dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) break;
+      if (board[ny * 15 + nx] === who) cnt++;
+      else break;
+    }
+    for (let d = 1; d < 5; d++) {
+      const nx = x - dx * d, ny = y - dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) break;
+      if (board[ny * 15 + nx] === who) cnt++;
+      else break;
+    }
+    if (cnt >= 5) return who;
   }
-  
-  // Add some visual effects
-  document.addEventListener("DOMContentLoaded", function () {
-    // Add hover effects to cards
-    const cards = document.querySelectorAll(".game-card, .stat-card, .game-item");
-    cards.forEach((card) => {
-      card.addEventListener("mouseenter", function () {
-        this.style.transform = "translateY(-10px) scale(1.02)";
-      });
-  
-      card.addEventListener("mouseleave", function () {
-        this.style.transform = "translateY(0) scale(1)";
-      });
+  return 0;
+}
+
+function finishOmok(winner) {
+  const o = gameState.omok;
+  o.active = false;
+  let msg = "";
+  let payout = 0;
+  if (winner === 1) {
+    msg = o.mode === "ai" ? "승리! (흑)" : "흑(플레이어1) 승리!";
+    payout = o.bet * 2;
+    gameState.balance += payout;
+    updateBalance();
+    if (payout > o.bet) showWinNotification(`오목 승리! +₩${(payout - o.bet).toLocaleString()}`);
+    alert(msg + `\n+₩${(payout - o.bet).toLocaleString()}`);
+  } else if (winner === 2) {
+    msg = o.mode === "ai" ? "패배! (백)" : "백(플레이어2) 승리!";
+    // 패배: 돈 잃음, 메시지창
+    alert(msg + `\n-₩${o.bet.toLocaleString()}`);
+  } else {
+    msg = "무승부";
+    payout = o.bet;
+    gameState.balance += payout;
+    updateBalance();
+    alert(msg + "\n베팅금 환급");
+  }
+  document.getElementById("omokStatus").textContent = `결과: ${msg}`;
+}
+
+// 더 똑똑한 AI: 공격/수비/우선순위 평가 (패턴 기반)
+function omokAIMoveSmart(board, ai, player) {
+  // 1. 즉시 승리
+  for (let i = 0; i < 225; i++) {
+    if (board[i] === 0) {
+      board[i] = ai;
+      if (checkOmokWinner(board, i) === ai) {
+        board[i] = 0;
+        return i;
+      }
+      board[i] = 0;
+    }
+  }
+  // 2. 즉시 패배 방지
+  for (let i = 0; i < 225; i++) {
+    if (board[i] === 0) {
+      board[i] = player;
+      if (checkOmokWinner(board, i) === player) {
+        board[i] = 0;
+        return i;
+      }
+      board[i] = 0;
+    }
+  }
+  // 3. 4개 만들기(공격) or 3개 막기(수비) 등 패턴 우선순위
+  let best = -1, bestScore = -99999;
+  for (let i = 0; i < 225; i++) {
+    if (board[i] !== 0) continue;
+    // 공격 점수
+    board[i] = ai;
+    let score = omokPatternScore(board, i, ai);
+    board[i] = 0;
+    // 수비 점수
+    board[i] = player;
+    score += omokPatternScore(board, i, player) * 0.9;
+    board[i] = 0;
+    // 중앙 가중치
+    const cx = 7, cy = 7, x = i % 15, y = Math.floor(i / 15);
+    score += 10 - (Math.abs(cx - x) + Math.abs(cy - y));
+    if (score > bestScore) {
+      bestScore = score;
+      best = i;
+    }
+  }
+  return best;
+}
+
+// 패턴 점수: 연속돌, 열린3, 열린4 등
+function omokPatternScore(board, idx, who) {
+  let score = 0;
+  const x = idx % 15, y = Math.floor(idx / 15);
+  const dirs = [
+    [1, 0], [0, 1], [1, 1], [1, -1]
+  ];
+  for (const [dx, dy] of dirs) {
+    let cnt = 1, open1 = false, open2 = false;
+    // +
+    for (let d = 1; d < 5; d++) {
+      const nx = x + dx * d, ny = y + dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) { open1 = false; break; }
+      if (board[ny * 15 + nx] === who) cnt++;
+      else { open1 = board[ny * 15 + nx] === 0; break; }
+    }
+    // - 
+    for (let d = 1; d < 5; d++) {
+      const nx = x - dx * d, ny = y - dy * d;
+      if (nx < 0 || nx >= 15 || ny < 0 || ny >= 15) { open2 = false; break; }
+      if (board[ny * 15 + nx] === who) cnt++;
+      else { open2 = board[ny * 15 + nx] === 0; break; }
+    }
+    // 점수 부여
+    if (cnt >= 5) score += 100000;
+    else if (cnt === 4 && open1 && open2) score += 10000; // 열린4
+    else if (cnt === 4 && (open1 || open2)) score += 3000; // 막힌4
+    else if (cnt === 3 && open1 && open2) score += 1000; // 열린3
+    else if (cnt === 3 && (open1 || open2)) score += 300; // 막힌3
+    else if (cnt === 2 && open1 && open2) score += 100; // 열린2
+    else if (cnt === 2 && (open1 || open2)) score += 30; // 막힌2
+  }
+  return score;
+}
+
+// Utility functions
+function showWinNotification(message) {
+  const notification = winNotification;
+  document.getElementById("winAmount").textContent = message;
+  notification.style.display = "block";
+
+  setTimeout(() => {
+    notification.style.display = "none";
+  }, 2000);
+}
+
+function startLiveStats() {
+  // Animate live statistics
+  setInterval(() => {
+    const onlineUsers = document.getElementById("onlineUsers");
+    const totalWinnings = document.getElementById("totalWinnings");
+    const gamesPlayed = document.getElementById("gamesPlayed");
+    const bigWins = document.getElementById("bigWins");
+
+    if (onlineUsers) {
+      const currentUsers = parseInt(onlineUsers.textContent.replace(/,/g, "")) || 0;
+      const newUsers = currentUsers + Math.floor(Math.random() * 10) - 5;
+      onlineUsers.textContent = Math.max(2000, newUsers).toLocaleString();
+    }
+
+    if (gamesPlayed) {
+      const currentGames = parseInt(gamesPlayed.textContent.replace(/,/g, "")) || 0;
+      gamesPlayed.textContent = (
+        currentGames + Math.floor(Math.random() * 5)
+      ).toLocaleString();
+    }
+
+    if (Math.random() < 0.3 && bigWins) {
+      const currentWins = parseInt(bigWins.textContent) || 0;
+      bigWins.textContent = currentWins + 1;
+    }
+  }, 5000);
+}
+
+// Add some visual effects
+document.addEventListener("DOMContentLoaded", function () {
+  // Add hover effects to cards
+  const cards = document.querySelectorAll(".game-card, .stat-card, .game-item");
+  cards.forEach((card) => {
+    card.addEventListener("mouseenter", function () {
+      this.style.transform = "translateY(-10px) scale(1.02)";
     });
-  
-    // Add loading states to buttons
-    const buttons = document.querySelectorAll(".btn");
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        if (!this.disabled) {
-          const original = this.textContent;
-          this.style.opacity = "0.7";
-  
-          setTimeout(() => {
-            this.style.opacity = "1";
-          }, 200);
-        }
-      });
+
+    card.addEventListener("mouseleave", function () {
+      this.style.transform = "translateY(0) scale(1)";
     });
   });
-  
-  
+
+  // Add loading states to buttons
+  const buttons = document.querySelectorAll(".btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      if (!this.disabled) {
+        const original = this.textContent;
+        this.style.opacity = "0.7";
+
+        setTimeout(() => {
+          this.style.opacity = "1";
+        }, 200);
+      }
+    });
+  });
+});
+
+
