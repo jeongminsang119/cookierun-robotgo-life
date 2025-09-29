@@ -706,3 +706,25 @@ body {
   transform: translateY(4px);
   box-shadow: none;
 }
+
+/* 간성치킨 아래에 추가되는 거지키우기 버튼 */
+.poorgame_button {
+  position: absolute;
+  right: 5vw;
+  bottom: 40px; /* play_button과 같은 위치, 필요시 조정 */
+  width: 15%;
+  height: 80px;
+  background-color: #2ecc71;
+  border-radius: 10px;
+  border-color: wheat;
+  border-width: 5px;
+  font-size: 50px;
+  color: white;
+  text-shadow: 1.5px 1.5px 1.5px #000;
+  cursor: pointer;
+  z-index: 100;
+  margin-top: 20px;
+}
+.poorgame_button:hover {
+  background-color: #27ae60;
+}
