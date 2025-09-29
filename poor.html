@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>거지키우기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="poor.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Top Status Bar -->
+      <header class="top-status">
+        <div class="status-left">
+          <div class="level-display">
+            <span class="level-icon">👑</span>
+            <span class="level-text">Lv.<span id="level">1</span></span>
+          </div>
+        </div>
+        <div class="status-center">
+          <div class="currency-display">
+            <div class="currency-item gold">
+              <span class="currency-icon">💰</span>
+              <span class="currency-amount" id="money">0</span>
+            </div>
+            <div class="currency-item diamond">
+              <span class="currency-icon">💎</span>
+              <span class="currency-amount" id="diamonds">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="status-right">
+          <button class="menu-btn" id="menu-btn">☰</button>
+        </div>
+      </header>
+
+      <!-- Main Game Area -->
+      <main class="game-area">
+        <div class="bg-layer sky"></div>
+        <div class="bg-layer city"></div>
+        <div class="bg-layer ground"></div>
+        <div class="vignette"></div>
+        <!-- Character Scene -->
+        <div class="character-scene">
+          <!-- Background NPCs -->
+          <div class="npc npc-1" style="left: 10%; top: 20%">👨‍💼</div>
+          <div class="npc npc-2" style="left: 80%; top: 15%">👩‍🦳</div>
+          <div class="npc npc-3" style="left: 15%; top: 60%">🧑‍🎓</div>
+          <div class="npc npc-4" style="left: 75%; top: 65%">👨‍🍳</div>
+          <div class="npc npc-5" style="left: 45%; top: 10%">👮‍♂️</div>
+
+          <!-- Main Character -->
+          <div class="main-character" id="main-character">
+            <video
+              id="character-video"
+              class="character-video"
+              src="2.mp4"
+              preload="auto"
+              playsinline
+              loop
+            ></video>
+          </div>
+
+          <!-- Click Effect Area -->
+          <div class="click-effects" id="click-effects"></div>
+        </div>
+      </main>
+
+      <!-- Bottom Menu Grid -->
+      <nav class="bottom-menu">
+        <div class="menu-grid">
+          <button class="menu-item" data-action="beg">
+            <div class="menu-icon">🤲</div>
+            <div class="menu-text">영거지정보</div>
+            <div class="beg-info">
+              <div class="level-inline">
+                Lv.<span id="level">1</span> <span id="level-name">거지</span>
+              </div>
+              <div class="exp-bar exp-mini">
+                <div class="exp-fill" id="exp-fill"></div>
+                <div class="exp-text exp-mini-text">
+                  <span id="current-exp">0</span> /
+                  <span id="required-exp">100</span>
+                </div>
+              </div>
+            </div>
+          </button>
+          <button class="menu-item" data-action="upgrade">
+            <div class="menu-icon">⬆️</div>
+            <div class="menu-text">업그레이드</div>
+          </button>
+          <button class="menu-item" data-action="business">
+            <div class="menu-icon">🏪</div>
+            <div class="menu-text">부동산</div>
+          </button>
+          <button class="menu-item" data-action="investment">
+            <div class="menu-icon">📈</div>
+            <div class="menu-text">투자</div>
+          </button>
+          <button class="menu-item" data-action="job">
+            <div class="menu-icon">💼</div>
+            <div class="menu-text">일자리</div>
+          </button>
+          <button class="menu-item" data-action="lottery">
+            <div class="menu-icon">🎰</div>
+            <div class="menu-text">복권</div>
+          </button>
+          <button class="menu-item" data-action="shop">
+            <div class="menu-icon">🛒</div>
+            <div class="menu-text">상점</div>
+          </button>
+          <button class="menu-item" data-action="settings">
+            <div class="menu-icon">⚙️</div>
+            <div class="menu-text">설정</div>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Modal Screens -->
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content" id="modal-content">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Auto Income Display -->
+      <div class="auto-income" id="auto-income">
+        <span class="auto-icon">⚡</span>
+        <span class="auto-text">+<span id="auto-rate">0</span>/초</span>
+      </div>
+
+      <!-- Mute Toggle -->
+      <button id="mute-toggle" class="mute-toggle" title="사운드 켜기/끄기">
+        🔊
+      </button>
+    </div>
+
+    <!-- Floating Messages -->
+    <div class="floating-messages" id="floating-messages"></div>
+
+    <!-- Scripts -->
+    <script src="poorgame.js"></script>
+    <script src="poormain.js"></script>
+    <script src="poorui.js"></script>
+    <script src="poorutils.js"></script>
+  </body>
+</html>
