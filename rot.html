@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로봇고 음악차트</title>
+    <link rel="stylesheet" href="music-chart.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <div class="header-left">
+            <div class="logo">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h1>Music Chart</h1>
+              <p class="subtitle">원하는 음악있으면 말씀해주세요!</p>
+            </div>
+          </div>
+          <div class="header-right">
+            <div class="total-badge">
+              <span>곡 수: </span><strong id="totalSongs">0</strong
+              ><span> 노래</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="chart-container">
+          <!-- Controls -->
+          <div
+            style="
+              display: flex;
+              gap: 16px;
+              align-items: center;
+              padding: 12px 16px;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <button
+              id="btnLikedOnly"
+              style="
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.06);
+                color: #fff;
+                cursor: pointer;
+              "
+            >
+              좋아요만 보기: OFF
+            </button>
+
+            <div
+              style="
+                margin-left: auto;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                color: #a1a1aa;
+              "
+            >
+              <button
+                id="btnStop"
+                style="
+                  padding: 8px 12px;
+                  border-radius: 8px;
+                  border: 1px solid rgba(255, 255, 255, 0.15);
+                  background: rgba(255, 255, 255, 0.06);
+                  color: #fff;
+                  cursor: pointer;
+                "
+              >
+                정지
+              </button>
+              <span id="currentTime">0:00</span>
+              <input
+                id="seekBar"
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+                step="0.1"
+                style="width: 320px"
+              />
+              <span id="totalTime">0:00</span>
+            </div>
+          </div>
+          <!-- Table Header -->
+          <div class="table-header">
+            <div class="col-rank">Rank</div>
+            <div class="col-change">Change</div>
+            <div class="col-song">Song</div>
+            <div class="col-album">Album</div>
+            <div class="col-duration">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="col-actions">Actions</div>
+          </div>
+
+          <!-- Song List -->
+          <div id="songList" class="song-list"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="music-chart.js"></script>
+  </body>
+</html>
