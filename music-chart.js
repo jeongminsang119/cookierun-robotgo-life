@@ -600,6 +600,18 @@ const songs = [
     coverUrl:
       "https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=200",
   },
+  {
+    id: 51,
+    rank: 51,
+    title: "EASY",
+    artist: "르세라핌",
+    album: "음악",
+    duration: "3:30",
+    rankChange: 0,
+    audioUrl: "",
+    coverUrl:
+      "https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg?auto=compress&cs=tinysrgb&w=200",
+  },
 ];
 
 // 각 곡의 mp3 경로를 코드 내에서 직접 지정
@@ -653,6 +665,7 @@ songs[46].audioUrl = "47.mp3";
 songs[47].audioUrl = "48.mp3";
 songs[48].audioUrl = "49.mp3";
 songs[49].audioUrl = "50.mp3";
+songs[50].audioUrl = "51.mp3";
 
 // 상태 관리
 let playingId = null;
@@ -737,44 +750,46 @@ function createSongElement(song, index) {
   const isLiked = likedSongs.has(song.id);
 
   div.innerHTML = `
-      <div class="rank">${song.rank}</div>
-
-      <div class="rank-change ${getRankChangeClass(song.rankChange)}">
-          ${getRankChangeHTML(song.rankChange)}
-      </div>
-
-      <div class="song-info">
-          <div class="cover-wrapper">
-              <img src="${song.coverUrl}" alt="${song.title}" class="cover">
-              <div class="play-overlay">
-                  <button class="play-btn-overlay" onclick="togglePlay(${
-                    song.id
-                  })">
-                      ${isPlaying ? getIconPause() : getIconPlay()}
-                  </button>
-              </div>
-          </div>
-          <div class="song-details">
-              <h3>${song.title}</h3>
-              <p>${song.artist}</p>
-          </div>
-      </div>
-
-      <div class="album">${song.album}</div>
-
-      <div class="duration">${song.duration}</div>
-
-      <div class="actions">
-          <button class="action-btn play-btn" onclick="togglePlay(${song.id})">
-              ${isPlaying ? getIconPause() : getIconPlay()}
-          </button>
-          <button class="action-btn like-btn ${
-            isLiked ? "liked" : ""
-          }" onclick="toggleLike(${song.id})">
-              ${getIconHeart()}
-          </button>
-      </div>
-  `;
+        <div class="rank">${song.rank}</div>
+  
+        <div class="rank-change ${getRankChangeClass(song.rankChange)}">
+            ${getRankChangeHTML(song.rankChange)}
+        </div>
+  
+        <div class="song-info">
+            <div class="cover-wrapper">
+                <img src="${song.coverUrl}" alt="${song.title}" class="cover">
+                <div class="play-overlay">
+                    <button class="play-btn-overlay" onclick="togglePlay(${
+                      song.id
+                    })">
+                        ${isPlaying ? getIconPause() : getIconPlay()}
+                    </button>
+                </div>
+            </div>
+            <div class="song-details">
+                <h3>${song.title}</h3>
+                <p>${song.artist}</p>
+            </div>
+        </div>
+  
+        <div class="album">${song.album}</div>
+  
+        <div class="duration">${song.duration}</div>
+  
+        <div class="actions">
+            <button class="action-btn play-btn" onclick="togglePlay(${
+              song.id
+            })">
+                ${isPlaying ? getIconPause() : getIconPlay()}
+            </button>
+            <button class="action-btn like-btn ${
+              isLiked ? "liked" : ""
+            }" onclick="toggleLike(${song.id})">
+                ${getIconHeart()}
+            </button>
+        </div>
+    `;
 
   return div;
 }
@@ -942,20 +957,20 @@ function getRankChangeClass(change) {
 function getRankChangeHTML(change) {
   if (change > 0) {
     return `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-              <polyline points="17 6 23 6 23 12"></polyline>
-          </svg>
-          <span>${change}</span>
-      `;
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+            <span>${change}</span>
+        `;
   } else if (change < 0) {
     return `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(180deg)">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-              <polyline points="17 6 23 6 23 12"></polyline>
-          </svg>
-          <span>${Math.abs(change)}</span>
-      `;
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(180deg)">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+            <span>${Math.abs(change)}</span>
+        `;
   }
   return "<span>-</span>";
 }
@@ -963,25 +978,25 @@ function getRankChangeHTML(change) {
 // 아이콘 SVG
 function getIconPlay() {
   return `
-      <svg viewBox="0 0 24 24" fill="currentColor">
-          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-      </svg>
-  `;
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+    `;
 }
 
 function getIconPause() {
   return `
-      <svg viewBox="0 0 24 24" fill="currentColor">
-          <rect x="6" y="4" width="4" height="16"></rect>
-          <rect x="14" y="4" width="4" height="16"></rect>
-      </svg>
-  `;
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+    `;
 }
 
 function getIconHeart() {
   return `
-      <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-      </svg>
-  `;
+        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+    `;
 }
