@@ -14,85 +14,6 @@ body {
   position: relative;
 }
 
-/* Player Modal */
-.player-modal {
-  position: fixed;
-  inset: 0;
-  background: #e8e6df;
-  color: #111;
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-}
-.pm-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-}
-.pm-icon {
-  background: transparent;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-}
-.pm-title-wrap {
-  text-align: center;
-  flex: 1;
-}
-.pm-title {
-  font-weight: 700;
-}
-.pm-artist {
-  color: #6b7280;
-  font-size: 0.9rem;
-  margin-top: 4px;
-}
-.pm-cover-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 24px 16px;
-}
-.pm-cover {
-  width: 240px;
-  height: 240px;
-  background: #ddd;
-  border-radius: 20px;
-  object-fit: cover;
-}
-.pm-controls {
-  margin-top: auto;
-  padding: 16px;
-}
-.pm-time {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.pm-time input[type="range"] {
-  flex: 1;
-}
-.pm-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  padding: 18px 0 32px;
-}
-.pm-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-.pm-play {
-  width: 64px;
-  height: 64px;
-  font-size: 18px;
-}
-
 body::before {
   content: "";
   position: fixed;
@@ -671,7 +592,3 @@ body::before {
     height: 100px;
   }
 }
-
-
-
-
