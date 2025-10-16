@@ -26,7 +26,7 @@
               </svg>
             </div>
             <div>
-              <h1>Music Chart</h1>
+              <h1>로봇고 음악차트</h1>
               <p class="subtitle">원하는 음악있으면 말씀해주세요!</p>
             </div>
           </div>
@@ -127,43 +127,8 @@
           <div id="songList" class="song-list"></div>
         </div>
       </main>
-
-      <!-- Player Modal -->
-      <div id="playerModal" class="player-modal" style="display: none">
-        <div class="pm-header">
-          <button id="pmClose" class="pm-icon">⌄</button>
-          <div class="pm-title-wrap">
-            <div id="pmTitle" class="pm-title">곡 제목</div>
-            <div id="pmArtist" class="pm-artist">아티스트</div>
-          </div>
-          <div style="width: 32px"></div>
-        </div>
-        <div class="pm-cover-wrap">
-          <img id="pmCover" class="pm-cover" src="" alt="cover" />
-        </div>
-        <div class="pm-controls">
-          <div class="pm-time">
-            <span id="pmCurrent">0:00</span>
-            <input
-              id="pmSeek"
-              type="range"
-              min="0"
-              max="100"
-              value="0"
-              step="0.1"
-            />
-            <span id="pmTotal">0:00</span>
-          </div>
-          <div class="pm-buttons">
-            <button id="pmPrev" class="pm-btn">⏮</button>
-            <button id="pmPlayPause" class="pm-btn pm-play">▶</button>
-            <button id="pmNext" class="pm-btn">⏭</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <script src="music-chart.js"></script>
   </body>
 </html>
-
