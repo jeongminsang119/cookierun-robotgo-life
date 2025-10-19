@@ -5,8 +5,8 @@ const songs = [
     rank: 1,
     title: "숙녀에게",
     artist: "송필근",
-    album: "음악",
-    duration: "3:28",
+    album: "몽환적 음악",
+    duration: "3:11",
     rankChange: 0,
     audioUrl: "",
     coverUrl:
@@ -689,9 +689,8 @@ let audio = new Audio();
 // 오디오 이벤트
 audio.preload = "metadata";
 audio.addEventListener("ended", () => {
-  playingId = null;
-  updatePlayingUI();
-  updateStopButton();
+  // 끝나면 다음 곡으로 자동 이동
+  playNext();
 });
 audio.addEventListener("play", () => {
   updatePlayingUI();
@@ -736,6 +735,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   if (btnStop) btnStop.addEventListener("click", stopPlayback);
   updateStopButton();
+  bindPlayerModalControls();
 });
 
 // 곡 렌더링
@@ -769,13 +769,13 @@ function createSongElement(song, index) {
             ${getRankChangeHTML(song.rankChange)}
         </div>
   
-        <div class="song-info">
+        <div class="song-info" onclick="openPlayerAndPlay(${song.id})">
             <div class="cover-wrapper">
                 <img src="${song.coverUrl}" alt="${song.title}" class="cover">
                 <div class="play-overlay">
-                    <button class="play-btn-overlay" onclick="togglePlay(${
+                    <button class="play-btn-overlay" onclick="openPlayerAndPlay(${
                       song.id
-                    })">
+                    }); event.stopPropagation();">
                         ${isPlaying ? getIconPause() : getIconPlay()}
                     </button>
                 </div>
@@ -791,7 +791,7 @@ function createSongElement(song, index) {
         <div class="duration">${song.duration}</div>
   
         <div class="actions">
-            <button class="action-btn play-btn" onclick="togglePlay(${
+            <button class="action-btn play-btn" onclick="openPlayerAndPlay(${
               song.id
             })">
                 ${isPlaying ? getIconPause() : getIconPlay()}
@@ -917,6 +917,112 @@ function formatTime(sec) {
     .padStart(2, "0");
   const m = Math.floor(sec / 60).toString();
   return `${m}:${s}`;
+}
+
+// ===== 플레이어 모달 및 다음/이전 제어 =====
+function getVisibleList() {
+  return showLikedOnly ? songs.filter((s) => likedSongs.has(s.id)) : songs;
+}
+
+function playNext() {
+  const list = getVisibleList();
+  if (playingId == null) {
+    if (list.length > 0) togglePlay(list[0].id);
+    return;
+  }
+  const idx = list.findIndex((s) => s.id === playingId);
+  if (idx >= 0 && idx + 1 < list.length) {
+    togglePlay(list[idx + 1].id);
+  } else {
+    playingId = null;
+    audio.pause();
+    updatePlayingUI();
+    updateStopButton();
+  }
+}
+
+function playPrev() {
+  const list = getVisibleList();
+  if (playingId == null) return;
+  const idx = list.findIndex((s) => s.id === playingId);
+  if (idx > 0) togglePlay(list[idx - 1].id);
+  else togglePlay(list[0].id);
+}
+
+function openPlayerAndPlay(id) {
+  openPlayerModal(id);
+  if (playingId === id && !audio.paused) return;
+  togglePlay(id);
+}
+
+function openPlayerModal(id) {
+  const modal = document.getElementById("playerModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  updatePlayerModal(id);
+}
+
+function closePlayerModal() {
+  const modal = document.getElementById("playerModal");
+  if (!modal) return;
+  modal.style.display = "none";
+}
+
+function bindPlayerModalControls() {
+  const closeBtn = document.getElementById("pmClose");
+  const prevBtn = document.getElementById("pmPrev");
+  const nextBtn = document.getElementById("pmNext");
+  const playBtn = document.getElementById("pmPlayPause");
+  const seek = document.getElementById("pmSeek");
+  if (closeBtn) closeBtn.addEventListener("click", closePlayerModal);
+  if (prevBtn) prevBtn.addEventListener("click", playPrev);
+  if (nextBtn) nextBtn.addEventListener("click", playNext);
+  if (playBtn)
+    playBtn.addEventListener("click", () => {
+      if (!audio.src) return;
+      if (audio.paused) audio.play();
+      else audio.pause();
+      updatePlayingUI();
+      updatePlayerModal();
+    });
+  if (seek)
+    seek.addEventListener("input", (e) => {
+      if (!audio.duration) return;
+      const pct = Number(e.target.value) / 100;
+      audio.currentTime = audio.duration * pct;
+    });
+  audio.addEventListener("timeupdate", () => updatePlayerModal());
+  audio.addEventListener("play", () => updatePlayerModal());
+  audio.addEventListener("pause", () => updatePlayerModal());
+}
+
+function updatePlayerModal(optionalId) {
+  const id = optionalId != null ? optionalId : playingId;
+  const song = songs.find((s) => s.id === id);
+  const cover = document.getElementById("pmCover");
+  const title = document.getElementById("pmTitle");
+  const artist = document.getElementById("pmArtist");
+  const playBtn = document.getElementById("pmPlayPause");
+  const cur = document.getElementById("pmCurrent");
+  const tot = document.getElementById("pmTotal");
+  const seek = document.getElementById("pmSeek");
+  if (song) {
+    if (cover) cover.src = song.coverUrl;
+    if (title) title.textContent = song.title;
+    if (artist) artist.textContent = song.artist;
+  }
+  if (playBtn) playBtn.textContent = audio.paused ? "▶" : "❚❚";
+  if (tot)
+    tot.textContent = audio.duration ? formatTime(audio.duration) : "0:00";
+  if (cur)
+    cur.textContent = audio.currentTime
+      ? formatTime(audio.currentTime)
+      : "0:00";
+  if (seek) {
+    if (audio.duration)
+      seek.value = ((audio.currentTime / audio.duration) * 100).toFixed(2);
+    else seek.value = 0;
+  }
 }
 
 // 비어있는 audioUrl을 예시 경로로 자동 채우기
