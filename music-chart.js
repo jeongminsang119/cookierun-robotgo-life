@@ -624,7 +624,20 @@ const songs = [
     coverUrl:
       "https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg?auto=compress&cs=tinysrgb&w=200",
   },
+  {
+    id: 53,
+    rank:54,
+    title:"간석기시대 감성이",
+    artist:"무앤상",
+    album:"음악",
+    duration:"1:54",
+    rankChange:0,
+    audioUrl:"",
+    coverUrl:"ceo.png",
+
+  },
 ];
+
 
 // 각 곡의 mp3 경로를 코드 내에서 직접 지정
 songs[0].audioUrl = "52.mp3";
@@ -679,6 +692,7 @@ songs[48].audioUrl = "49.mp3";
 songs[49].audioUrl = "50.mp3";
 songs[50].audioUrl = "51.mp3";
 songs[51].audioUrl = "1.mp3";
+songs[52].audioUrl = "53.mp3";
 
 // 상태 관리
 let playingId = null;
