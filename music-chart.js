@@ -626,7 +626,7 @@ const songs = [
   },
   {
     id: 53,
-    rank:54,
+    rank:53,
     title:"간석기시대 감성이",
     artist:"무앤상",
     album:"음악",
@@ -1133,3 +1133,4 @@ function getIconHeart() {
         </svg>
     `;
 }
+
