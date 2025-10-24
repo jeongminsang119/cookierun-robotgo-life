@@ -206,9 +206,7 @@ mines: "마인스",
 rps: "가위바위보",
 tictactoe: "틱택토",
 blackjack: "블랙젝",
-baccarat: "바카라",
-texasHoldem: "텍사스 홀덤",
-whtml: "킁킁게임",
+whtml: "ㅋㅋ게임",
 };
 return titles[gameType] || "게임";
 }
