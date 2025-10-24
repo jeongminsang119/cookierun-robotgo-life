@@ -194,6 +194,7 @@ updateBettingAmount();
 loadGameContent(gameType);
 }
 
+// ...existing code...
 function getGameTitle(gameType) {
 const titles = {
 aviator: "에비에이터",
@@ -207,9 +208,11 @@ tictactoe: "틱택토",
 blackjack: "블랙젝",
 baccarat: "바카라",
 texasHoldem: "텍사스 홀덤",
+whtml: "킁킁게임",
 };
 return titles[gameType] || "게임";
 }
+// ...existing code...
 
 function loadGameContent(gameType) {
 switch (gameType) {
@@ -247,11 +250,159 @@ break;
 case "omok":
 loadOmokGame();
 break;
+case "whtml":
+loadWHtmlGame();
+break;
 default:
 gameArea.innerHTML = "<p>게임을 불러오는 중...</p>";
 }
 }
 
+// ...existing code...
+// 기존 loadWHtmlGame 함수 대신 아래 코드로 교체
+function loadWHtmlGame() {
+  // 가이드 상태 초기화
+  gameState.wGuide = {
+    step: 0,
+    steps: [
+      {
+        title: "1단계 — 캐릭터 선택",
+        body:
+          "전체화면후 화면클릭한번하고 A/D 또는 ◀ ▶ 으로 캐릭터를 선택하세요. 선택 후 엔터(Enter)로 게임을 시작합니다.",
+      },
+      {
+        title: "2단계 — 기본 조작",
+        body:
+          "좌/우 이동: ◀ ▶ / A D, 점프: W 또는 ↑, 스킬: F/G/H(플레이어1) / 1/2/3(플레이어2).",
+      },
+      {
+        title: "3단계 — AI모드",
+        body:
+          "엔터키를 2번연속 누르면 AI모드가 활성화됩니다. AI가 자동으로 플레이합니다. 혼자서 게임 가능!!",
+      },
+      {
+        title: "4단계 — 베팅 규칙",
+        body:
+          "게임 시작 시 현재 설정된 베팅(₩" +
+          gameState.currentBet.toLocaleString() +
+          ")이 사용됩니다. 승리 시 배당이 적용됩니다.",
+      },
+    ],
+  };
+
+  // 렌더 가이드 UI
+  renderWGuide();
+}
+
+function renderWGuide() {
+  const g = gameState.wGuide;
+  const stepData = g.steps[g.step];
+
+  gameArea.innerHTML = `
+    <div class="w-guide" style="display:flex;flex-direction:column;gap:14px;padding:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:800;color:#ffb800;font-size:1.15rem;">ㅋㅋ게임 안내</div>
+        <div>
+          <button class="btn btn-secondary" onclick="closeGameModal()">닫기</button>
+        </div>
+      </div>
+
+      <div class="w-step" style="background:linear-gradient(180deg,#0b0b0b,#0f0f0f);padding:18px;border-radius:10px;color:#fff;min-height:140px;">
+        <h3 style="margin:0 0 8px 0;color:#ffcc66;">${stepData.title}</h3>
+        <p style="margin:0;color:#ddd;line-height:1.6">${stepData.body}</p>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="color:#ccc;font-size:0.95rem;">${g.step + 1} / ${g.steps.length}</div>
+        <div class="w-controls" style="display:flex;gap:8px;">
+          <button class="btn" id="wPrevBtn" onclick="wPrev()" ${g.step === 0 ? 'disabled' : ''}>이전</button>
+          <button class="btn" id="wNextBtn" onclick="wNext()" ${g.step === g.steps.length - 1 ? 'disabled' : ''}>다음</button>
+          <button class="btn btn-primary" id="wStartBtn" onclick="startWGame()" ${g.step === g.steps.length - 1 ? '' : 'disabled'}>게임 시작</button>
+        </div>
+      </div>
+
+      <div style="font-size:0.9rem;color:#9aa;line-height:1.4;">
+        꿀팁: 모든 단계는 나중에 다시 볼 수 있습니다. "게임 시작" 클릭 시 실제 게임이 로드됩니다.
+      </div>
+    </div>
+  `;
+}
+
+// 가이드 네비게이션
+function wNext() {
+  const g = gameState.wGuide;
+  if (!g) return;
+  if (g.step < g.steps.length - 1) {
+    g.step++;
+    renderWGuide();
+  }
+}
+function wPrev() {
+  const g = gameState.wGuide;
+  if (!g) return;
+  if (g.step > 0) {
+    g.step--;
+    renderWGuide();
+  }
+}
+
+// 가이드 끝나고 실제 w.html 게임 로드
+function startWGame() {
+  // safety: ensure on final step
+  const g = gameState.wGuide;
+  if (!g || g.step !== g.steps.length - 1) return;
+
+  // 로컬 iframe으로 게임 로드
+  gameArea.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:800;color:#ffb800;">ㅋㅋ게임</div>
+        <div>
+          <button class="btn btn-secondary" onclick="openWFullScreen()">전체화면</button>
+          <button class="btn" onclick="closeGameModal()">나가기</button>
+        </div>
+      </div>
+      <div style="background:#000;border-radius:10px;overflow:hidden;border:2px solid #222;">
+        <iframe id="wFrame" src="w.html" style="width:100%;height:72vh;border:0;background:#000;"></iframe>
+      </div>
+      <div style="color:#ccc;font-size:0.95rem;">설명서를 다시 보려면 모달 닫고 다시 플레이 버튼을 누르세요.</div>
+    </div>
+  `;
+
+  // remove guide state
+  delete gameState.wGuide;
+}
+// ...existing code...
+
+
+// 유틸: 전체화면 버튼
+function openWFullScreen() {
+const iframe = document.getElementById("wFrame");
+if (!iframe) return;
+try {
+if (iframe.requestFullscreen) iframe.requestFullscreen();
+else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+else if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.documentElement.requestFullscreen) {
+iframe.contentWindow.document.documentElement.requestFullscreen();
+}
+} catch (e) {
+console.warn("전체화면 실패", e);
+}
+}
+
+// 모달 닫기 유틸 (기존 모달 닫기와 동일하게 동작)
+function closeGameModal() {
+gameModal.style.display = "none";
+// iframe 정리 (사운드 재생 중이면 정지하도록 iframe src 비우기)
+const iframe = document.getElementById("wFrame");
+if (iframe) {
+iframe.src = "about:blank";
+setTimeout(() => {
+iframe.remove();
+}, 300);
+}
+}
+// ...existing code...
 // Slot Machine Game (restored)
 function loadSlotMachine() {
 gameArea.innerHTML = `
