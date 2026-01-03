@@ -692,7 +692,7 @@ songs[48].audioUrl = "49.mp3";
 songs[49].audioUrl = "50.mp3";
 songs[50].audioUrl = "51.mp3";
 songs[51].audioUrl = "1.mp3";
-songs[52].audioUrl = "53.mp3";
+songs[52].audioUrl = "543.mp3";
 
 // 상태 관리
 let playingId = null;
@@ -1133,6 +1133,7 @@ function getIconHeart() {
         </svg>
     `;
 }
+
 
 
 
